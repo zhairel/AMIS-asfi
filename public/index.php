@@ -57,11 +57,10 @@
             <ul class="nav-menu" id="navMenu">
                 <li><a href="#about" class="nav-link">About Us</a></li>
                 <li><a href="#programs" class="nav-link">Programs</a></li>
-                <li><a href="#portal" class="nav-link">Sadaqah Portal</a></li>
                 <li><a href="#transparency" class="nav-link">Transparency</a></li>
                 <li><a href="#volunteer" class="nav-link">Get Involved</a></li>
                 <li><a href="#contact" class="nav-link">Contact</a></li>
-                <li><a href="#portal" class="btn-donate-nav">💚 Give Sadaqah</a></li>
+                <li><a href="#contact" class="btn-donate-nav">💚 Give Sadaqah</a></li>
             </ul>
         </div>
     </nav>
@@ -81,7 +80,7 @@
                         AMIS Sadaqah Family Incorporated (ASFI) is dedicated to uplifting students, orphans, and underprivileged families across Davao City and Mindanao through Islamic compassion, educational grants, and community development.
                     </p>
                     <div class="hero-actions">
-                        <a href="#portal" class="btn btn-primary">💚 Give Sadaqah Now</a>
+                        <a href="#contact" class="btn btn-primary">💚 Contact ASFI</a>
                         <a href="#about" class="btn btn-outline-light">📖 Learn About ASFI</a>
                     </div>
                 </div>
@@ -185,7 +184,7 @@
                     <div class="program-body">
                         <h3 class="program-title">AMIS Scholar Support Fund</h3>
                         <p class="program-desc">Covers tuition, textbooks, uniforms, and learning supplies for deserving students from low-income families.</p>
-                        <a href="#portal" class="btn btn-outline-light" style="color: var(--primary); border-color: var(--primary);">Sponsor a Scholar →</a>
+                        <a href="#contact" class="btn btn-outline-light" style="color: var(--primary); border-color: var(--primary);">Sponsor a Scholar →</a>
                     </div>
                 </div>
 
@@ -198,7 +197,7 @@
                     <div class="program-body">
                         <h3 class="program-title">Community Food Drives</h3>
                         <p class="program-desc">Distributes essential grocery food packs and hot meals to struggling families in Davao City communities.</p>
-                        <a href="#portal" class="btn btn-outline-light" style="color: var(--primary); border-color: var(--primary);">Support Food Drive →</a>
+                        <a href="#contact" class="btn btn-outline-light" style="color: var(--primary); border-color: var(--primary);">Support Food Drive →</a>
                     </div>
                 </div>
 
@@ -211,89 +210,7 @@
                     <div class="program-body">
                         <h3 class="program-title">Orphan & Widow Care</h3>
                         <p class="program-desc">Provides monthly stpend, healthcare support, and educational care for orphaned children and widowed mothers.</p>
-                        <a href="#portal" class="btn btn-outline-light" style="color: var(--primary); border-color: var(--primary);">Support Orphan Care →</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- INTERACTIVE SADAQAH PORTAL -->
-    <section id="portal" class="section section-bg-light">
-        <div class="container">
-            <div class="donation-box">
-                <div class="donation-tabs">
-                    <button class="tab-btn active" data-tab="tab-quick">💚 Direct Payment Channels</button>
-                    <button class="tab-btn" data-tab="tab-pledge">📝 Online Donation Pledge</button>
-                </div>
-
-                <div class="donation-body">
-                    <!-- Tab 1: Payment Accounts -->
-                    <div id="tab-quick" class="tab-content">
-
-                        <h3 style="font-size: 1.2rem; margin-bottom: 10px; color: var(--primary-dark);">Official Payment Channels (Click to Copy):</h3>
-                        <div class="payment-accounts-grid">
-                            <div class="account-card">
-                                <span class="account-badge">GCASH</span>
-                                <h4>AMIS Sadaqah Family</h4>
-                                <div class="account-num">0927 299 1833</div>
-                                <button class="btn-copy" data-num="09272991833">📋 Copy GCash</button>
-                            </div>
-
-                            <div class="account-card">
-                                <span class="account-badge" style="background: #0284c7;">MAYA</span>
-                                <h4>AMIS ASFI Official</h4>
-                                <div class="account-num">0927 299 1833</div>
-                                <button class="btn-copy" data-num="09272991833">📋 Copy Maya</button>
-                            </div>
-
-                            <div class="account-card">
-                                <span class="account-badge" style="background: #d97706;">BANK TRANSFER</span>
-                                <h4>BDO / Landbank Account</h4>
-                                <div class="account-num">0038 9102 4491</div>
-                                <button class="btn-copy" data-num="003891024491">📋 Copy Bank Account</button>
-                            </div>
-                        </div>
-
-                        <div style="margin-top: 25px; padding: 15px; background: #ecfdf5; border-radius: var(--radius-md); border: 1px solid var(--border-green); font-size: 0.9rem; color: var(--primary-dark);">
-                            📌 <strong>Receipt Verification:</strong> Please send a screenshot of your transfer to <strong>asfi@amis.edu.ph</strong> or via Viber/WhatsApp at <strong>+63 927 299 1833</strong> to receive an official ASFI donation receipt.
-                        </div>
-                    </div>
-
-                    <!-- Tab 2: Online Pledge Form -->
-                    <div id="tab-pledge" class="tab-content" style="display: none;">
-                        <form id="pledgeForm">
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label class="input-label">Full Name:</label>
-                                    <input type="text" id="donorName" class="form-control" required placeholder="Brother / Sister Name">
-                                </div>
-                                <div class="form-group">
-                                    <label class="input-label">Email Address:</label>
-                                    <input type="email" class="form-control" required placeholder="your.email@example.com">
-                                </div>
-                            </div>
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label class="input-label">Phone Number:</label>
-                                    <input type="text" class="form-control" placeholder="09XX XXX XXXX">
-                                </div>
-                                <div class="form-group">
-                                    <label class="input-label">Intended Cause / Program:</label>
-                                    <select class="form-control">
-                                        <option>General Sadaqah / Where Most Needed</option>
-                                        <option>Student Educational Grants</option>
-                                        <option>Orphan & Widow Care</option>
-                                        <option>Community Food Relief</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="input-label">Message / Special Intentions (Niyyah):</label>
-                                <textarea class="form-control" rows="3" placeholder="Optional notes or prayers..."></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Donation Pledge 💚</button>
-                        </form>
+                        <a href="#contact" class="btn btn-outline-light" style="color: var(--primary); border-color: var(--primary);">Support Orphan Care →</a>
                     </div>
                 </div>
             </div>
