@@ -221,12 +221,6 @@
     <!-- INTERACTIVE SADAQAH PORTAL -->
     <section id="portal" class="section section-bg-light">
         <div class="container">
-            <div class="section-header">
-                <span class="section-subtitle">Give for the Sake of Allah</span>
-                <h2 class="section-title">Sadaqah & Donation Portal</h2>
-                <p class="section-desc">Choose a cause and donate securely via GCash, Maya, or direct Bank Transfer.</p>
-            </div>
-
             <div class="donation-box">
                 <div class="donation-tabs">
                     <button class="tab-btn active" data-tab="tab-quick">💚 Direct Payment Channels</button>
