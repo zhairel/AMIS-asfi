@@ -48,7 +48,13 @@
                 </div>
             </a>
 
-            <ul class="nav-menu">
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle Navigation">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+
+            <ul class="nav-menu" id="navMenu">
                 <li><a href="#about" class="nav-link">About Us</a></li>
                 <li><a href="#programs" class="nav-link">Programs</a></li>
                 <li><a href="#portal" class="nav-link">Sadaqah Portal</a></li>

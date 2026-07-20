@@ -1,4 +1,21 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // Mobile Navigation Toggle
+    const navToggle = document.getElementById('navToggle');
+    const navMenu = document.getElementById('navMenu');
+
+    if (navToggle && navMenu) {
+        navToggle.addEventListener('click', function () {
+            navMenu.classList.toggle('active');
+            this.classList.toggle('active');
+        });
+
+        navMenu.querySelectorAll('.nav-link, .btn-donate-nav').forEach(link => {
+            link.addEventListener('click', function () {
+                navMenu.classList.remove('active');
+                navToggle.classList.remove('active');
+            });
+        });
+    }
     // 1. Interactive Amount Selector Buttons
     const amountBtns = document.querySelectorAll('.amount-btn');
     const customAmountInput = document.getElementById('customAmount');

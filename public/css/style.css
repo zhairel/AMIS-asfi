@@ -827,20 +827,201 @@ h1, h2, h3, h4, h5, h6, .brand-font {
   opacity: 1;
 }
 
+/* Mobile Hamburger Toggle */
+.nav-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 1001;
+}
+
+.nav-toggle .bar {
+  width: 26px;
+  height: 3px;
+  background-color: var(--primary-deep);
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+.nav-toggle.active .bar:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.nav-toggle.active .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle.active .bar:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
 /* Responsive */
 @media (max-width: 992px) {
-  .hero-grid, .about-grid, .stats-grid, .pillar-grid, .program-grid, .payment-accounts-grid, .footer-grid {
-    grid-template-columns: 1fr;
+  .nav-toggle {
+    display: flex;
   }
+  
+  .nav-menu {
+    position: fixed;
+    top: 80px;
+    left: 0;
+    width: 100%;
+    background: white;
+    flex-direction: column;
+    padding: 30px 20px;
+    gap: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transform: translateY(-150%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-bottom: 1px solid #e2e8f0;
+  }
+  
+  .nav-menu.active {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .top-bar-content {
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+  }
+  
+  .top-info {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .hero {
+    padding: 60px 0 80px;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
+  }
+
+  .hero-badge {
+    margin: 0 auto 16px;
+  }
+
+  .hero-title {
+    font-size: 2.5rem;
+  }
+
+  .hero-desc {
+    margin: 0 auto 25px;
+  }
+
+  .hero-actions {
+    justify-content: center;
+  }
+
+  .hero-logo-large {
+    width: 160px;
+    height: 160px;
+  }
+
+  .hero-emblem-card {
+    padding: 24px 16px;
+  }
+
+  .stats-banner {
+    margin-top: -30px;
+    padding: 24px 16px;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
   .stat-item {
     border-right: none;
-    border-bottom: 1px solid #e2e8f0;
-    padding-bottom: 20px;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 15px;
   }
-  .stat-item:last-child {
+
+  .stat-item:nth-child(3), .stat-item:nth-child(4) {
     border-bottom: none;
+    padding-bottom: 0;
   }
+
+  .stat-number {
+    font-size: 2rem;
+  }
+
+  .section {
+    padding: 60px 0;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .about-grid, .pillar-grid, .program-grid, .payment-accounts-grid, .footer-grid, .form-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  .donation-body {
+    padding: 24px 16px;
+  }
+
+  .donation-tabs {
+    flex-direction: column;
+  }
+
+  .tab-btn {
+    padding: 14px;
+    font-size: 0.95rem;
+  }
+
   .amount-grid {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .toast-msg {
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    text-align: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+  }
+
+  .amount-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .logo-title {
+    font-size: 1.15rem;
+  }
+
+  .logo-sub {
+    font-size: 0.65rem;
+  }
+
+  .nav-logo-img {
+    width: 42px;
+    height: 42px;
   }
 }
