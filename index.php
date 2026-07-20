@@ -230,19 +230,6 @@
                 <div class="donation-body">
                     <!-- Tab 1: Payment Accounts -->
                     <div id="tab-quick" class="tab-content">
-                        <h3 style="font-size: 1.2rem; margin-bottom: 15px; color: var(--primary-dark);">Select Preset Amount:</h3>
-                        <div class="amount-grid">
-                            <button class="amount-btn" data-amount="200">₱200</button>
-                            <button class="amount-btn active" data-amount="500">₱500</button>
-                            <button class="amount-btn" data-amount="1000">₱1,000</button>
-                            <button class="amount-btn" data-amount="2500">₱2,500</button>
-                            <button class="amount-btn" data-amount="5000">₱5,000</button>
-                        </div>
-
-                        <div class="custom-amount-group">
-                            <label class="input-label">Custom Donation Amount (PHP):</label>
-                            <input type="number" id="customAmount" class="form-control" value="500" placeholder="Enter amount in PHP">
-                        </div>
 
                         <h3 style="font-size: 1.2rem; margin-bottom: 10px; color: var(--primary-dark);">Official Payment Channels (Click to Copy):</h3>
                         <div class="payment-accounts-grid">
