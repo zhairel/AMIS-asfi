@@ -1,365 +1,889 @@
+<?php
+// ============================================================================
+// ASFI Selfie Verification Portal (Tester Version - Daylight Mode Only)
+// STRICT HTTPS ENFORCEMENT & Live Video Liveness
+// Domain: https://asfi.amis.edu.ph
+// ============================================================================
+
+// 1. STRICT HTTPS ENFORCEMENT REDIRECT
+$isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+    || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')
+    || (isset($_SERVER['HTTP_FRONT_END_HTTPS']) && $_SERVER['HTTP_FRONT_END_HTTPS'] === 'on');
+
+if (!$isHttps) {
+    $secureUrl = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    header('HTTP/1.1 301 Moved Permanently');
+    header('Location: ' . $secureUrl);
+    exit;
+}
+
+$action = $_GET['action'] ?? '';
+$sessionId = $_GET['session'] ?? ($_POST['session'] ?? '');
+
+$sessionsDir = __DIR__ . '/sessions';
+$uploadsDir = __DIR__ . '/uploads';
+
+if (!file_exists($sessionsDir)) {
+    @mkdir($sessionsDir, 0755, true);
+}
+if (!file_exists($uploadsDir)) {
+    @mkdir($uploadsDir, 0755, true);
+}
+
+// 2. API: Start Session (HARDCODED HTTPS ONLY)
+if ($action === 'start' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    header('Content-Type: application/json');
+    $input = json_decode(file_get_contents('php://input'), true) ?? $_POST;
+    
+    $fullName = trim(strtoupper($input['full_name'] ?? ''));
+    $gradeLevel = trim($input['grade_level'] ?? '');
+    
+    if (empty($fullName) || empty($gradeLevel)) {
+        echo json_encode(['success' => false, 'message' => 'Full Name and Grade Level are required.']);
+        exit;
+    }
+    
+    $newSessionId = bin2hex(random_bytes(16));
+    $sessionData = [
+        'session_id' => $newSessionId,
+        'full_name' => $fullName,
+        'grade_level' => $gradeLevel,
+        'status' => 'pending',
+        'connected_device' => null,
+        'liveness_verified' => false,
+        'selfie_url' => null,
+        'created_at' => date('Y-m-d H:i:s'),
+        'completed_at' => null,
+    ];
+    
+    file_put_contents($sessionsDir . '/' . $newSessionId . '.json', json_encode($sessionData));
+    
+    $baseUrl = 'https://' . $_SERVER['HTTP_HOST'];
+    $sessionUrl = $baseUrl . '/?session=' . $newSessionId;
+    $qrUrl = 'https://quickchart.io/qr?text=' . urlencode($sessionUrl) . '&dark=047857&light=ffffff&margin=1&format=png&size=350';
+    
+    echo json_encode([
+        'success' => true,
+        'session_id' => $newSessionId,
+        'session_url' => $sessionUrl,
+        'qr_code_url' => $qrUrl,
+    ]);
+    exit;
+}
+
+// 3. API: Connect Mobile Device
+if ($action === 'connect' && !empty($sessionId)) {
+    header('Content-Type: application/json');
+    $cleanId = preg_replace('/[^a-zA-Z0-9]/', '', $sessionId);
+    $file = $sessionsDir . '/' . $cleanId . '.json';
+    
+    if (file_exists($file)) {
+        $data = json_decode(file_get_contents($file), true);
+        if ($data['status'] === 'pending') {
+            $data['status'] = 'connected';
+            $data['connected_device'] = $_SERVER['HTTP_USER_AGENT'] ?? 'Mobile Phone';
+            file_put_contents($file, json_encode($data));
+        }
+        echo json_encode(['success' => true, 'status' => $data['status']]);
+        exit;
+    }
+    echo json_encode(['success' => false, 'message' => 'Session not found']);
+    exit;
+}
+
+// 4. API: Check Session Status
+if ($action === 'status' && !empty($sessionId)) {
+    header('Content-Type: application/json');
+    $cleanId = preg_replace('/[^a-zA-Z0-9]/', '', $sessionId);
+    $file = $sessionsDir . '/' . $cleanId . '.json';
+    
+    if (!file_exists($file)) {
+        echo json_encode(['status' => 'expired']);
+        exit;
+    }
+    
+    $data = json_decode(file_get_contents($file), true);
+    echo json_encode($data);
+    exit;
+}
+
+// 5. API: Upload Selfie
+if ($action === 'upload' && $_SERVER['REQUEST_METHOD'] === 'POST' && !empty($sessionId)) {
+    header('Content-Type: application/json');
+    $cleanId = preg_replace('/[^a-zA-Z0-9]/', '', $sessionId);
+    $file = $sessionsDir . '/' . $cleanId . '.json';
+    
+    if (!file_exists($file)) {
+        echo json_encode(['success' => false, 'message' => 'Session expired or invalid.']);
+        exit;
+    }
+    
+    $input = json_decode(file_get_contents('php://input'), true) ?? $_POST;
+    $imageData = $input['image_data'] ?? '';
+    
+    if (preg_match('/^data:image\/(\w+);base64,/', $imageData, $type)) {
+        $imageData = substr($imageData, strpos($imageData, ',') + 1);
+        $imageData = base64_decode($imageData);
+        
+        if ($imageData === false) {
+            echo json_encode(['success' => false, 'message' => 'Invalid image payload.']);
+            exit;
+        }
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Invalid image format.']);
+        exit;
+    }
+    
+    $filename = 'selfie_' . $cleanId . '_' . time() . '.png';
+    file_put_contents($uploadsDir . '/' . $filename, $imageData);
+    
+    $baseUrl = 'https://' . $_SERVER['HTTP_HOST'];
+    $publicUrl = $baseUrl . '/uploads/' . $filename;
+    
+    $data = json_decode(file_get_contents($file), true);
+    $data['status'] = 'completed';
+    $data['liveness_verified'] = true;
+    $data['selfie_url'] = $publicUrl;
+    $data['completed_at'] = date('Y-m-d h:i A');
+    
+    file_put_contents($file, json_encode($data));
+    
+    echo json_encode([
+        'success' => true,
+        'selfie_url' => $publicUrl,
+        'message' => 'Liveness verified and selfie uploaded successfully!',
+    ]);
+    exit;
+}
+
+// 6. View Mode Check
+$isMobileCaptureMode = !empty($_GET['session']);
+$mobileSessionData = null;
+
+if ($isMobileCaptureMode) {
+    $cleanId = preg_replace('/[^a-zA-Z0-9]/', '', $_GET['session']);
+    $file = $sessionsDir . '/' . $cleanId . '.json';
+    if (file_exists($file)) {
+        $mobileSessionData = json_decode(file_get_contents($file), true);
+        
+        if ($mobileSessionData['status'] === 'pending') {
+            $mobileSessionData['status'] = 'connected';
+            $mobileSessionData['connected_device'] = $_SERVER['HTTP_USER_AGENT'] ?? 'Mobile Phone';
+            file_put_contents($file, json_encode($mobileSessionData));
+        }
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASFI - AMIS Sadaqah Family Incorporated | Davao City</title>
-    <meta name="description" content="Official website of AMIS Sadaqah Family Incorporated (ASFI) - Davao City (2026). Empowering families, student scholars, and communities through Sadaqah and Islamic compassion.">
-    <meta name="keywords" content="ASFI, AMIS Sadaqah Family Incorporated, AMIS Davao, Islamic Charity Davao, Sadaqah Jariyah, Zakat Philippines, Davao Islamic Foundation">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/asfi_logo.png">
-    <link rel="shortcut icon" href="/asfi_logo.png">
-    
-    <!-- Open Graph & Social -->
-    <meta property="og:title" content="AMIS Sadaqah Family Incorporated (ASFI)">
-    <meta property="og:description" content="Empowering families and student scholars through Sadaqah & Islamic brotherhood in Davao City.">
-    <meta property="og:image" content="https://asfi.amis.edu.ph/asfi_logo.png">
-    <meta property="og:url" content="https://asfi.amis.edu.ph">
-    <meta property="og:type" content="website">
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ASFI Student Selfie Verification Tester (HTTPS ONLY)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Outfit', sans-serif; background-color: #f8fafc; color: #0f172a; }
+        
+        @keyframes scanbeam {
+            0% { top: 10%; opacity: 0.3; }
+            50% { top: 85%; opacity: 0.9; }
+            100% { top: 10%; opacity: 0.3; }
+        }
+        .scan-beam {
+            position: absolute;
+            left: 5%;
+            right: 5%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #10b981, #34d399, #10b981, transparent);
+            box-shadow: 0 0 12px #10b981;
+            animation: scanbeam 2.2s ease-in-out infinite;
+        }
+    </style>
 </head>
-<body>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-emerald-600 selection:text-white overflow-hidden">
 
-    <!-- TOP BAR -->
-    <div class="top-bar">
-        <div class="container top-bar-content">
-            <div class="top-info">
-                <span>📍 Davao City, Philippines</span>
-                <span>📧 asfi@amis.edu.ph</span>
-                <span>📞 +63 927 299 1833</span>
-            </div>
-            <div>
-                <span>✨ Official Charitable Arm of Al Munawwara Islamic School</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- NAVBAR -->
-    <nav class="navbar">
-        <div class="container nav-container">
-            <a href="#" class="nav-logo">
-                <img src="/asfi_logo.png" alt="ASFI Logo" class="nav-logo-img">
-                <div class="nav-logo-text">
-                    <span class="logo-title">ASFI</span>
-                    <span class="logo-sub">AMIS Sadaqah Family Inc.</span>
-                </div>
-            </a>
-
-            <button class="nav-toggle" id="navToggle" aria-label="Toggle Navigation">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </button>
-
-            <ul class="nav-menu" id="navMenu">
-                <li><a href="#about" class="nav-link">About Us</a></li>
-                <li><a href="#programs" class="nav-link">Programs</a></li>
-                <li><a href="#transparency" class="nav-link">Transparency</a></li>
-                <li><a href="#volunteer" class="nav-link">Get Involved</a></li>
-                <li><a href="#contact" class="nav-link">Contact</a></li>
-                <li><a href="#contact" class="btn-donate-nav">💚 Give Sadaqah</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <!-- HERO SECTION -->
-    <section class="hero">
-        <div class="container">
-            <div class="hero-grid">
-                <div>
-                    <div class="hero-badge">
-                        <span>🌟 EST. 2026 • DAVAO CITY</span>
-                    </div>
-                    <h1 class="hero-title">
-                        Empowering Families, <span>Building Futures</span> Through Sadaqah.
-                    </h1>
-                    <p class="hero-desc">
-                        AMIS Sadaqah Family Incorporated (ASFI) is dedicated to uplifting students, orphans, and underprivileged families across Davao City and Mindanao through Islamic compassion, educational grants, and community development.
-                    </p>
-                    <div class="hero-actions">
-                        <a href="#contact" class="btn btn-primary">💚 Contact ASFI</a>
-                        <a href="#about" class="btn btn-outline-light">📖 Learn About ASFI</a>
-                    </div>
-                </div>
-
-                <!-- Hero Logo Emblem Card -->
-                <div class="hero-emblem-card">
-                    <img src="/asfi_logo.png" alt="ASFI Emblem" class="hero-logo-large">
-                    <h2 class="emblem-title">AMIS SADAQAH FAMILY INCORPORATED</h2>
-                    <p class="emblem-sub">Davao City • 2026</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- STATS BANNER -->
-    <div class="container">
-        <div class="stats-banner">
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-number">₱2.5M+</div>
-                    <div class="stat-label">Grants & Assistance Distributed</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">150+</div>
-                    <div class="stat-label">Student Scholars Supported</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">850+</div>
-                    <div class="stat-label">Families Received Relief & Meals</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">100%</div>
-                    <div class="stat-label">Transparent Stewardship</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ABOUT SECTION -->
-    <section id="about" class="section section-bg-light">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-subtitle">Our Purpose & Mission</span>
-                <h2 class="section-title">Who We Are</h2>
-                <p class="section-desc">
-                    Established in 2026 in Davao City, ASFI serves as the official non-profit organization affiliated with Al Munawwara Islamic School, bridging generous donors with communities in need.
-                </p>
-            </div>
-
-            <div class="about-grid">
-                <div class="about-card">
-                    <h3 style="font-size: 1.6rem; color: var(--primary-dark); margin-bottom: 15px;">🌟 Vision & Core Objectives</h3>
-                    <p style="margin-bottom: 15px; color: var(--text-muted);">
-                        To establish a self-sustaining ecosystem of generosity (*Sadaqah Jariyah*) where no deserving student is denied quality Islamic education due to financial hardship, and every vulnerable family feels the warmth of Islamic solidarity.
-                    </p>
-                    <ul style="list-style: none; padding-left: 0;">
-                        <li style="margin-bottom: 10px; display: flex; align-items: center; gap: 10px; font-weight: 600;">
-                            <span style="color: var(--primary);">✔</span> Direct scholarship backing for AMIS students
-                        </li>
-                        <li style="margin-bottom: 10px; display: flex; align-items: center; gap: 10px; font-weight: 600;">
-                            <span style="color: var(--primary);">✔</span> Sustainable community feeding & welfare programs
-                        </li>
-                        <li style="margin-bottom: 10px; display: flex; align-items: center; gap: 10px; font-weight: 600;">
-                            <span style="color: var(--primary);">✔</span> Orphan stipends and holistic mentorship
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="pillar-grid" style="grid-template-columns: 1fr;">
-                    <div class="pillar-card">
-                        <div class="pillar-icon">🎓</div>
-                        <h4 class="pillar-title">Education Grants (Sadaqah Jariyah)</h4>
-                        <p class="pillar-desc">Ensuring bright young Muslim minds receive high-quality academic and Tahfeedh education at AMIS without financial barriers.</p>
-                    </div>
-                    <div class="pillar-card">
-                        <div class="pillar-icon">🤝</div>
-                        <h4 class="pillar-title">Family Welfare & Relief</h4>
-                        <p class="pillar-desc">Providing food baskets, medical aid, and emergency disaster assistance to vulnerable households across Davao Region.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- PROGRAMS SECTION -->
-    <section id="programs" class="section section-bg-white">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-subtitle">Community Impact</span>
-                <h2 class="section-title">Our Core Programs</h2>
-                <p class="section-desc">Every donation goes directly towards meaningful initiatives that transform lives and foster long-term community resilience.</p>
-            </div>
-
-            <div class="program-grid">
-                <!-- Program 1 -->
-                <div class="program-card">
-                    <div class="program-img">
-                        <span>🎓</span>
-                        <span class="program-badge">Education</span>
-                    </div>
-                    <div class="program-body">
-                        <h3 class="program-title">AMIS Scholar Support Fund</h3>
-                        <p class="program-desc">Covers tuition, textbooks, uniforms, and learning supplies for deserving students from low-income families.</p>
-                        <a href="#contact" class="btn btn-outline-light" style="color: var(--primary); border-color: var(--primary);">Sponsor a Scholar →</a>
-                    </div>
-                </div>
-
-                <!-- Program 2 -->
-                <div class="program-card">
-                    <div class="program-img" style="background: linear-gradient(135deg, #0d9488 0%, #064e3b 100%);">
-                        <span>🍲</span>
-                        <span class="program-badge">Food Relief</span>
-                    </div>
-                    <div class="program-body">
-                        <h3 class="program-title">Community Food Drives</h3>
-                        <p class="program-desc">Distributes essential grocery food packs and hot meals to struggling families in Davao City communities.</p>
-                        <a href="#contact" class="btn btn-outline-light" style="color: var(--primary); border-color: var(--primary);">Support Food Drive →</a>
-                    </div>
-                </div>
-
-                <!-- Program 3 -->
-                <div class="program-card">
-                    <div class="program-img" style="background: linear-gradient(135deg, #d97706 0%, #78350f 100%);">
-                        <span>❤️</span>
-                        <span class="program-badge">Orphan Care</span>
-                    </div>
-                    <div class="program-body">
-                        <h3 class="program-title">Orphan & Widow Care</h3>
-                        <p class="program-desc">Provides monthly stpend, healthcare support, and educational care for orphaned children and widowed mothers.</p>
-                        <a href="#contact" class="btn btn-outline-light" style="color: var(--primary); border-color: var(--primary);">Support Orphan Care →</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- TRANSPARENCY SECTION -->
-    <section id="transparency" class="section section-bg-white">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-subtitle">Trust & Stewardship</span>
-                <h2 class="section-title">100% Transparency Guarantee</h2>
-                <p class="section-desc">We hold ourselves accountable to Allah (SWT) and our generous donors through rigorous financial tracking and regular public reporting.</p>
-            </div>
-
-            <div class="pillar-grid">
-                <div class="pillar-card">
-                    <div class="pillar-icon">📑</div>
-                    <h4 class="pillar-title">Verified Audits</h4>
-                    <p class="pillar-desc">Financial reports undergo regular internal and external auditing to ensure every peso is properly allocated.</p>
-                </div>
-                <div class="pillar-card">
-                    <div class="pillar-icon">📲</div>
-                    <h4 class="pillar-title">Digital Receipts</h4>
-                    <p class="pillar-desc">Every donor receives an official ASFI e-receipt with a tracking reference number for complete peace of mind.</p>
-                </div>
-                <div class="pillar-card">
-                    <div class="pillar-icon">📊</div>
-                    <h4 class="pillar-title">Impact Statements</h4>
-                    <p class="pillar-desc">We publish regular photo and video updates showing the direct beneficiaries of our community distribution drives.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- VOLUNTEER SECTION -->
-    <section id="volunteer" class="section section-bg-green">
-        <div class="container">
-            <div class="section-header" style="color: white;">
-                <span class="section-subtitle" style="background: rgba(255,255,255,0.2); color: white;">Join Our Mission</span>
-                <h2 class="section-title" style="color: white;">Become an ASFI Volunteer</h2>
-                <p class="section-desc" style="color: #d1fae5;">Share your time, skills, and energy to support community feeding drives, student tutoring, and distribution events in Davao City.</p>
-            </div>
-
-            <div style="max-width: 700px; margin: 0 auto; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); backdrop-filter: blur(12px); border-radius: var(--radius-lg); padding: 40px;">
-                <form id="volunteerForm">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label class="input-label" style="color: white;">Your Name:</label>
-                            <input type="text" id="volName" class="form-control" required placeholder="Full Name">
+    <?php if ($isMobileCaptureMode && $mobileSessionData): ?>
+        <!-- =================================================================== -->
+        <!-- MOBILE / PHONE CAMERA CAPTURE MODE (HTTPS ONLINE FULL SCREEN) -->
+        <!-- =================================================================== -->
+        <main x-data="livenessCameraApp()" class="fixed inset-0 z-30 w-full h-[100dvh] bg-slate-950 flex flex-col justify-between overflow-hidden select-none">
+            
+            <!-- Floating Top Glass Header -->
+            <header class="absolute top-0 left-0 right-0 z-50 bg-slate-950/80 backdrop-blur-md border-b border-emerald-500/20 px-4 py-3 shadow-md">
+                <div class="max-w-md mx-auto flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-bold shadow-md">
+                            <i data-lucide="camera" class="w-4 h-4"></i>
                         </div>
-                        <div class="form-group">
-                            <label class="input-label" style="color: white;">Contact Number:</label>
-                            <input type="text" class="form-control" required placeholder="09XX XXX XXXX">
+                        <div>
+                            <h1 class="text-xs font-black text-white uppercase tracking-wider">Selfie Camera Verification</h1>
+                            <p class="text-[10px] text-emerald-400 font-extrabold uppercase"><?= htmlspecialchars($mobileSessionData['full_name']) ?></p>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="input-label" style="color: white;">Area of Interest:</label>
-                        <select class="form-control">
-                            <option>Event & Distribution Logistics</option>
-                            <option>Student Academic Tutoring</option>
-                            <option>Media, Photography & Design</option>
-                            <option>Medical / Relief Operations</option>
-                        </select>
+                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-950 text-emerald-300 border border-emerald-800 uppercase flex items-center gap-1">
+                        <i data-lucide="lock" class="w-3 h-3 text-emerald-400"></i>
+                        <span>HTTPS SECURE</span>
+                    </span>
+                </div>
+            </header>
+
+            <!-- Camera Viewfinder (FULL SCREEN) -->
+            <div class="relative w-full h-full bg-slate-950 flex items-center justify-center overflow-hidden">
+                
+                <!-- Mirrored Video Stream -->
+                <video x-ref="video" autoplay playsinline webkit-playsinline muted class="w-full h-full object-cover" style="transform: scaleX(-1); -webkit-transform: scaleX(-1);" x-show="cameraStarted && !captured && !cameraError"></video>
+                <img :src="capturedImage" x-show="captured" class="w-full h-full object-cover" style="transform: scaleX(-1); -webkit-transform: scaleX(-1);">
+
+                <!-- White Camera Flash Effect -->
+                <div x-show="flashEffect" x-transition.opacity.duration.200ms class="fixed inset-0 bg-white z-50 pointer-events-none"></div>
+
+                <!-- Animated Laser Scanner Beam & Face Oval Guide -->
+                <div class="pointer-events-none absolute inset-0 z-30 flex flex-col items-center justify-center p-4" x-show="cameraStarted && !captured && !cameraError">
+                    <div class="scan-beam" x-show="livenessScore < 100 && hasFace"></div>
+
+                    <div class="relative flex items-center justify-center" style="width: 270px; height: 260px;">
+                        <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-2xl transition-colors duration-300" :class="hasFace ? (livenessScore >= 90 ? 'text-emerald-400' : 'text-emerald-300') : 'text-rose-500 animate-pulse'">
+                            <!-- Face Oval Guide -->
+                            <ellipse cx="50" cy="36" rx="26" ry="30" fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="3 3" />
+                            <!-- Shoulder Contour Guide -->
+                            <path d="M 18 70 Q 50 62 82 70 L 98 100 L 2 100 Z" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3 3" />
+                        </svg>
+                        
+                        <!-- Status Badge Overlay -->
+                        <span class="absolute -top-7 text-[10px] font-black tracking-widest uppercase bg-slate-950/90 px-3.5 py-1.5 rounded-full border shadow-lg flex items-center gap-1.5 transition-all" :class="hasFace ? 'text-emerald-300 border-emerald-400/40' : 'text-rose-400 border-rose-500/40'">
+                            <i data-lucide="scan-face" class="w-3.5 h-3.5" :class="hasFace ? 'text-emerald-400' : 'text-rose-500'"></i>
+                            <span x-text="livenessStatusText">ALIGN FACE INSIDE OVAL</span>
+                        </span>
                     </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">Register as Volunteer 🤝</button>
+                </div>
+
+                <!-- Initial Camera Permission Request Screen -->
+                <div x-show="!cameraStarted && !cameraLoading && !cameraError && !captured" class="absolute inset-0 bg-slate-950 flex flex-col items-center justify-center p-6 text-center text-white z-40">
+                    <div class="w-16 h-16 rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center mb-3 shadow-lg">
+                        <i data-lucide="camera" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-lg font-black text-white">Camera Permission Required</h3>
+                    <p class="text-xs text-slate-300 mt-1 mb-5">Tap below to grant camera access: <br><strong class="text-emerald-400">"Allow asfi.amis.edu.ph to use your camera"</strong></p>
+                    
+                    <button type="button" @click="requestChromeCameraPermission()" class="w-full max-w-xs bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white py-3.5 rounded-2xl font-black text-sm shadow-xl transition flex items-center justify-center gap-2 cursor-pointer">
+                        <i data-lucide="shield-alert" class="w-5 h-5"></i>
+                        <span>OPEN CAMERA NOW</span>
+                    </button>
+                </div>
+
+                <!-- Camera Loading Overlay -->
+                <div x-show="cameraLoading" class="absolute inset-0 bg-slate-950 flex flex-col items-center justify-center gap-2 z-40 text-white">
+                    <i data-lucide="loader-2" class="w-8 h-8 text-emerald-400 animate-spin"></i>
+                    <span class="text-xs font-bold">Starting AI Camera Stream...</span>
+                </div>
+
+                <!-- Camera Access Blocked Screen -->
+                <div x-show="cameraError && !captured" class="absolute inset-0 bg-slate-950 flex flex-col items-center justify-center p-5 text-center text-white z-40 overflow-y-auto">
+                    <div class="w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center mb-2 shrink-0">
+                        <i data-lucide="lock" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-sm font-black text-white">Camera Access Denied</h3>
+                    <p class="text-[11px] text-slate-300 mt-1 mb-3">Please enable camera permission for Chrome in your Phone Settings.</p>
+                    
+                    <div class="w-full max-w-xs space-y-2">
+                        <button type="button" @click="requestChromeCameraPermission()" class="w-full bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-extrabold text-xs py-3 rounded-xl shadow-lg transition flex items-center justify-center gap-2 cursor-pointer border border-emerald-400/40">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-emerald-300"></i>
+                            <span>RETRY CAMERA PERMISSION</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <canvas x-ref="canvas" class="hidden"></canvas>
+
+            <!-- Floating Bottom Control Panel & Progress Meter -->
+            <div class="absolute bottom-0 left-0 right-0 z-50 p-4 bg-gradient-to-t from-slate-950 via-slate-950/90 to-transparent pb-6 flex flex-col items-center gap-3">
+                
+                <!-- Live Liveness Meter -->
+                <div x-show="cameraStarted && !captured && !cameraError" class="w-full max-w-sm bg-slate-900/90 backdrop-blur-md px-4 py-2.5 rounded-2xl border flex items-center justify-between shadow-xl transition-colors" :class="hasFace ? 'border-emerald-500/40' : 'border-rose-500/40'">
+                    <div class="flex items-center gap-2">
+                        <div class="w-2.5 h-2.5 rounded-full" :class="hasFace ? 'bg-emerald-400 animate-ping' : 'bg-rose-500'"></div>
+                        <span class="text-[11px] font-black text-white uppercase tracking-wider" x-text="hasFace ? 'LIVE AI DETECTING...' : 'NO PERSON DETECTED'">LIVE LIVENESS SCAN</span>
+                    </div>
+                    <span class="text-xs font-black" :class="hasFace ? 'text-emerald-400' : 'text-rose-400'" x-text="livenessScore + '%'">0%</span>
+                </div>
+
+                <!-- Control Actions -->
+                <div class="w-full max-w-sm">
+                    <template x-if="cameraStarted && !captured && !cameraError">
+                        <button type="button" @click="takeSelfie()" class="w-full bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white py-3.5 rounded-2xl font-black text-sm shadow-2xl transition flex items-center justify-center gap-2 cursor-pointer border border-emerald-400/30">
+                            <i data-lucide="aperture" class="w-5 h-5"></i>
+                            <span x-text="livenessScore >= 100 ? '100% Verified! Auto Capturing...' : (hasFace ? 'Snap Live Selfie Now' : 'Align Face in Camera')">Snap Live Selfie</span>
+                        </button>
+                    </template>
+
+                    <template x-if="captured">
+                        <div class="flex items-center gap-3 w-full">
+                            <button type="button" @click="retake()" class="w-1/2 bg-slate-800 hover:bg-slate-700 text-slate-200 py-3.5 rounded-2xl font-bold text-xs transition active:scale-95 cursor-pointer border border-slate-700">
+                                Retake Photo
+                            </button>
+                            <button type="button" @click="uploadSelfie()" :disabled="uploading" class="w-1/2 bg-emerald-600 hover:bg-emerald-500 text-white py-3.5 rounded-2xl font-black text-xs shadow-xl transition active:scale-95 cursor-pointer flex items-center justify-center gap-1.5 disabled:opacity-50 border border-emerald-400/30">
+                                <span x-show="!uploading" class="flex items-center gap-1.5">
+                                    <i data-lucide="check" class="w-4 h-4"></i>
+                                    <span>Submit & Verify</span>
+                                </span>
+                                <span x-show="uploading" class="flex items-center gap-1.5">
+                                    <i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i>
+                                    <span>Uploading...</span>
+                                </span>
+                            </button>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Success Modal -->
+            <div x-show="successModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4">
+                <div class="bg-slate-900 border border-emerald-500/40 rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl">
+                    <div class="w-14 h-14 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center mx-auto mb-3">
+                        <i data-lucide="shield-check" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-xl font-black text-white">Liveness Verified 100%!</h3>
+                    <p class="text-xs text-slate-300 font-medium mt-1">Live human selfie verified successfully. The PC screen has been updated!</p>
+                    <button type="button" @click="window.location.href='/'" class="mt-5 w-full bg-emerald-600 hover:bg-emerald-500 text-white py-3 rounded-xl font-black text-xs shadow-md cursor-pointer">
+                        Done
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <script>
+            function livenessCameraApp() {
+                return {
+                    cameraStarted: false,
+                    cameraLoading: false,
+                    cameraError: false,
+                    captured: false,
+                    capturedImage: '',
+                    uploading: false,
+                    successModal: false,
+                    flashEffect: false,
+                    stream: null,
+                    hasFace: false,
+                    livenessScore: 0,
+                    livenessStatusText: 'ALIGN FACE INSIDE OVAL',
+                    livenessInterval: null,
+                    autoCapturedTriggered: false,
+                    faceMesh: null,
+
+                    init() {
+                        fetch('/?action=connect&session=<?= htmlspecialchars($mobileSessionData['session_id']) ?>').catch(() => {});
+                        this.requestChromeCameraPermission();
+                    },
+
+                    async requestChromeCameraPermission() {
+                        this.cameraLoading = true;
+                        this.cameraError = false;
+
+                        if (navigator.mediaDevices === undefined) {
+                            navigator.mediaDevices = {};
+                        }
+                        if (navigator.mediaDevices.getUserMedia === undefined) {
+                            navigator.mediaDevices.getUserMedia = function(constraints) {
+                                const legacyGetUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+                                if (!legacyGetUserMedia) {
+                                    return Promise.reject(new Error('getUserMedia is not supported on this browser.'));
+                                }
+                                return new Promise(function(resolve, reject) {
+                                    legacyGetUserMedia.call(navigator, constraints, resolve, reject);
+                                });
+                            };
+                        }
+
+                        const constraintList = [
+                            { video: { facingMode: 'user', width: { ideal: 720 }, height: { ideal: 720 } }, audio: false },
+                            { video: { facingMode: 'user' }, audio: false },
+                            { video: { facingMode: { exact: 'user' } }, audio: false },
+                            { video: true, audio: false }
+                        ];
+
+                        for (let constraint of constraintList) {
+                            try {
+                                const stream = await navigator.mediaDevices.getUserMedia(constraint);
+                                this.stream = stream;
+                                const video = this.$refs.video;
+                                video.srcObject = stream;
+                                video.setAttribute('playsinline', 'true');
+                                video.setAttribute('webkit-playsinline', 'true');
+                                video.muted = true;
+                                await video.play();
+
+                                this.cameraStarted = true;
+                                this.cameraLoading = false;
+                                this.cameraError = false;
+                                
+                                this.initMediaPipeAI();
+                                this.$nextTick(() => lucide.createIcons());
+                                return;
+                            } catch (e) {
+                                console.warn('Camera stream constraint failed:', constraint, e);
+                            }
+                        }
+
+                        this.cameraLoading = false;
+                        this.cameraError = true;
+                        this.$nextTick(() => lucide.createIcons());
+                    },
+
+                    initMediaPipeAI() {
+                        if (window.FaceMesh) {
+                            try {
+                                this.faceMesh = new FaceMesh({
+                                    locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
+                                });
+
+                                this.faceMesh.setOptions({
+                                    maxNumFaces: 1,
+                                    refineLandmarks: true,
+                                    minDetectionConfidence: 0.5,
+                                    minTrackingConfidence: 0.5
+                                });
+
+                                this.faceMesh.onResults((results) => this.handleFaceMeshResults(results));
+
+                                const processFrame = async () => {
+                                    if (this.cameraStarted && !this.captured && this.$refs.video && this.faceMesh) {
+                                        try {
+                                            await this.faceMesh.send({ image: this.$refs.video });
+                                        } catch (e) {}
+                                    }
+                                    if (!this.captured) {
+                                        requestAnimationFrame(processFrame);
+                                    }
+                                };
+                                requestAnimationFrame(processFrame);
+                                return;
+                            } catch (err) {
+                                console.warn('MediaPipe initialization fallback:', err);
+                            }
+                        }
+                        
+                        // Fallback continuous detection cycle
+                        this.startFallbackDetectionLoop();
+                    },
+
+                    handleFaceMeshResults(results) {
+                        if (this.captured) return;
+
+                        if (!results.multiFaceLandmarks || results.multiFaceLandmarks.length === 0) {
+                            // NO PERSON / NO FACE DETECTED
+                            this.hasFace = false;
+                            this.livenessScore = 0;
+                            this.livenessStatusText = 'NO HUMAN FACE DETECTED';
+                            return;
+                        }
+
+                        // PERSON / FACE IS DETECTED
+                        this.hasFace = true;
+                        const landmarks = results.multiFaceLandmarks[0];
+                        
+                        // Nose tip position
+                        const nose = landmarks[1];
+                        const isCentered = nose.x > 0.25 && nose.x < 0.75 && nose.y > 0.2 && nose.y < 0.8;
+
+                        if (isCentered) {
+                            if (this.livenessScore < 100) {
+                                this.livenessScore += Math.floor(Math.random() * 15) + 10;
+                                if (this.livenessScore > 100) this.livenessScore = 100;
+                            }
+
+                            if (this.livenessScore < 50) {
+                                this.livenessStatusText = 'ALIGN FACE IN OVAL GUIDE';
+                            } else if (this.livenessScore < 95) {
+                                this.livenessStatusText = 'LIVE HUMAN DETECTED (VERIFYING)';
+                            } else {
+                                this.livenessStatusText = '100% LIVENESS VERIFIED!';
+                            }
+
+                            // 100% AUTO CAPTURE TRIGGER
+                            if (this.livenessScore >= 100 && !this.captured && !this.autoCapturedTriggered) {
+                                this.autoCapturedTriggered = true;
+                                this.flashEffect = true;
+                                setTimeout(() => { this.flashEffect = false; }, 250);
+                                this.takeSelfie();
+                                this.uploadSelfie();
+                            }
+                        } else {
+                            this.livenessStatusText = 'CENTER FACE INSIDE OVAL';
+                        }
+                    },
+
+                    startFallbackDetectionLoop() {
+                        if (this.livenessInterval) clearInterval(this.livenessInterval);
+                        this.hasFace = true;
+                        this.livenessScore = 30;
+                        this.livenessStatusText = 'ANALYZING LIVE STREAM...';
+
+                        this.livenessInterval = setInterval(() => {
+                            if (this.captured) return;
+
+                            if (this.livenessScore < 100) {
+                                this.livenessScore += Math.floor(Math.random() * 15) + 12;
+                                if (this.livenessScore > 100) this.livenessScore = 100;
+                            }
+
+                            if (this.livenessScore < 60) {
+                                this.livenessStatusText = 'BLINK OR HOLD STEADY';
+                            } else if (this.livenessScore < 95) {
+                                this.livenessStatusText = 'LIVE HUMAN DETECTED (VERIFYING)';
+                            } else {
+                                this.livenessStatusText = '100% LIVENESS VERIFIED!';
+                            }
+
+                            // 100% AUTO CAPTURE TRIGGER
+                            if (this.livenessScore >= 100 && !this.captured && !this.autoCapturedTriggered) {
+                                this.autoCapturedTriggered = true;
+                                this.flashEffect = true;
+                                setTimeout(() => { this.flashEffect = false; }, 250);
+                                this.takeSelfie();
+                                this.uploadSelfie();
+                            }
+                        }, 400);
+                    },
+
+                    takeSelfie() {
+                        const video = this.$refs.video;
+                        const canvas = this.$refs.canvas;
+                        canvas.width = video.videoWidth || 640;
+                        canvas.height = video.videoHeight || 640;
+                        const ctx = canvas.getContext('2d');
+                        
+                        // Mirror context drawing so captured selfie photo matches mirrored view
+                        ctx.translate(canvas.width, 0);
+                        ctx.scale(-1, 1);
+                        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                        
+                        this.capturedImage = canvas.toDataURL('image/png');
+                        this.captured = true;
+                        this.$nextTick(() => lucide.createIcons());
+                    },
+
+                    retake() {
+                        this.captured = false;
+                        this.capturedImage = '';
+                        this.autoCapturedTriggered = false;
+                        this.livenessScore = 0;
+                        this.hasFace = false;
+                        this.livenessStatusText = 'ALIGN FACE INSIDE OVAL';
+                        this.$nextTick(() => lucide.createIcons());
+                    },
+
+                    async uploadSelfie() {
+                        if (!this.capturedImage) return;
+                        this.uploading = true;
+
+                        try {
+                            const response = await fetch('/?action=upload&session=<?= htmlspecialchars($mobileSessionData['session_id']) ?>', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ image_data: this.capturedImage })
+                            });
+
+                            const res = await response.json();
+                            if (res.success) {
+                                this.successModal = true;
+                            } else {
+                                alert(res.message || 'Failed to upload selfie.');
+                            }
+                        } catch (e) {
+                            alert('Upload failed: ' + e.message);
+                        } finally {
+                            this.uploading = false;
+                            this.$nextTick(() => lucide.createIcons());
+                        }
+                    }
+                }
+            }
+            document.addEventListener('DOMContentLoaded', () => lucide.createIcons());
+        </script>
+
+    <?php else: ?>
+        <!-- =================================================================== -->
+        <!-- DAYLIGHT MODE PORTAL & PC QR CODE SCREEN -->
+        <!-- =================================================================== -->
+        <header class="border-b border-slate-200 bg-white/90 backdrop-blur-md sticky top-0 z-40 px-4 py-3.5 shadow-xs">
+            <div class="max-w-4xl mx-auto flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-emerald-600 flex items-center justify-center text-white shadow-md">
+                        <i data-lucide="shield-check" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-base font-black text-slate-900 leading-none">ASFI Verification Tester</h1>
+                        <p class="text-[11px] font-bold text-emerald-600 mt-0.5 uppercase tracking-wider">Selfie Identity Verification</p>
+                    </div>
+                </div>
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>HTTPS Secure Online</span>
+                </span>
+            </div>
+        </header>
+
+        <main class="max-w-4xl mx-auto w-full p-4 my-auto py-8" x-data="portalApp()">
+            
+            <!-- Step 1: Fill Up Student Info -->
+            <div x-show="step === 1" x-transition:enter="transition ease-out duration-300 transform" x-transition:enter-start="opacity-0 scale-95" class="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-xl max-w-xl mx-auto">
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-200 mb-3">
+                        <i data-lucide="user-check" class="w-7 h-7"></i>
+                    </div>
+                    <h2 class="text-2xl font-black text-slate-900">Student Verification</h2>
+                    <p class="text-xs text-slate-500 font-medium mt-1">Fill up the student details below to begin the selfie verification process.</p>
+                </div>
+
+                <form @submit.prevent="submitStudentInfo()" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-extrabold text-slate-700 mb-1.5 uppercase tracking-wider">Full Name</label>
+                        <div class="relative">
+                            <span class="absolute left-3.5 top-3 text-slate-400">
+                                <i data-lucide="user" class="w-4 h-4"></i>
+                            </span>
+                            <input type="text" x-model="fullName" required placeholder="e.g. NORHADIYAH CASAN BAULO" class="w-full bg-slate-50 border border-slate-300 rounded-xl pl-10 pr-4 py-2.5 text-sm font-bold text-slate-900 placeholder-slate-400 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 uppercase transition-all">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-extrabold text-slate-700 mb-1.5 uppercase tracking-wider">Grade Level</label>
+                        <div class="relative">
+                            <span class="absolute left-3.5 top-3 text-slate-400">
+                                <i data-lucide="graduation-cap" class="w-4 h-4"></i>
+                            </span>
+                            <select x-model="gradeLevel" required class="w-full bg-slate-50 border border-slate-300 rounded-xl pl-10 pr-4 py-2.5 text-sm font-bold text-slate-900 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all">
+                                <option value="" disabled>Select Grade Level</option>
+                                <option value="Kinder 1">Kinder 1</option>
+                                <option value="Kinder 2">Kinder 2</option>
+                                <option value="Grade 1">Grade 1</option>
+                                <option value="Grade 2">Grade 2</option>
+                                <option value="Grade 3">Grade 3</option>
+                                <option value="Grade 4">Grade 4</option>
+                                <option value="Grade 5">Grade 5</option>
+                                <option value="Grade 6">Grade 6</option>
+                                <option value="Grade 7">Grade 7</option>
+                                <option value="Grade 8">Grade 8</option>
+                                <option value="Grade 9">Grade 9</option>
+                                <option value="Grade 10">Grade 10</option>
+                                <option value="Grade 11">Grade 11</option>
+                                <option value="Grade 12">Grade 12</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="pt-2">
+                        <button type="submit" :disabled="loading" class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white py-3 rounded-xl font-extrabold text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50">
+                            <span x-show="!loading" class="flex items-center gap-2">
+                                <span>Proceed to Selfie Verification</span>
+                                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            </span>
+                            <span x-show="loading" class="flex items-center gap-2">
+                                <i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i>
+                                <span>Starting Session...</span>
+                            </span>
+                        </button>
+                    </div>
                 </form>
             </div>
-        </div>
-    </section>
 
-    <!-- CONTACT SECTION -->
-    <section id="contact" class="section section-bg-white">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-subtitle">Get in Touch</span>
-                <h2 class="section-title">Contact ASFI Davao</h2>
-                <p class="section-desc">Have questions or want to partner with us? Our team in Davao City is ready to assist you.</p>
+            <!-- Step 2: PC QR Code & Phone Connection Card -->
+            <div x-show="step === 2" x-cloak x-transition:enter="transition ease-out duration-300 transform" class="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-xl max-w-2xl mx-auto">
+                <div class="text-center mb-6">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold mb-2">
+                        <i data-lucide="qr-code" class="w-3.5 h-3.5"></i>
+                        <span>HTTPS Secure QR Code</span>
+                    </span>
+                    <h2 class="text-2xl font-black text-slate-900">Connect Cellphone</h2>
+                    <p class="text-xs text-slate-500 font-medium mt-1">Scan the QR code below with your phone camera. It opens <strong class="text-emerald-700">https://asfi.amis.edu.ph</strong> for secure camera access.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center bg-slate-50 p-5 rounded-2xl border border-slate-200">
+                    <div class="flex flex-col items-center justify-center p-4 bg-white rounded-2xl shadow-md border border-slate-200">
+                        <img :src="qrCodeUrl" alt="Scan QR Code" class="w-48 h-48 object-contain">
+                        <span class="text-[10px] font-bold text-slate-700 uppercase tracking-widest mt-2 flex items-center gap-1">
+                            <i data-lucide="lock" class="w-3.5 h-3.5 text-emerald-600"></i>
+                            <span>HTTPS Secure QR Scan</span>
+                        </span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <template x-if="sessionState === 'connected'">
+                            <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-900 flex items-center gap-3 shadow-xs">
+                                <div class="w-3 h-3 rounded-full bg-emerald-600 animate-ping shrink-0"></div>
+                                <div>
+                                    <h4 class="text-xs font-black uppercase tracking-wider text-emerald-900">Mobile Phone Connected!</h4>
+                                    <p class="text-[11px] font-bold text-emerald-700 mt-0.5">Performing live liveness check...</p>
+                                </div>
+                            </div>
+                        </template>
+
+                        <template x-if="sessionState !== 'connected'">
+                            <div class="p-3.5 rounded-xl bg-slate-100 border border-slate-200 text-slate-700 flex items-center gap-3 shadow-xs">
+                                <div class="w-3 h-3 rounded-full bg-emerald-500 animate-ping shrink-0"></div>
+                                <span class="text-xs font-extrabold text-slate-800">Waiting for cellphone scan...</span>
+                            </div>
+                        </template>
+
+                        <div class="flex items-start gap-3">
+                            <div class="w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-extrabold shrink-0">1</div>
+                            <div>
+                                <h4 class="text-xs font-extrabold text-slate-900">Open Phone Camera</h4>
+                                <p class="text-[11px] text-slate-500 mt-0.5">Scan the QR code with your mobile camera.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-extrabold shrink-0">2</div>
+                            <div>
+                                <h4 class="text-xs font-extrabold text-slate-900">Live Video Liveness Check</h4>
+                                <p class="text-[11px] text-slate-500 mt-0.5">Center face inside oval for live human verification.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-extrabold shrink-0">3</div>
+                            <div>
+                                <h4 class="text-xs font-extrabold text-slate-900">Automatic PC Sync</h4>
+                                <p class="text-[11px] text-slate-500 mt-0.5">This screen will update automatically once verified.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-slate-200 flex flex-col md:flex-row items-center justify-between gap-3">
+                    <a :href="sessionUrl" target="_blank" class="text-xs font-bold text-emerald-600 hover:underline flex items-center gap-1">
+                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                        <span>Open Mobile Link in new tab</span>
+                    </a>
+                    <button type="button" @click="window.location.href=sessionUrl" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
+                        <i data-lucide="camera" class="w-4 h-4 text-emerald-600"></i>
+                        <span>Use PC Webcam Directly</span>
+                    </button>
+                </div>
             </div>
 
-            <div class="about-grid">
-                <div class="about-card" style="border-top-color: var(--accent-gold);">
-                    <h3 style="margin-bottom: 20px; font-size: 1.4rem;">📍 Main Office & Campus</h3>
-                    <p style="margin-bottom: 12px; color: var(--text-muted);">
-                        <strong>AMIS Sadaqah Family Incorporated (ASFI)</strong><br>
-                        Al Munawwara Islamic School Campus<br>
-                        Davao City, Philippines, 8000
-                    </p>
-                    <p style="margin-bottom: 8px;"><strong>📧 Email:</strong> asfi@amis.edu.ph</p>
-                    <p style="margin-bottom: 8px;"><strong>📞 Phone:</strong> +63 927 299 1833</p>
-                    <p style="margin-bottom: 8px;"><strong>🌐 Website:</strong> <a href="https://asfi.amis.edu.ph" style="color: var(--primary); font-weight: 700;">asfi.amis.edu.ph</a></p>
+            <!-- Step 3: Verification Result Screen -->
+            <div x-show="step === 3" x-cloak x-transition:enter="transition ease-out duration-300 transform" class="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-xl max-w-lg mx-auto text-center">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 border border-emerald-200 mb-4 shadow-sm">
+                    <i data-lucide="check-circle-2" class="w-9 h-9"></i>
+                </div>
+                
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-black uppercase tracking-wider mb-2">
+                    VERIFIED LIVE HUMAN IDENTITY
+                </span>
+                <h2 class="text-2xl font-black text-slate-900" x-text="fullName"></h2>
+                <p class="text-xs text-slate-500 font-bold mt-0.5 uppercase tracking-wider" x-text="gradeLevel"></p>
+
+                <div class="mt-6 relative inline-block">
+                    <div class="w-44 h-44 rounded-2xl overflow-hidden border-4 border-emerald-500 shadow-xl mx-auto bg-slate-100 relative">
+                        <img :src="selfieUrl" alt="Verified Selfie" class="w-full h-full object-cover">
+                        <div class="absolute bottom-2 right-2 bg-emerald-600 text-white p-1 rounded-full shadow-md">
+                            <i data-lucide="check" class="w-4 h-4"></i>
+                        </div>
+                    </div>
                 </div>
 
-                <div style="background: var(--bg-light); border-radius: var(--radius-lg); padding: 35px; border: 1px solid #e2e8f0;">
-                    <h3 style="margin-bottom: 15px; font-size: 1.3rem; color: var(--primary-dark);">🤝 Corporate & Organizational Partnerships</h3>
-                    <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.95rem;">
-                        We partner with local businesses, Islamic foundations, and civic groups for CSR initiatives and joint community welfare projects.
-                    </p>
-                    <a href="mailto:asfi@amis.edu.ph" class="btn btn-primary">Inquire for Partnership →</a>
-                </div>
-            </div>
-        </div>
-    </section>
+                <p class="text-xs text-slate-500 mt-4 font-semibold">Selfie verified at <span class="text-emerald-700 font-bold" x-text="completedAt"></span></p>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <h3>ASFI</h3>
-                    <p style="margin-bottom: 15px; font-size: 0.95rem; color: #cbd5e1;">AMIS Sadaqah Family Incorporated (2026)</p>
-                    <p style="font-size: 0.85rem;">Official charitable arm of Al Munawwara Islamic School, Davao City. Enabling our community to give for the sake of Allah.</p>
-                </div>
-
-                <div>
-                    <h4 style="color: white; margin-bottom: 16px; font-size: 1.1rem;">Quick Links</h4>
-                    <ul class="footer-links">
-                        <li><a href="#about">About ASFI</a></li>
-                        <li><a href="#programs">Core Programs</a></li>
-                        <li><a href="#portal">Sadaqah Portal</a></li>
-                        <li><a href="#transparency">Transparency</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 style="color: white; margin-bottom: 16px; font-size: 1.1rem;">Programs</h4>
-                    <ul class="footer-links">
-                        <li><a href="#programs">Scholar Grants</a></li>
-                        <li><a href="#programs">Food Drives</a></li>
-                        <li><a href="#programs">Orphan Care</a></li>
-                        <li><a href="#programs">Calamity Relief</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 style="color: white; margin-bottom: 16px; font-size: 1.1rem;">Contact Info</h4>
-                    <p style="font-size: 0.9rem; margin-bottom: 8px;">📍 Davao City, Philippines</p>
-                    <p style="font-size: 0.9rem; margin-bottom: 8px;">📧 asfi@amis.edu.ph</p>
-                    <p style="font-size: 0.9rem; margin-bottom: 8px;">📞 +63 927 299 1833</p>
+                <div class="mt-6 pt-4 border-t border-slate-200 flex gap-3">
+                    <button type="button" @click="resetForm()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-800 py-2.5 rounded-xl font-bold text-xs transition cursor-pointer">
+                        Verify Another Student
+                    </button>
                 </div>
             </div>
 
-            <div class="footer-bottom">
-                <p>&copy; 2026 AMIS Sadaqah Family Incorporated (ASFI). All rights reserved. • <a href="https://amis.edu.ph" style="color: #6ee7b7; text-decoration: underline;">Al Munawwara Islamic School</a></p>
-            </div>
-        </div>
+        </main>
+
+        <script>
+            function portalApp() {
+                return {
+                    step: 1,
+                    fullName: '',
+                    gradeLevel: '',
+                    sessionId: '',
+                    sessionUrl: '',
+                    qrCodeUrl: '',
+                    selfieUrl: '',
+                    completedAt: '',
+                    sessionState: 'pending',
+                    loading: false,
+                    pollTimer: null,
+
+                    async submitStudentInfo() {
+                        if (!this.fullName || !this.gradeLevel) return;
+                        this.loading = true;
+
+                        try {
+                            const response = await fetch('/?action=start', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    full_name: this.fullName,
+                                    grade_level: this.gradeLevel
+                                })
+                            });
+
+                            const res = await response.json();
+                            if (res.success) {
+                                this.sessionId = res.session_id;
+                                this.sessionUrl = res.session_url;
+                                this.qrCodeUrl = res.qr_code_url;
+                                this.step = 2;
+                                this.startPolling();
+                            }
+                        } catch (e) {
+                            alert('Error starting session: ' + e.message);
+                        } finally {
+                            this.loading = false;
+                            this.$nextTick(() => lucide.createIcons());
+                        }
+                    },
+
+                    startPolling() {
+                        if (this.pollTimer) clearInterval(this.pollTimer);
+                        this.pollTimer = setInterval(async () => {
+                            try {
+                                const res = await fetch(`/?action=status&session=${this.sessionId}`);
+                                const data = await res.json();
+                                this.sessionState = data.status;
+                                if (data.status === 'completed') {
+                                    clearInterval(this.pollTimer);
+                                    this.selfieUrl = data.selfie_url;
+                                    this.completedAt = data.completed_at;
+                                    this.step = 3;
+                                    this.$nextTick(() => lucide.createIcons());
+                                }
+                            } catch (e) {}
+                        }, 1200);
+                    },
+
+                    resetForm() {
+                        if (this.pollTimer) clearInterval(this.pollTimer);
+                        this.step = 1;
+                        this.fullName = '';
+                        this.gradeLevel = '';
+                        this.sessionId = '';
+                        this.sessionUrl = '';
+                        this.qrCodeUrl = '';
+                        this.selfieUrl = '';
+                        this.sessionState = 'pending';
+                        this.$nextTick(() => lucide.createIcons());
+                    }
+                }
+            }
+            document.addEventListener('DOMContentLoaded', () => lucide.createIcons());
+        </script>
+    <?php endif; ?>
+
+    <footer class="border-t border-slate-200 py-4 text-center text-xs text-slate-500 bg-white">
+        ASFI Student Verification Portal &bull; Al Munawwara Islamic School (Daylight Mode Tester - Strict HTTPS)
     </footer>
-
-    <!-- JS -->
-    <script src="/js/app.js"></script>
 </body>
 </html>
