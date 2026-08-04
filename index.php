@@ -140,7 +140,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
         <!-- Top Bar inside Coming Soon Splash -->
         <header class="max-w-6xl mx-auto w-full flex items-center justify-between py-2 relative z-10">
             <div class="flex items-center gap-3">
-                <img src="asfi_logo_2026.png" alt="ASFI Official Logo" loading="lazy" decoding="async" class="h-12 w-12 sm:h-14 sm:w-14 object-contain drop-shadow-md animate-float">
+                <img src="asfi_logo_2026.png" alt="ASFI Official Logo" loading="lazy" decoding="async" class="h-12 w-12 sm:h-14 sm:w-14 object-contain drop-shadow-md">
                 <div>
                     <h1 class="text-xs sm:text-sm font-black tracking-wider text-darkText uppercase"><span class="text-primary font-black">AMIS</span> SADAQAH FAMILY INCORPORATED</h1>
                     <p class="text-[10px] sm:text-[11px] font-extrabold text-primary uppercase tracking-widest">2026</p>
@@ -148,25 +148,21 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
             </div>
         </header>
 
-        <!-- Background Floating Decorative Elements -->
-        <div class="absolute top-1/4 left-10 w-48 h-48 rounded-full bg-emerald-300/20 blur-3xl pointer-events-none animate-glow-ring"></div>
-        <div class="absolute bottom-1/4 right-10 w-64 h-64 rounded-full bg-amber-300/20 blur-3xl pointer-events-none animate-glow-ring" style="animation-delay: 1.5s;"></div>
+        <!-- Background Floating Decorative Elements (Background Animation Only) -->
+        <div class="absolute top-1/4 left-10 w-64 h-64 rounded-full bg-emerald-300/25 blur-3xl pointer-events-none animate-glow-ring"></div>
+        <div class="absolute bottom-1/4 right-10 w-80 h-80 rounded-full bg-amber-300/25 blur-3xl pointer-events-none animate-glow-ring" style="animation-delay: 1.5s;"></div>
 
         <!-- Center Content: Coming Soon InshaAllah -->
         <main class="max-w-3xl mx-auto w-full text-center my-auto py-4 sm:py-6 px-2 sm:px-4 space-y-4 sm:space-y-5 relative z-10">
             
             <!-- Arabic Bismillah Calligraphy Banner -->
             <div class="space-y-1">
-                <p class="font-arabic text-2xl sm:text-4xl md:text-5xl text-primary font-bold tracking-wide transition transform hover:scale-105 duration-300">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
+                <p class="font-arabic text-2xl sm:text-4xl md:text-5xl text-primary font-bold tracking-wide">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
             </div>
 
-            <!-- Big Logo Display with Ambient Rotating Glow Ring -->
+            <!-- Big Logo Display (Static, Clean) -->
             <div class="relative inline-block my-1">
-                <!-- Rotating Decorative Ring -->
-                <div class="absolute -inset-4 rounded-full border-2 border-dashed border-emerald-400/40 animate-spin-slow pointer-events-none"></div>
-                <!-- Glowing Halo -->
-                <div class="absolute inset-0 rounded-full bg-[#16A34A]/25 blur-2xl animate-glow-ring"></div>
-                <img src="asfi_logo_2026.png" alt="ASFI Logo" loading="lazy" decoding="async" class="relative h-36 w-36 sm:h-48 sm:w-48 md:h-56 md:w-56 mx-auto object-contain drop-shadow-2xl animate-float">
+                <img src="asfi_logo_2026.png" alt="ASFI Logo" loading="lazy" decoding="async" class="relative h-36 w-36 sm:h-48 sm:w-48 md:h-56 md:w-56 mx-auto object-contain drop-shadow-xl">
             </div>
 
             <!-- Headline & Tagline -->
