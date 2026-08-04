@@ -174,12 +174,6 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                 <h2 class="text-2xl sm:text-4xl md:text-5xl font-black text-darkText tracking-tight leading-tight">
                     Coming Soon <span class="text-primary font-black">InshaAllah</span>
                 </h2>
-                <p class="text-xs sm:text-base md:text-lg font-extrabold text-orangeAccent italic max-w-xl mx-auto px-2">
-                    "Empowering Communities Through Compassion and Mutual Support."
-                </p>
-                <p class="text-[11px] sm:text-xs text-slate-600 max-w-lg mx-auto leading-relaxed font-medium px-2">
-                    We are launching a modern, transparent humanitarian foundation platform for ASFI 2026 to power Education Grants, Emergency Medical Aid, Orphan Support, and Takaful Relief.
-                </p>
             </div>
 
             <!-- Get Notified Subscription Form -->
@@ -197,8 +191,9 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
         </main>
 
         <!-- Footer inside Coming Soon -->
-        <footer class="max-w-6xl mx-auto w-full text-center text-[10px] sm:text-[11px] text-slate-500 py-2 border-t border-slate-200 font-medium relative z-10">
+        <footer class="max-w-6xl mx-auto w-full text-center text-[10px] sm:text-[11px] text-slate-500 py-2 border-t border-slate-200 font-medium relative z-10 space-y-0.5">
             <p>© 2026 AMIS Sadaqah Family Incorporated (ASFI). All Rights Reserved.</p>
+            <p class="text-primary font-extrabold">Developed by: Mon Zhairel Lingasa</p>
         </footer>
     </div>
 
