@@ -122,6 +122,41 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
             animation: shimmerText 5s linear infinite;
         }
 
+        /* Shiny Logo Sweep Animation */
+        @keyframes logoShineSweep {
+            0% {
+                transform: translateX(-150%) rotate(25deg);
+            }
+            40%, 100% {
+                transform: translateX(250%) rotate(25deg);
+            }
+        }
+
+        .shiny-logo-container {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+            border-radius: 9999px;
+            padding: 8px;
+        }
+
+        .shiny-logo-container::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.85) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            animation: logoShineSweep 3s ease-in-out infinite;
+            pointer-events: none;
+        }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #F8FAFC; }
@@ -132,7 +167,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 <body x-data="asfiApp()" :class="showComingSoon ? 'overflow-hidden h-screen' : 'min-h-screen'" class="selection:bg-[#16A34A] selection:text-white relative text-darkText bg-asfi-pattern">
 
     <!-- =================================================================== -->
-    <!-- 1. COMING SOON INSHAALLAH LAUNCH PAGE (ANIMATED STANDALONE PAGE) -->
+    <!-- 1. COMING SOON INSHAALLAH LAUNCH PAGE (CLEAN BACKGROUND, SHINY LOGO) -->
     <!-- =================================================================== -->
     <div x-show="showComingSoon"
          class="fixed inset-0 z-50 h-screen w-screen bg-gradient-to-br from-emerald-50/90 via-white to-blue-50/70 flex flex-col justify-between p-4 md:p-8 overflow-hidden">
@@ -148,10 +183,6 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
             </div>
         </header>
 
-        <!-- Background Floating Decorative Elements (Background Animation Only) -->
-        <div class="absolute top-1/4 left-10 w-64 h-64 rounded-full bg-emerald-300/25 blur-3xl pointer-events-none animate-glow-ring"></div>
-        <div class="absolute bottom-1/4 right-10 w-80 h-80 rounded-full bg-amber-300/25 blur-3xl pointer-events-none animate-glow-ring" style="animation-delay: 1.5s;"></div>
-
         <!-- Center Content: Coming Soon InshaAllah -->
         <main class="max-w-3xl mx-auto w-full text-center my-auto py-4 sm:py-6 px-2 sm:px-4 space-y-4 sm:space-y-5 relative z-10">
             
@@ -160,9 +191,11 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                 <p class="font-arabic text-2xl sm:text-4xl md:text-5xl text-primary font-bold tracking-wide">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
             </div>
 
-            <!-- Big Logo Display (Static, Clean) -->
+            <!-- Shiny Logo Display (Shiny Light Sweep Effect) -->
             <div class="relative inline-block my-1">
-                <img src="asfi_logo_2026.png" alt="ASFI Logo" loading="lazy" decoding="async" class="relative h-36 w-36 sm:h-48 sm:w-48 md:h-56 md:w-56 mx-auto object-contain drop-shadow-xl">
+                <div class="shiny-logo-container drop-shadow-2xl">
+                    <img src="asfi_logo_2026.png" alt="ASFI Logo" loading="lazy" decoding="async" class="h-36 w-36 sm:h-48 sm:w-48 md:h-56 md:w-56 mx-auto object-contain">
+                </div>
             </div>
 
             <!-- Headline & Tagline -->
