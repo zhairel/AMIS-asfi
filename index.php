@@ -125,6 +125,35 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
             pointer-events: none;
         }
 
+        /* Peaceful Spiritual Aurora Gradient Background */
+        @keyframes auroraFlow {
+            0% {
+                transform: translate(-10%, -10%) rotate(0deg) scale(1);
+            }
+            50% {
+                transform: translate(10%, 10%) rotate(180deg) scale(1.15);
+            }
+            100% {
+                transform: translate(-10%, -10%) rotate(360deg) scale(1);
+            }
+        }
+
+        .aurora-bg-layer {
+            position: absolute;
+            top: -40%;
+            left: -40%;
+            width: 180%;
+            height: 180%;
+            background: radial-gradient(circle at 25% 25%, rgba(22, 163, 74, 0.16) 0%, transparent 45%),
+                        radial-gradient(circle at 75% 25%, rgba(20, 184, 166, 0.16) 0%, transparent 45%),
+                        radial-gradient(circle at 50% 75%, rgba(56, 189, 248, 0.16) 0%, transparent 45%),
+                        radial-gradient(circle at 75% 75%, rgba(251, 191, 36, 0.13) 0%, transparent 45%);
+            filter: blur(70px);
+            animation: auroraFlow 28s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #F8FAFC; }
@@ -135,10 +164,13 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 <body x-data="asfiApp()" :class="showComingSoon ? 'overflow-hidden h-screen' : 'min-h-screen'" class="selection:bg-[#2563EB] selection:text-white relative text-darkText bg-asfi-pattern">
 
     <!-- =================================================================== -->
-    <!-- 1. COMING SOON INSHAALLAH LAUNCH PAGE (RESPONSIVE TYPOGRAPHY) -->
+    <!-- 1. COMING SOON INSHAALLAH LAUNCH PAGE (AURORA GRADIENT ANIMATION) -->
     <!-- =================================================================== -->
     <div x-show="showComingSoon"
          class="fixed inset-0 z-50 h-screen w-screen bg-gradient-to-br from-blue-50/90 via-white to-emerald-50/70 flex flex-col justify-between p-4 md:p-8 overflow-hidden">
+        
+        <!-- Aurora Gradient Ambient Layer -->
+        <div class="aurora-bg-layer"></div>
         
         <!-- Top Bar inside Coming Soon Splash -->
         <header class="max-w-6xl mx-auto w-full flex items-center justify-between py-2 relative z-10">
