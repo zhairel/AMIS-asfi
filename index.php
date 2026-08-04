@@ -184,7 +184,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                 <div class="shiny-logo-container drop-shadow-2xl">
                     <img src="asfi_logo_2026.png" alt="ASFI Logo" loading="lazy" decoding="async" class="h-36 w-36 sm:h-48 sm:w-48 md:h-56 md:w-56 mx-auto object-contain">
                 </div>
-                <h3 class="text-sm sm:text-lg md:text-xl font-black tracking-widest text-darkText uppercase pt-2">
+                <h3 class="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-black tracking-widest text-darkText uppercase pt-2">
                     <span class="text-[#16A34A] font-black">AMIS</span> SADAQAH FAMILY INCORPORATION
                 </h3>
             </div>
