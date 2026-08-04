@@ -3,9 +3,7 @@
 // ASFI - AMIS SADAQAH FAMILY INCORPORATED (DAVAO CITY 2026)
 // Official Web Application & Launch Preview Portal
 // Tagline: Empowering Communities Through Compassion and Mutual Support.
-// Palette: Primary #16A34A (Emerald Green), Secondary #2563EB (Royal Blue),
-//          Accent #FBBF24 (Golden Yellow), Accent 2 #F97316 (Orange),
-//          Background #FFFFFF, Light Background #F8FAFC, Text #0F172A
+// Mobile Responsive & Lazy Loading Optimized
 // ============================================================================
 
 // Strict HTTPS enforcement
@@ -71,14 +69,6 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
             background-position: 0 0, 16px 16px;
         }
 
-        .gold-gradient-text {
-            color: #d97706;
-        }
-
-        .primary-gradient-text {
-            color: #16A34A;
-        }
-
         .asfi-card {
             background: #FFFFFF;
             border-radius: 1.5rem;
@@ -102,7 +92,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 <body x-data="asfiApp()" class="min-h-screen selection:bg-[#16A34A] selection:text-white relative text-darkText bg-asfi-pattern">
 
     <!-- =================================================================== -->
-    <!-- 1. COMING SOON INSHAALLAH LOADING / SPLASH LAYER -->
+    <!-- 1. COMING SOON INSHAALLAH LOADING / SPLASH LAYER (RESPONSIVE) -->
     <!-- =================================================================== -->
     <div x-show="showComingSoon"
          x-transition:leave="transition ease-in-out duration-700 transform"
@@ -111,53 +101,53 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
          class="fixed inset-0 z-50 bg-gradient-to-br from-emerald-50 via-white to-blue-50/60 backdrop-blur-xl flex flex-col justify-between p-4 md:p-8 overflow-y-auto">
         
         <!-- Top Bar inside Coming Soon Splash -->
-        <header class="max-w-6xl mx-auto w-full flex items-center justify-between py-2">
+        <header class="max-w-6xl mx-auto w-full flex flex-col sm:flex-row items-center justify-between gap-3 py-2 text-center sm:text-left">
             <div class="flex items-center gap-3">
-                <img src="asfi_logo_2026.png" alt="ASFI Official Logo" class="h-14 w-14 object-contain drop-shadow-md">
+                <img src="asfi_logo_2026.png" alt="ASFI Official Logo" loading="lazy" decoding="async" class="h-12 w-12 sm:h-14 sm:w-14 object-contain drop-shadow-md">
                 <div>
-                    <h1 class="text-sm font-black tracking-wider text-darkText uppercase">AMIS SADAQAH FAMILY INCORPORATED</h1>
-                    <p class="text-[11px] font-extrabold text-primary uppercase tracking-widest">Davao City 2026</p>
+                    <h1 class="text-xs sm:text-sm font-black tracking-wider text-darkText uppercase">AMIS SADAQAH FAMILY INCORPORATED</h1>
+                    <p class="text-[10px] sm:text-[11px] font-extrabold text-primary uppercase tracking-widest">Davao City 2026</p>
                 </div>
             </div>
             
-            <button @click="dismissComingSoon()" type="button" class="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-xs font-extrabold text-white shadow-md transition hover:bg-emerald-700 cursor-pointer">
+            <button @click="dismissComingSoon()" type="button" class="inline-flex items-center gap-2 rounded-full bg-primary px-4 sm:px-5 py-2 sm:py-2.5 text-xs font-extrabold text-white shadow-md transition hover:bg-emerald-700 cursor-pointer">
                 <span>Explore Website Preview</span>
                 <i data-lucide="arrow-down-right" class="h-4 w-4"></i>
             </button>
         </header>
 
         <!-- Center Content: Coming Soon InshaAllah -->
-        <main class="max-w-3xl mx-auto w-full text-center my-auto py-8 px-4 space-y-6">
+        <main class="max-w-3xl mx-auto w-full text-center my-auto py-6 sm:py-8 px-2 sm:px-4 space-y-5 sm:space-y-6">
             
             <!-- Arabic Bismillah Calligraphy Banner -->
             <div class="space-y-2">
-                <p class="font-arabic text-3xl md:text-5xl text-primary font-bold tracking-wide">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
+                <p class="font-arabic text-2xl sm:text-4xl md:text-5xl text-primary font-bold tracking-wide">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
             </div>
 
             <!-- Big Logo Display -->
-            <div class="relative inline-block my-2">
+            <div class="relative inline-block my-1">
                 <div class="absolute inset-0 rounded-full bg-[#16A34A]/20 blur-2xl opacity-60 animate-pulse"></div>
-                <img src="asfi_logo_2026.png" alt="ASFI Logo" class="relative h-48 w-48 md:h-56 md:w-56 mx-auto object-contain drop-shadow-xl hover:scale-105 transition-transform duration-300">
+                <img src="asfi_logo_2026.png" alt="ASFI Logo" loading="lazy" decoding="async" class="relative h-36 w-36 sm:h-48 sm:w-48 md:h-56 md:w-56 mx-auto object-contain drop-shadow-xl hover:scale-105 transition-transform duration-300">
             </div>
 
             <!-- Headline & Tagline -->
-            <div class="space-y-3">
-                <h2 class="text-3xl md:text-5xl font-black text-darkText tracking-tight leading-tight">
+            <div class="space-y-2 sm:space-y-3">
+                <h2 class="text-2xl sm:text-4xl md:text-5xl font-black text-darkText tracking-tight leading-tight">
                     Coming Soon <span class="text-primary">InshaAllah</span>
                 </h2>
-                <p class="text-base md:text-xl font-extrabold text-orangeAccent italic max-w-xl mx-auto">
+                <p class="text-sm sm:text-lg md:text-xl font-extrabold text-orangeAccent italic max-w-xl mx-auto px-2">
                     "Empowering Communities Through Compassion and Mutual Support."
                 </p>
-                <p class="text-xs md:text-sm text-slate-600 max-w-lg mx-auto leading-relaxed font-medium">
+                <p class="text-xs sm:text-sm text-slate-600 max-w-lg mx-auto leading-relaxed font-medium px-2">
                     We are launching a modern, transparent humanitarian foundation platform for ASFI Davao City 2026 to power Education Grants, Emergency Medical Aid, Orphan Support, and Takaful Relief.
                 </p>
             </div>
 
             <!-- Get Notified Subscription Form -->
-            <div class="pt-2 max-w-md mx-auto">
+            <div class="pt-2 max-w-md mx-auto w-full px-2">
                 <form @submit.prevent="subscribeNewsletter()" class="flex flex-col sm:flex-row gap-2">
                     <input type="email" x-model="subscriberEmail" required placeholder="Enter your email address..." class="flex-1 rounded-xl bg-white border border-emerald-300 px-4 py-3 text-xs text-darkText placeholder-slate-400 focus:border-primary focus:outline-none shadow-sm">
-                    <button type="submit" class="rounded-xl bg-primary hover:bg-emerald-700 px-7 py-3 text-xs font-black uppercase tracking-wider text-white shadow-md transition active:scale-95 cursor-pointer whitespace-nowrap">
+                    <button type="submit" class="rounded-xl bg-primary hover:bg-emerald-700 px-6 py-3 text-xs font-black uppercase tracking-wider text-white shadow-md transition active:scale-95 cursor-pointer whitespace-nowrap">
                         Notify Me
                     </button>
                 </form>
@@ -167,8 +157,8 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
             </div>
 
             <!-- Explore Preview Button -->
-            <div class="pt-3">
-                <button @click="dismissComingSoon()" type="button" class="inline-flex items-center gap-2.5 rounded-2xl bg-goldAccent hover:bg-amber-400 px-8 py-4 text-sm font-black uppercase tracking-wider text-darkText shadow-xl transition hover:scale-105 active:scale-95 cursor-pointer">
+            <div class="pt-2">
+                <button @click="dismissComingSoon()" type="button" class="inline-flex items-center gap-2 rounded-2xl bg-goldAccent hover:bg-amber-400 px-6 sm:px-8 py-3.5 sm:py-4 text-xs sm:text-sm font-black uppercase tracking-wider text-darkText shadow-xl transition hover:scale-105 active:scale-95 cursor-pointer">
                     <span>Preview Foundation Website</span>
                     <i data-lucide="arrow-down" class="h-4 w-4"></i>
                 </button>
@@ -176,25 +166,25 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
         </main>
 
         <!-- Footer inside Coming Soon -->
-        <footer class="max-w-6xl mx-auto w-full text-center text-[11px] text-slate-500 py-2 border-t border-slate-200 font-medium">
+        <footer class="max-w-6xl mx-auto w-full text-center text-[10px] sm:text-[11px] text-slate-500 py-2 border-t border-slate-200 font-medium">
             <p>© 2026 AMIS Sadaqah Family Incorporated (ASFI) - Davao City, Philippines. All Rights Reserved.</p>
         </footer>
     </div>
 
 
     <!-- =================================================================== -->
-    <!-- 2. MAIN WEBSITE APP (EXACT SPECIFIED HEX PALETTE) -->
+    <!-- 2. MAIN WEBSITE APP (FULL RESPONSIVE NAVIGATION & LAZY LOADED ASSETS) -->
     <!-- =================================================================== -->
     
     <!-- Top Preview Banner -->
-    <div x-show="!showComingSoon" x-cloak class="bg-primary text-white px-4 py-2 text-xs font-bold text-center flex items-center justify-between shadow-xs">
+    <div x-show="!showComingSoon" x-cloak class="bg-primary text-white px-3 sm:px-4 py-2 text-[11px] sm:text-xs font-bold text-center flex items-center justify-between shadow-xs">
         <div class="max-w-7xl mx-auto w-full flex items-center justify-between gap-2">
-            <div class="flex items-center gap-2">
-                <span class="inline-block w-2 h-2 rounded-full bg-goldAccent animate-ping"></span>
-                <span>✨ Previewing Official ASFI Web Application (Davao City 2026)</span>
+            <div class="flex items-center gap-2 truncate">
+                <span class="inline-block w-2 h-2 rounded-full bg-goldAccent animate-ping shrink-0"></span>
+                <span class="truncate">✨ Previewing Official ASFI Web Application (Davao City 2026)</span>
             </div>
-            <button @click="showComingSoon = true" class="text-[11px] font-black uppercase underline text-amber-200 hover:text-white cursor-pointer">
-                View Launch Banner
+            <button @click="showComingSoon = true" class="text-[10px] sm:text-[11px] font-black uppercase underline text-amber-200 hover:text-white cursor-pointer shrink-0">
+                View Launch Splash
             </button>
         </div>
     </div>
@@ -203,16 +193,16 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
     <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-emerald-100 px-4 py-3.5 shadow-xs transition-all">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
             <!-- Brand Logo -->
-            <a href="#" class="flex items-center gap-3">
-                <img src="asfi_logo_2026.png" alt="ASFI Logo" class="h-12 w-12 object-contain drop-shadow-sm">
+            <a href="#" class="flex items-center gap-2.5 sm:gap-3">
+                <img src="asfi_logo_2026.png" alt="ASFI Logo" loading="lazy" decoding="async" class="h-10 w-10 sm:h-12 sm:w-12 object-contain drop-shadow-sm">
                 <div>
-                    <span class="block text-sm font-black tracking-wider text-darkText uppercase leading-none">ASFI DAVAO CITY</span>
-                    <span class="text-[10px] font-extrabold text-primary tracking-wider">AMIS SADAQAH FAMILY INCORPORATED</span>
+                    <span class="block text-xs sm:text-sm font-black tracking-wider text-darkText uppercase leading-none">ASFI DAVAO CITY</span>
+                    <span class="text-[9px] sm:text-[10px] font-extrabold text-primary tracking-wider">AMIS SADAQAH FAMILY INC.</span>
                 </div>
             </a>
 
             <!-- Desktop Nav Links -->
-            <nav class="hidden md:flex items-center gap-7 text-xs font-bold text-slate-700">
+            <nav class="hidden md:flex items-center gap-6 lg:gap-7 text-xs font-bold text-slate-700">
                 <a href="#about" class="hover:text-primary transition">About Us</a>
                 <a href="#programs" class="hover:text-primary transition">Programs</a>
                 <a href="#impact" class="hover:text-primary transition">Impact</a>
@@ -221,15 +211,36 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                 <a href="#contact" class="hover:text-primary transition">Contact</a>
             </nav>
 
-            <!-- Action Buttons -->
-            <div class="flex items-center gap-2.5">
-                <button @click="openVolunteerModal()" type="button" class="hidden sm:inline-flex items-center gap-1.5 rounded-xl border border-secondary/30 bg-blue-50 px-4 py-2.5 text-xs font-bold text-secondary hover:bg-blue-100 transition shadow-2xs">
+            <!-- Action Buttons & Mobile Hamburger -->
+            <div class="flex items-center gap-2">
+                <button @click="openVolunteerModal()" type="button" class="hidden sm:inline-flex items-center gap-1.5 rounded-xl border border-secondary/30 bg-blue-50 px-3.5 py-2 text-xs font-bold text-secondary hover:bg-blue-100 transition shadow-2xs">
                     <i data-lucide="heart-handshake" class="h-4 w-4 text-secondary"></i>
                     <span>Volunteer</span>
                 </button>
-                <button @click="openDonateModal()" type="button" class="inline-flex items-center gap-1.5 rounded-xl bg-primary hover:bg-emerald-700 px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-md transition active:scale-95 cursor-pointer">
+                <button @click="openDonateModal()" type="button" class="inline-flex items-center gap-1.5 rounded-xl bg-primary hover:bg-emerald-700 px-3.5 sm:px-5 py-2 sm:py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-md transition active:scale-95 cursor-pointer">
                     <i data-lucide="hand-heart" class="h-4 w-4 text-goldAccent"></i>
-                    <span>Donate Now</span>
+                    <span>Donate</span>
+                </button>
+
+                <!-- Mobile Navigation Toggle Button -->
+                <button @click="mobileNav = !mobileNav" type="button" class="md:hidden p-2 text-slate-700 hover:text-primary rounded-lg focus:outline-none cursor-pointer">
+                    <i data-lucide="menu" class="h-6 w-6" x-show="!mobileNav"></i>
+                    <i data-lucide="x" class="h-6 w-6" x-show="mobileNav" x-cloak></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Drawer Navigation -->
+        <div x-show="mobileNav" x-cloak x-collapse class="md:hidden bg-white border-t border-slate-100 px-4 py-4 space-y-3 font-bold text-xs">
+            <a href="#about" @click="mobileNav = false" class="block py-2 text-slate-700 hover:text-primary">About Us</a>
+            <a href="#programs" @click="mobileNav = false" class="block py-2 text-slate-700 hover:text-primary">Our Programs</a>
+            <a href="#impact" @click="mobileNav = false" class="block py-2 text-slate-700 hover:text-primary">Our Impact</a>
+            <a href="#stories" @click="mobileNav = false" class="block py-2 text-slate-700 hover:text-primary">Success Stories</a>
+            <a href="#faq" @click="mobileNav = false" class="block py-2 text-slate-700 hover:text-primary">FAQ</a>
+            <a href="#contact" @click="mobileNav = false" class="block py-2 text-slate-700 hover:text-primary">Contact Us</a>
+            <div class="pt-2 flex flex-col gap-2">
+                <button @click="mobileNav = false; openVolunteerModal()" class="w-full text-center py-2.5 rounded-xl border border-secondary text-secondary font-bold">
+                    Become a Volunteer
                 </button>
             </div>
         </div>
@@ -237,83 +248,83 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 
 
     <!-- HERO SECTION -->
-    <section class="relative pt-12 pb-20 md:py-24 bg-gradient-to-br from-emerald-50/70 via-white to-blue-50/50 overflow-hidden border-b border-emerald-100">
+    <section class="relative pt-8 sm:pt-12 pb-16 sm:pb-20 md:py-24 bg-gradient-to-br from-emerald-50/70 via-white to-blue-50/50 overflow-hidden border-b border-emerald-100">
         <div class="max-w-7xl mx-auto px-4 relative z-10">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
                 
                 <!-- Left Hero Content -->
-                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-                    <div class="inline-flex items-center gap-2 rounded-full border border-emerald-300 bg-emerald-100/80 px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest text-primary shadow-2xs">
+                <div class="lg:col-span-7 space-y-5 sm:space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 rounded-full border border-emerald-300 bg-emerald-100/80 px-3.5 sm:px-4 py-1 sm:py-1.5 text-[11px] sm:text-xs font-extrabold uppercase tracking-widest text-primary shadow-2xs">
                         <i data-lucide="sparkles" class="h-3.5 w-3.5 text-orangeAccent"></i>
                         <span>Takaful & Mutual Community Support</span>
                     </div>
 
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-darkText tracking-tight leading-[1.15]">
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-darkText tracking-tight leading-[1.15]">
                         Empowering Communities Through <span class="text-primary">Compassion & Mutual Support</span>
                     </h1>
 
-                    <p class="text-base sm:text-lg text-slate-600 font-medium leading-relaxed max-w-2xl">
+                    <p class="text-sm sm:text-lg text-slate-600 font-medium leading-relaxed max-w-2xl mx-auto lg:mx-0">
                         AMIS Sadaqah Family Incorporated (ASFI) is a modern humanitarian foundation dedicated to uplifting underprivileged families in Davao City and Mindanao through Education Grants, Emergency Medical Relief, Orphan Care, and Disaster Assistance.
                     </p>
 
-                    <div class="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                        <button @click="openDonateModal()" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl bg-primary hover:bg-emerald-700 px-8 py-4 text-sm font-black uppercase tracking-wider text-white shadow-xl transition active:scale-95 cursor-pointer">
+                    <div class="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-4">
+                        <button @click="openDonateModal()" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl bg-primary hover:bg-emerald-700 px-8 py-3.5 sm:py-4 text-xs sm:text-sm font-black uppercase tracking-wider text-white shadow-xl transition active:scale-95 cursor-pointer">
                             <i data-lucide="heart" class="h-4 w-4 text-goldAccent"></i>
                             <span>Donate Sadaqah & Zakat</span>
                         </button>
-                        <a href="#programs" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-300 bg-white px-7 py-4 text-sm font-bold text-darkText shadow-sm hover:bg-slate-50 transition">
+                        <a href="#programs" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-300 bg-white px-7 py-3.5 sm:py-4 text-xs sm:text-sm font-bold text-darkText shadow-sm hover:bg-slate-50 transition">
                             <span>Explore Our Programs</span>
                             <i data-lucide="chevron-right" class="h-4 w-4 text-primary"></i>
                         </a>
                     </div>
 
                     <!-- Quick Trust Indicators -->
-                    <div class="pt-6 border-t border-slate-200 grid grid-cols-3 gap-4 text-center lg:text-left">
+                    <div class="pt-6 border-t border-slate-200 grid grid-cols-3 gap-2 sm:gap-4 text-center lg:text-left">
                         <div>
-                            <span class="block text-2xl md:text-3xl font-black text-primary">100%</span>
-                            <span class="text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">Audited Amanah</span>
+                            <span class="block text-xl sm:text-3xl font-black text-primary">100%</span>
+                            <span class="text-[10px] sm:text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">Audited Amanah</span>
                         </div>
                         <div>
-                            <span class="block text-2xl md:text-3xl font-black text-orangeAccent">12,500+</span>
-                            <span class="text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">Lives Touched</span>
+                            <span class="block text-xl sm:text-3xl font-black text-orangeAccent">12,500+</span>
+                            <span class="text-[10px] sm:text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">Lives Touched</span>
                         </div>
                         <div>
-                            <span class="block text-2xl md:text-3xl font-black text-secondary">SEC 2026</span>
-                            <span class="text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">Davao Registered</span>
+                            <span class="block text-xl sm:text-3xl font-black text-secondary">SEC 2026</span>
+                            <span class="text-[10px] sm:text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">Davao Registered</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Right Hero Visual Card -->
                 <div class="lg:col-span-5">
-                    <div class="asfi-card p-4 space-y-4">
+                    <div class="asfi-card p-3 sm:p-4 space-y-3 sm:space-y-4">
                         <!-- Hero Image Banner -->
-                        <div class="relative h-72 sm:h-80 rounded-2xl overflow-hidden bg-slate-100 shadow-md">
-                            <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1200&auto=format&fit=crop" alt="Volunteers helping children" class="w-full h-full object-cover">
+                        <div class="relative h-60 sm:h-72 lg:h-80 rounded-2xl overflow-hidden bg-slate-100 shadow-md">
+                            <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1200&auto=format&fit=crop" alt="Volunteers helping children" loading="lazy" decoding="async" class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent"></div>
                             
-                            <div class="absolute bottom-4 left-4 right-4 text-white">
-                                <span class="inline-block px-3 py-1 rounded-full bg-primary text-white text-[10px] font-black uppercase tracking-wider mb-1">Active Community Mission</span>
-                                <h3 class="text-base font-extrabold">Davao Family Relief Drive 2026</h3>
-                                <p class="text-xs text-slate-200">Delivering food baskets & health support to 450 families.</p>
+                            <div class="absolute bottom-3 left-3 right-3 text-white">
+                                <span class="inline-block px-2.5 py-0.5 rounded-full bg-primary text-white text-[9px] sm:text-[10px] font-black uppercase tracking-wider mb-1">Active Community Mission</span>
+                                <h3 class="text-sm sm:text-base font-extrabold">Davao Family Relief Drive 2026</h3>
+                                <p class="text-[11px] sm:text-xs text-slate-200">Delivering food baskets & health support to 450 families.</p>
                             </div>
                         </div>
 
                         <!-- Featured Program Mini Cards -->
-                        <div class="grid grid-cols-2 gap-3">
-                            <div class="rounded-xl bg-emerald-50 p-3.5 border border-emerald-200 shadow-2xs">
-                                <div class="flex items-center gap-2 text-primary font-extrabold text-xs">
-                                    <i data-lucide="graduation-cap" class="h-4 w-4 text-primary"></i>
-                                    <span>Education Grants</span>
+                        <div class="grid grid-cols-2 gap-2.5 sm:gap-3">
+                            <div class="rounded-xl bg-emerald-50 p-3 border border-emerald-200 shadow-2xs">
+                                <div class="flex items-center gap-1.5 text-primary font-extrabold text-xs">
+                                    <i data-lucide="graduation-cap" class="h-4 w-4 text-primary shrink-0"></i>
+                                    <span class="truncate">Education Grants</span>
                                 </div>
-                                <span class="block text-xs font-bold text-slate-600 mt-1">250+ Active Scholars</span>
+                                <span class="block text-[11px] font-bold text-slate-600 mt-1">250+ Scholars</span>
                             </div>
-                            <div class="rounded-xl bg-blue-50 p-3.5 border border-blue-200 shadow-2xs">
-                                <div class="flex items-center gap-2 text-secondary font-extrabold text-xs">
-                                    <i data-lucide="stethoscope" class="h-4 w-4 text-secondary"></i>
-                                    <span>Medical Aid</span>
+                            <div class="rounded-xl bg-blue-50 p-3 border border-blue-200 shadow-2xs">
+                                <div class="flex items-center gap-1.5 text-secondary font-extrabold text-xs">
+                                    <i data-lucide="stethoscope" class="h-4 w-4 text-secondary shrink-0"></i>
+                                    <span class="truncate">Medical Aid</span>
                                 </div>
-                                <span class="block text-xs font-bold text-slate-600 mt-1">1,000+ Patients Helped</span>
+                                <span class="block text-[11px] font-bold text-slate-600 mt-1">1,000+ Patients</span>
                             </div>
                         </div>
                     </div>
@@ -325,56 +336,56 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 
 
     <!-- ABOUT THE FOUNDATION SECTION -->
-    <section id="about" class="py-20 bg-white relative border-b border-slate-200">
+    <section id="about" class="py-16 sm:py-20 bg-white relative border-b border-slate-200">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+            <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16 space-y-3">
                 <span class="inline-flex items-center gap-2 rounded-full bg-amber-100 px-4 py-1 text-xs font-extrabold uppercase tracking-widest text-amber-800 border border-amber-300">
                     Our Mission & Values
                 </span>
-                <h2 class="text-3xl sm:text-4xl font-black text-darkText">About ASFI Foundation</h2>
-                <p class="text-sm sm:text-base text-slate-600 font-medium">
+                <h2 class="text-2xl sm:text-4xl font-black text-darkText">About ASFI Foundation</h2>
+                <p class="text-xs sm:text-base text-slate-600 font-medium">
                     AMIS Sadaqah Family Incorporated (ASFI) was established in Davao City to serve as a beacon of mutual assistance (Takaful), ensuring no family struggles alone during hardship.
                 </p>
             </div>
 
             <!-- 4 Core Pillars Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                 
-                <div class="bg-emerald-50/60 rounded-3xl p-6 space-y-3 border border-emerald-200 shadow-xs hover:border-primary hover:shadow-md transition">
+                <div class="bg-emerald-50/60 rounded-3xl p-5 sm:p-6 space-y-3 border border-emerald-200 shadow-xs hover:border-primary hover:shadow-md transition">
                     <div class="w-12 h-12 rounded-2xl bg-[#16A34A] text-white flex items-center justify-center font-bold text-xl shadow-sm">
                         <i data-lucide="shield-check" class="h-6 w-6"></i>
                     </div>
-                    <h3 class="text-lg font-extrabold text-darkText">Amanah (Trust)</h3>
+                    <h3 class="text-base sm:text-lg font-extrabold text-darkText">Amanah (Trust)</h3>
                     <p class="text-xs text-slate-600 leading-relaxed font-medium">
                         Complete financial transparency, audited records, and 100% verified distribution of Sadaqah and Zakat funds.
                     </p>
                 </div>
 
-                <div class="bg-blue-50/60 rounded-3xl p-6 space-y-3 border border-blue-200 shadow-xs hover:border-secondary hover:shadow-md transition">
+                <div class="bg-blue-50/60 rounded-3xl p-5 sm:p-6 space-y-3 border border-blue-200 shadow-xs hover:border-secondary hover:shadow-md transition">
                     <div class="w-12 h-12 rounded-2xl bg-[#2563EB] text-white flex items-center justify-center font-bold text-xl shadow-sm">
                         <i data-lucide="users" class="h-6 w-6"></i>
                     </div>
-                    <h3 class="text-lg font-extrabold text-darkText">Takaful (Mutual Support)</h3>
+                    <h3 class="text-base sm:text-lg font-extrabold text-darkText">Takaful (Mutual Support)</h3>
                     <p class="text-xs text-slate-600 leading-relaxed font-medium">
                         Rooted in mutual solidarity, community members unite to share burdens and protect vulnerable families.
                     </p>
                 </div>
 
-                <div class="bg-amber-50/60 rounded-3xl p-6 space-y-3 border border-amber-200 shadow-xs hover:border-goldAccent hover:shadow-md transition">
+                <div class="bg-amber-50/60 rounded-3xl p-5 sm:p-6 space-y-3 border border-amber-200 shadow-xs hover:border-goldAccent hover:shadow-md transition">
                     <div class="w-12 h-12 rounded-2xl bg-[#F97316] text-white flex items-center justify-center font-bold text-xl shadow-sm">
                         <i data-lucide="heart" class="h-6 w-6"></i>
                     </div>
-                    <h3 class="text-lg font-extrabold text-darkText">Ikhlas (Pure Intent)</h3>
+                    <h3 class="text-base sm:text-lg font-extrabold text-darkText">Ikhlas (Pure Intent)</h3>
                     <p class="text-xs text-slate-600 leading-relaxed font-medium">
                         Serving humanity with unconditional compassion, dignity, and respect for every beneficiary.
                     </p>
                 </div>
 
-                <div class="bg-emerald-50/60 rounded-3xl p-6 space-y-3 border border-emerald-200 shadow-xs hover:border-primary hover:shadow-md transition">
+                <div class="bg-emerald-50/60 rounded-3xl p-5 sm:p-6 space-y-3 border border-emerald-200 shadow-xs hover:border-primary hover:shadow-md transition">
                     <div class="w-12 h-12 rounded-2xl bg-[#16A34A] text-white flex items-center justify-center font-bold text-xl shadow-sm">
                         <i data-lucide="sparkles" class="h-6 w-6"></i>
                     </div>
-                    <h3 class="text-lg font-extrabold text-darkText">Ukhuwah (Unity)</h3>
+                    <h3 class="text-base sm:text-lg font-extrabold text-darkText">Ukhuwah (Unity)</h3>
                     <p class="text-xs text-slate-600 leading-relaxed font-medium">
                         Strengthening community ties in Davao City by connecting donors, volunteers, and families in a cycle of good.
                     </p>
@@ -386,29 +397,29 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 
 
     <!-- OUR PROGRAMS SECTION -->
-    <section id="programs" class="py-20 bg-[#F8FAFC] relative border-b border-slate-200">
+    <section id="programs" class="py-16 sm:py-20 bg-[#F8FAFC] relative border-b border-slate-200">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+            <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16 space-y-3">
                 <span class="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-1 text-xs font-extrabold uppercase tracking-widest text-primary border border-emerald-300">
                     Humanitarian Initiatives
                 </span>
-                <h2 class="text-3xl sm:text-4xl font-black text-darkText">Our Core Programs</h2>
-                <p class="text-sm sm:text-base text-slate-600 font-medium">
+                <h2 class="text-2xl sm:text-4xl font-black text-darkText">Our Core Programs</h2>
+                <p class="text-xs sm:text-base text-slate-600 font-medium">
                     Structured community programs designed to empower underprivileged youth, families, and orphans in Mindanao.
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                 
                 <!-- Program 1: Education Assistance -->
                 <div class="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between group hover:border-[#16A34A] hover:shadow-xl transition duration-300">
-                    <div class="relative h-48 overflow-hidden bg-slate-100">
-                        <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=800&auto=format&fit=crop" alt="Education Assistance" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <div class="relative h-44 sm:h-48 overflow-hidden bg-slate-100">
+                        <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=800&auto=format&fit=crop" alt="Education Assistance" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                         <span class="absolute top-3 left-3 bg-[#16A34A] text-white text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">Education</span>
                     </div>
-                    <div class="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                    <div class="p-5 sm:p-6 space-y-3 flex-1 flex flex-col justify-between">
                         <div>
-                            <h3 class="text-xl font-black text-darkText group-hover:text-primary transition">Education Assistance</h3>
+                            <h3 class="text-lg sm:text-xl font-black text-darkText group-hover:text-primary transition">Education Assistance</h3>
                             <p class="text-xs text-slate-600 mt-2 leading-relaxed font-medium">
                                 Scholarships, learning supplies, school uniforms, and tutoring support for deserving students in Davao City.
                             </p>
@@ -422,13 +433,13 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 
                 <!-- Program 2: Medical Assistance -->
                 <div class="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between group hover:border-[#2563EB] hover:shadow-xl transition duration-300">
-                    <div class="relative h-48 overflow-hidden bg-slate-100">
-                        <img src="https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?q=80&w=800&auto=format&fit=crop" alt="Medical Assistance" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <div class="relative h-44 sm:h-48 overflow-hidden bg-slate-100">
+                        <img src="https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?q=80&w=800&auto=format&fit=crop" alt="Medical Assistance" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                         <span class="absolute top-3 left-3 bg-[#2563EB] text-white text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">Healthcare</span>
                     </div>
-                    <div class="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                    <div class="p-5 sm:p-6 space-y-3 flex-1 flex flex-col justify-between">
                         <div>
-                            <h3 class="text-xl font-black text-darkText group-hover:text-secondary transition">Medical Assistance</h3>
+                            <h3 class="text-lg sm:text-xl font-black text-darkText group-hover:text-secondary transition">Medical Assistance</h3>
                             <p class="text-xs text-slate-600 mt-2 leading-relaxed font-medium">
                                 Emergency healthcare grants, prescription medication aid, dialysis support, and hospital bill assistance.
                             </p>
@@ -442,13 +453,13 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 
                 <!-- Program 3: Disaster Relief -->
                 <div class="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between group hover:border-[#F97316] hover:shadow-xl transition duration-300">
-                    <div class="relative h-48 overflow-hidden bg-slate-100">
-                        <img src="https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=800&auto=format&fit=crop" alt="Disaster Relief" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <div class="relative h-44 sm:h-48 overflow-hidden bg-slate-100">
+                        <img src="https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=800&auto=format&fit=crop" alt="Disaster Relief" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                         <span class="absolute top-3 left-3 bg-[#F97316] text-white text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">Emergency</span>
                     </div>
-                    <div class="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                    <div class="p-5 sm:p-6 space-y-3 flex-1 flex flex-col justify-between">
                         <div>
-                            <h3 class="text-xl font-black text-darkText group-hover:text-orangeAccent transition">Disaster Relief</h3>
+                            <h3 class="text-lg sm:text-xl font-black text-darkText group-hover:text-orangeAccent transition">Disaster Relief</h3>
                             <p class="text-xs text-slate-600 mt-2 leading-relaxed font-medium">
                                 Rapid deployment of emergency food packs, clean drinking water, hygiene kits, and temporary shelter during calamities.
                             </p>
@@ -462,13 +473,13 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 
                 <!-- Program 4: Livelihood Support -->
                 <div class="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between group hover:border-[#16A34A] hover:shadow-xl transition duration-300">
-                    <div class="relative h-48 overflow-hidden bg-slate-100">
-                        <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=800&auto=format&fit=crop" alt="Livelihood Support" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <div class="relative h-44 sm:h-48 overflow-hidden bg-slate-100">
+                        <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=800&auto=format&fit=crop" alt="Livelihood Support" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                         <span class="absolute top-3 left-3 bg-[#16A34A] text-white text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">Livelihood</span>
                     </div>
-                    <div class="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                    <div class="p-5 sm:p-6 space-y-3 flex-1 flex flex-col justify-between">
                         <div>
-                            <h3 class="text-xl font-black text-darkText group-hover:text-primary transition">Livelihood Support</h3>
+                            <h3 class="text-lg sm:text-xl font-black text-darkText group-hover:text-primary transition">Livelihood Support</h3>
                             <p class="text-xs text-slate-600 mt-2 leading-relaxed font-medium">
                                 Micro-grants, small business starter kits, and vocational skills training for struggling parents and breadwinners.
                             </p>
@@ -482,13 +493,13 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 
                 <!-- Program 5: Orphan & Widow Support -->
                 <div class="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between group hover:border-[#FBBF24] hover:shadow-xl transition duration-300">
-                    <div class="relative h-48 overflow-hidden bg-slate-100">
-                        <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=800&auto=format&fit=crop" alt="Orphan Support" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <div class="relative h-44 sm:h-48 overflow-hidden bg-slate-100">
+                        <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=800&auto=format&fit=crop" alt="Orphan Support" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                         <span class="absolute top-3 left-3 bg-[#F97316] text-white text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">Orphan Care</span>
                     </div>
-                    <div class="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                    <div class="p-5 sm:p-6 space-y-3 flex-1 flex flex-col justify-between">
                         <div>
-                            <h3 class="text-xl font-black text-darkText group-hover:text-orangeAccent transition">Orphan & Widow Support</h3>
+                            <h3 class="text-lg sm:text-xl font-black text-darkText group-hover:text-orangeAccent transition">Orphan & Widow Support</h3>
                             <p class="text-xs text-slate-600 mt-2 leading-relaxed font-medium">
                                 Monthly care stipends, educational backing, nutritional aid, and holistic family counseling for orphans.
                             </p>
@@ -502,13 +513,13 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 
                 <!-- Program 6: Community Development -->
                 <div class="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between group hover:border-[#2563EB] hover:shadow-xl transition duration-300">
-                    <div class="relative h-48 overflow-hidden bg-slate-100">
-                        <img src="https://images.unsplash.com/photo-1541976844346-f18aeac57b06?q=80&w=800&auto=format&fit=crop" alt="Community Development" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    <div class="relative h-44 sm:h-48 overflow-hidden bg-slate-100">
+                        <img src="https://images.unsplash.com/photo-1541976844346-f18aeac57b06?q=80&w=800&auto=format&fit=crop" alt="Community Development" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                         <span class="absolute top-3 left-3 bg-[#2563EB] text-white text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">Development</span>
                     </div>
-                    <div class="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                    <div class="p-5 sm:p-6 space-y-3 flex-1 flex flex-col justify-between">
                         <div>
-                            <h3 class="text-xl font-black text-darkText group-hover:text-secondary transition">Community Development</h3>
+                            <h3 class="text-lg sm:text-xl font-black text-darkText group-hover:text-secondary transition">Community Development</h3>
                             <p class="text-xs text-slate-600 mt-2 leading-relaxed font-medium">
                                 Installation of community water stations, sanitation facilities, and community center improvements.
                             </p>
@@ -526,40 +537,40 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 
 
     <!-- IMPACT STATISTICS COUNTER SECTION -->
-    <section id="impact" class="py-16 bg-[#16A34A] text-white shadow-md">
+    <section id="impact" class="py-12 sm:py-16 bg-[#16A34A] text-white shadow-md">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 text-center">
                 
-                <div class="space-y-2">
-                    <div class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 text-white mb-2 shadow-inner">
-                        <i data-lucide="users" class="h-6 w-6"></i>
+                <div class="space-y-1 sm:space-y-2">
+                    <div class="inline-flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-2xl bg-white/20 text-white mb-1 shadow-inner">
+                        <i data-lucide="users" class="h-5 w-5 sm:h-6 sm:w-6"></i>
                     </div>
-                    <span class="block text-4xl sm:text-5xl font-black">12,500+</span>
-                    <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-100">Beneficiaries Reached</span>
+                    <span class="block text-3xl sm:text-5xl font-black">12,500+</span>
+                    <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-wider text-emerald-100">Beneficiaries Reached</span>
                 </div>
 
-                <div class="space-y-2">
-                    <div class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 text-goldAccent mb-2 shadow-inner">
-                        <i data-lucide="graduation-cap" class="h-6 w-6"></i>
+                <div class="space-y-1 sm:space-y-2">
+                    <div class="inline-flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-2xl bg-white/20 text-goldAccent mb-1 shadow-inner">
+                        <i data-lucide="graduation-cap" class="h-5 w-5 sm:h-6 sm:w-6"></i>
                     </div>
-                    <span class="block text-4xl sm:text-5xl font-black text-goldAccent">250+</span>
-                    <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-100">Scholarships Granted</span>
+                    <span class="block text-3xl sm:text-5xl font-black text-goldAccent">250+</span>
+                    <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-wider text-emerald-100">Scholarships Granted</span>
                 </div>
 
-                <div class="space-y-2">
-                    <div class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 text-white mb-2 shadow-inner">
-                        <i data-lucide="heart-pulse" class="h-6 w-6"></i>
+                <div class="space-y-1 sm:space-y-2">
+                    <div class="inline-flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-2xl bg-white/20 text-white mb-1 shadow-inner">
+                        <i data-lucide="heart-pulse" class="h-5 w-5 sm:h-6 sm:w-6"></i>
                     </div>
-                    <span class="block text-4xl sm:text-5xl font-black">1,000+</span>
-                    <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-100">Medical Aid Cases</span>
+                    <span class="block text-3xl sm:text-5xl font-black">1,000+</span>
+                    <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-wider text-emerald-100">Medical Aid Cases</span>
                 </div>
 
-                <div class="space-y-2">
-                    <div class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 text-goldAccent mb-2 shadow-inner">
-                        <i data-lucide="building-2" class="h-6 w-6"></i>
+                <div class="space-y-1 sm:space-y-2">
+                    <div class="inline-flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-2xl bg-white/20 text-goldAccent mb-1 shadow-inner">
+                        <i data-lucide="building-2" class="h-5 w-5 sm:h-6 sm:w-6"></i>
                     </div>
-                    <span class="block text-4xl sm:text-5xl font-black text-goldAccent">50+</span>
-                    <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-100">Community Projects</span>
+                    <span class="block text-3xl sm:text-5xl font-black text-goldAccent">50+</span>
+                    <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-wider text-emerald-100">Community Projects</span>
                 </div>
 
             </div>
@@ -568,27 +579,27 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 
 
     <!-- HOW YOU CAN HELP SECTION -->
-    <section class="py-20 bg-white border-b border-slate-200">
+    <section class="py-16 sm:py-20 bg-white border-b border-slate-200">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+            <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16 space-y-3">
                 <span class="inline-flex items-center gap-2 rounded-full bg-amber-100 px-4 py-1 text-xs font-extrabold uppercase tracking-widest text-amber-800 border border-amber-300">
                     Join Our Cause
                 </span>
-                <h2 class="text-3xl sm:text-4xl font-black text-darkText">How You Can Help</h2>
-                <p class="text-sm sm:text-base text-slate-600 font-medium">
+                <h2 class="text-2xl sm:text-4xl font-black text-darkText">How You Can Help</h2>
+                <p class="text-xs sm:text-base text-slate-600 font-medium">
                     Your generosity creates an immediate impact for families and children across Davao City.
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
                 
                 <!-- Option 1: Donate -->
-                <div class="bg-[#F8FAFC] rounded-3xl p-8 text-center border border-slate-200 shadow-sm hover:border-[#FBBF24] hover:shadow-xl transition flex flex-col justify-between">
+                <div class="bg-[#F8FAFC] rounded-3xl p-6 sm:p-8 text-center border border-slate-200 shadow-sm hover:border-[#FBBF24] hover:shadow-xl transition flex flex-col justify-between">
                     <div class="space-y-4">
-                        <div class="w-16 h-16 rounded-2xl bg-amber-100 text-[#F97316] flex items-center justify-center mx-auto border border-amber-300">
-                            <i data-lucide="hand-heart" class="h-8 w-8"></i>
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-amber-100 text-[#F97316] flex items-center justify-center mx-auto border border-amber-300">
+                            <i data-lucide="hand-heart" class="h-7 w-7 sm:h-8 sm:w-8"></i>
                         </div>
-                        <h3 class="text-2xl font-black text-darkText">Donate Sadaqah & Zakat</h3>
+                        <h3 class="text-xl sm:text-2xl font-black text-darkText">Donate Sadaqah & Zakat</h3>
                         <p class="text-xs text-slate-600 leading-relaxed font-medium">
                             Fulfill your Zakat obligations or give Sadaqah to fund scholarships, emergency medical aid, and relief.
                         </p>
@@ -599,12 +610,12 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                 </div>
 
                 <!-- Option 2: Volunteer -->
-                <div class="bg-[#F8FAFC] rounded-3xl p-8 text-center border border-slate-200 shadow-sm hover:border-[#16A34A] hover:shadow-xl transition flex flex-col justify-between">
+                <div class="bg-[#F8FAFC] rounded-3xl p-6 sm:p-8 text-center border border-slate-200 shadow-sm hover:border-[#16A34A] hover:shadow-xl transition flex flex-col justify-between">
                     <div class="space-y-4">
-                        <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-primary flex items-center justify-center mx-auto border border-emerald-300">
-                            <i data-lucide="heart-handshake" class="h-8 w-8"></i>
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-emerald-100 text-primary flex items-center justify-center mx-auto border border-emerald-300">
+                            <i data-lucide="heart-handshake" class="h-7 w-7 sm:h-8 sm:w-8"></i>
                         </div>
-                        <h3 class="text-2xl font-black text-darkText">Become a Volunteer</h3>
+                        <h3 class="text-xl sm:text-2xl font-black text-darkText">Become a Volunteer</h3>
                         <p class="text-xs text-slate-600 leading-relaxed font-medium">
                             Join our community team in Davao City to help distribute food relief, assist in medical drives, and tutor scholars.
                         </p>
@@ -615,12 +626,12 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                 </div>
 
                 <!-- Option 3: Partner -->
-                <div class="bg-[#F8FAFC] rounded-3xl p-8 text-center border border-slate-200 shadow-sm hover:border-[#2563EB] hover:shadow-xl transition flex flex-col justify-between">
+                <div class="bg-[#F8FAFC] rounded-3xl p-6 sm:p-8 text-center border border-slate-200 shadow-sm hover:border-[#2563EB] hover:shadow-xl transition flex flex-col justify-between">
                     <div class="space-y-4">
-                        <div class="w-16 h-16 rounded-2xl bg-blue-100 text-secondary flex items-center justify-center mx-auto border border-blue-300">
-                            <i data-lucide="building-2" class="h-8 w-8"></i>
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-blue-100 text-secondary flex items-center justify-center mx-auto border border-blue-300">
+                            <i data-lucide="building-2" class="h-7 w-7 sm:h-8 sm:w-8"></i>
                         </div>
-                        <h3 class="text-2xl font-black text-darkText">Partner With Us</h3>
+                        <h3 class="text-xl sm:text-2xl font-black text-darkText">Partner With Us</h3>
                         <p class="text-xs text-slate-600 leading-relaxed font-medium">
                             Collaborate with ASFI as a corporate CSR partner, educational institution, or NGO to multiply community impact.
                         </p>
@@ -636,25 +647,25 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 
 
     <!-- SUCCESS STORIES SECTION -->
-    <section id="stories" class="py-20 bg-[#F8FAFC] border-b border-slate-200">
+    <section id="stories" class="py-16 sm:py-20 bg-[#F8FAFC] border-b border-slate-200">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+            <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16 space-y-3">
                 <span class="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-1 text-xs font-extrabold uppercase tracking-widest text-primary border border-emerald-300">
                     Real Impact
                 </span>
-                <h2 class="text-3xl sm:text-4xl font-black text-darkText">Success Stories</h2>
-                <p class="text-sm sm:text-base text-slate-600 font-medium">
+                <h2 class="text-2xl sm:text-4xl font-black text-darkText">Success Stories</h2>
+                <p class="text-xs sm:text-base text-slate-600 font-medium">
                     Read how your generosity creates lasting transformation for students and families.
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                 
                 <!-- Story 1 -->
-                <div class="bg-white rounded-3xl p-6 md:p-8 border border-slate-200 shadow-sm flex flex-col sm:flex-row gap-6 items-center">
-                    <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=400&auto=format&fit=crop" alt="Scholar Story" class="w-28 h-28 rounded-2xl object-cover border-2 border-primary shrink-0">
+                <div class="bg-white rounded-3xl p-5 sm:p-8 border border-slate-200 shadow-sm flex flex-col sm:flex-row gap-5 sm:gap-6 items-center text-center sm:text-left">
+                    <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=400&auto=format&fit=crop" alt="Scholar Story" loading="lazy" decoding="async" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover border-2 border-primary shrink-0">
                     <div class="space-y-2">
-                        <div class="flex items-center gap-1 text-goldAccent">
+                        <div class="flex items-center justify-center sm:justify-start gap-1 text-goldAccent">
                             <i data-lucide="star" class="h-4 w-4 fill-current"></i>
                             <i data-lucide="star" class="h-4 w-4 fill-current"></i>
                             <i data-lucide="star" class="h-4 w-4 fill-current"></i>
@@ -664,16 +675,16 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                         <p class="text-xs text-slate-700 italic leading-relaxed font-medium">
                             "Without the ASFI Education Scholarship, continuing my Grade 11 studies in Davao would have been impossible. Alhamdulillāh, now I can pursue my dream of becoming an educator."
                         </p>
-                        <h4 class="text-sm font-black text-darkText">Fatima Z. — ASFI Scholar 2026</h4>
-                        <span class="text-[10px] font-extrabold text-primary uppercase tracking-wider">Education Assistance Program</span>
+                        <h4 class="text-xs sm:text-sm font-black text-darkText">Fatima Z. — ASFI Scholar 2026</h4>
+                        <span class="text-[10px] font-extrabold text-primary uppercase tracking-wider block">Education Assistance Program</span>
                     </div>
                 </div>
 
                 <!-- Story 2 -->
-                <div class="bg-white rounded-3xl p-6 md:p-8 border border-slate-200 shadow-sm flex flex-col sm:flex-row gap-6 items-center">
-                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=400&auto=format&fit=crop" alt="Medical Aid Story" class="w-28 h-28 rounded-2xl object-cover border-2 border-secondary shrink-0">
+                <div class="bg-white rounded-3xl p-5 sm:p-8 border border-slate-200 shadow-sm flex flex-col sm:flex-row gap-5 sm:gap-6 items-center text-center sm:text-left">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=400&auto=format&fit=crop" alt="Medical Aid Story" loading="lazy" decoding="async" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover border-2 border-secondary shrink-0">
                     <div class="space-y-2">
-                        <div class="flex items-center gap-1 text-goldAccent">
+                        <div class="flex items-center justify-center sm:justify-start gap-1 text-goldAccent">
                             <i data-lucide="star" class="h-4 w-4 fill-current"></i>
                             <i data-lucide="star" class="h-4 w-4 fill-current"></i>
                             <i data-lucide="star" class="h-4 w-4 fill-current"></i>
@@ -683,8 +694,8 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                         <p class="text-xs text-slate-700 italic leading-relaxed font-medium">
                             "When my husband required urgent dialysis treatment, ASFI stepped in with emergency medical assistance within 24 hours. May Allāh reward the donors continuously."
                         </p>
-                        <h4 class="text-sm font-black text-darkText">Mariam S. — Beneficiary Family</h4>
-                        <span class="text-[10px] font-extrabold text-secondary uppercase tracking-wider">Medical Aid Assistance</span>
+                        <h4 class="text-xs sm:text-sm font-black text-darkText">Mariam S. — Beneficiary Family</h4>
+                        <span class="text-[10px] font-extrabold text-secondary uppercase tracking-wider block">Medical Aid Assistance</span>
                     </div>
                 </div>
 
@@ -694,53 +705,53 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 
 
     <!-- FAQ ACCORDION SECTION -->
-    <section id="faq" class="py-20 bg-white relative border-b border-slate-200">
+    <section id="faq" class="py-16 sm:py-20 bg-white relative border-b border-slate-200">
         <div class="max-w-4xl mx-auto px-4">
-            <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+            <div class="text-center max-w-2xl mx-auto mb-12 sm:mb-16 space-y-3">
                 <span class="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-1 text-xs font-extrabold uppercase tracking-widest text-primary border border-emerald-300">
                     Got Questions?
                 </span>
-                <h2 class="text-3xl sm:text-4xl font-black text-darkText">Frequently Asked Questions</h2>
+                <h2 class="text-2xl sm:text-4xl font-black text-darkText">Frequently Asked Questions</h2>
             </div>
 
-            <div class="space-y-4" x-data="{ openFaq: 1 }">
+            <div class="space-y-3 sm:space-y-4" x-data="{ openFaq: 1 }">
                 
                 <div class="bg-[#F8FAFC] rounded-2xl border border-slate-200 overflow-hidden">
-                    <button @click="openFaq = (openFaq === 1 ? 0 : 1)" class="w-full p-5 text-left flex items-center justify-between font-black text-darkText text-sm cursor-pointer">
+                    <button @click="openFaq = (openFaq === 1 ? 0 : 1)" class="w-full p-4 sm:p-5 text-left flex items-center justify-between font-black text-darkText text-xs sm:text-sm cursor-pointer gap-2">
                         <span>How are ASFI Sadaqah and Zakat funds verified and audited?</span>
-                        <i data-lucide="chevron-down" class="h-4 w-4 text-primary transition-transform" :class="openFaq === 1 ? 'rotate-180' : ''"></i>
+                        <i data-lucide="chevron-down" class="h-4 w-4 text-primary shrink-0 transition-transform" :class="openFaq === 1 ? 'rotate-180' : ''"></i>
                     </button>
-                    <div x-show="openFaq === 1" x-collapse class="px-5 pb-5 text-xs text-slate-600 leading-relaxed font-medium border-t border-slate-200 pt-3">
+                    <div x-show="openFaq === 1" x-collapse class="px-4 sm:px-5 pb-4 sm:pb-5 text-xs text-slate-600 leading-relaxed font-medium border-t border-slate-200 pt-3">
                         ASFI operates under strict Amanah (Trust) principles. 100% of designated Zakat funds are disbursed directly to eligible beneficiaries (Asnaf). We maintain audited accounting records and publish transparency reports.
                     </div>
                 </div>
 
                 <div class="bg-[#F8FAFC] rounded-2xl border border-slate-200 overflow-hidden">
-                    <button @click="openFaq = (openFaq === 2 ? 0 : 2)" class="w-full p-5 text-left flex items-center justify-between font-black text-darkText text-sm cursor-pointer">
+                    <button @click="openFaq = (openFaq === 2 ? 0 : 2)" class="w-full p-4 sm:p-5 text-left flex items-center justify-between font-black text-darkText text-xs sm:text-sm cursor-pointer gap-2">
                         <span>Who is eligible for ASFI Education Scholarships?</span>
-                        <i data-lucide="chevron-down" class="h-4 w-4 text-primary transition-transform" :class="openFaq === 2 ? 'rotate-180' : ''"></i>
+                        <i data-lucide="chevron-down" class="h-4 w-4 text-primary shrink-0 transition-transform" :class="openFaq === 2 ? 'rotate-180' : ''"></i>
                     </button>
-                    <div x-show="openFaq === 2" x-collapse class="px-5 pb-5 text-xs text-slate-600 leading-relaxed font-medium border-t border-slate-200 pt-3">
+                    <div x-show="openFaq === 2" x-collapse class="px-4 sm:px-5 pb-4 sm:pb-5 text-xs text-slate-600 leading-relaxed font-medium border-t border-slate-200 pt-3">
                         Students enrolled in Kinder to Grade 12 or college programs in Davao City who come from low-income families or orphan backgrounds can apply for education assistance through our portal.
                     </div>
                 </div>
 
                 <div class="bg-[#F8FAFC] rounded-2xl border border-slate-200 overflow-hidden">
-                    <button @click="openFaq = (openFaq === 3 ? 0 : 3)" class="w-full p-5 text-left flex items-center justify-between font-black text-darkText text-sm cursor-pointer">
+                    <button @click="openFaq = (openFaq === 3 ? 0 : 3)" class="w-full p-4 sm:p-5 text-left flex items-center justify-between font-black text-darkText text-xs sm:text-sm cursor-pointer gap-2">
                         <span>How can a family request Emergency Medical Assistance?</span>
-                        <i data-lucide="chevron-down" class="h-4 w-4 text-primary transition-transform" :class="openFaq === 3 ? 'rotate-180' : ''"></i>
+                        <i data-lucide="chevron-down" class="h-4 w-4 text-primary shrink-0 transition-transform" :class="openFaq === 3 ? 'rotate-180' : ''"></i>
                     </button>
-                    <div x-show="openFaq === 3" x-collapse class="px-5 pb-5 text-xs text-slate-600 leading-relaxed font-medium border-t border-slate-200 pt-3">
+                    <div x-show="openFaq === 3" x-collapse class="px-4 sm:px-5 pb-4 sm:pb-5 text-xs text-slate-600 leading-relaxed font-medium border-t border-slate-200 pt-3">
                         Families can submit a medical assistance request by filling out our online form or visiting our Davao City office with a valid medical prescription/abstract and proof of identity.
                     </div>
                 </div>
 
                 <div class="bg-[#F8FAFC] rounded-2xl border border-slate-200 overflow-hidden">
-                    <button @click="openFaq = (openFaq === 4 ? 0 : 4)" class="w-full p-5 text-left flex items-center justify-between font-black text-darkText text-sm cursor-pointer">
+                    <button @click="openFaq = (openFaq === 4 ? 0 : 4)" class="w-full p-4 sm:p-5 text-left flex items-center justify-between font-black text-darkText text-xs sm:text-sm cursor-pointer gap-2">
                         <span>What payment methods are supported for donations?</span>
-                        <i data-lucide="chevron-down" class="h-4 w-4 text-primary transition-transform" :class="openFaq === 4 ? 'rotate-180' : ''"></i>
+                        <i data-lucide="chevron-down" class="h-4 w-4 text-primary shrink-0 transition-transform" :class="openFaq === 4 ? 'rotate-180' : ''"></i>
                     </button>
-                    <div x-show="openFaq === 4" x-collapse class="px-5 pb-5 text-xs text-slate-600 leading-relaxed font-medium border-t border-slate-200 pt-3">
+                    <div x-show="openFaq === 4" x-collapse class="px-4 sm:px-5 pb-4 sm:pb-5 text-xs text-slate-600 leading-relaxed font-medium border-t border-slate-200 pt-3">
                         We accept GCash online transfer, QR Ph instant scanning, and direct bank transfers (BDO / BPI). All donors receive an official digital receipt.
                     </div>
                 </div>
@@ -751,16 +762,16 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 
 
     <!-- CONTACT & OFFICE LOCATIONS SECTION -->
-    <section id="contact" class="py-20 bg-[#F8FAFC]">
+    <section id="contact" class="py-16 sm:py-20 bg-[#F8FAFC]">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
                 
                 <!-- Contact Info -->
-                <div class="lg:col-span-5 space-y-6">
+                <div class="lg:col-span-5 space-y-5 sm:space-y-6">
                     <span class="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-1 text-xs font-extrabold uppercase tracking-widest text-primary border border-emerald-300">
                         Get In Touch
                     </span>
-                    <h2 class="text-3xl font-black text-darkText">Contact ASFI Foundation</h2>
+                    <h2 class="text-2xl sm:text-3xl font-black text-darkText">Contact ASFI Foundation</h2>
                     <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
                         Have questions about our programs, sponsorships, or volunteering? Reach out to our Davao City team today.
                     </p>
@@ -801,8 +812,8 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 
                 <!-- Inquiry Form -->
                 <div class="lg:col-span-7">
-                    <div class="bg-white rounded-3xl p-6 md:p-8 border border-slate-200 shadow-sm">
-                        <h3 class="text-xl font-black text-darkText mb-4">Send Us a Message</h3>
+                    <div class="bg-white rounded-3xl p-5 sm:p-8 border border-slate-200 shadow-sm">
+                        <h3 class="text-lg sm:text-xl font-black text-darkText mb-4">Send Us a Message</h3>
                         <form @submit.prevent="submitContactForm()" class="space-y-4">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
@@ -845,17 +856,17 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 
 
     <!-- FOOTER -->
-    <footer class="bg-[#0F172A] text-slate-300 text-xs py-12">
-        <div class="max-w-7xl mx-auto px-4 space-y-8">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+    <footer class="bg-[#0F172A] text-slate-300 text-xs py-10 sm:py-12">
+        <div class="max-w-7xl mx-auto px-4 space-y-6 sm:space-y-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
                 <div class="flex items-center gap-3">
-                    <img src="asfi_logo_2026.png" alt="ASFI Logo" class="h-10 w-10 object-contain">
+                    <img src="asfi_logo_2026.png" alt="ASFI Logo" loading="lazy" decoding="async" class="h-10 w-10 object-contain">
                     <div>
-                        <span class="block text-sm font-black text-white uppercase">ASFI DAVAO CITY 2026</span>
+                        <span class="block text-xs sm:text-sm font-black text-white uppercase">ASFI DAVAO CITY 2026</span>
                         <span class="text-[10px] text-[#FBBF24] font-bold">AMIS SADAQAH FAMILY INCORPORATED</span>
                     </div>
                 </div>
-                <div class="flex items-center gap-6 font-bold text-slate-300">
+                <div class="flex flex-wrap justify-center items-center gap-4 sm:gap-6 font-bold text-slate-300 text-xs">
                     <a href="#about" class="hover:text-[#FBBF24]">About</a>
                     <a href="#programs" class="hover:text-[#FBBF24]">Programs</a>
                     <a href="#impact" class="hover:text-[#FBBF24]">Impact</a>
@@ -864,7 +875,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                 </div>
             </div>
             
-            <div class="border-t border-slate-800 pt-6 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 gap-4">
+            <div class="border-t border-slate-800 pt-6 flex flex-col sm:flex-row items-center justify-between text-[10px] sm:text-[11px] text-slate-400 gap-3 text-center sm:text-left">
                 <p>© 2026 AMIS Sadaqah Family Incorporated (ASFI) - Davao City, Philippines. All Rights Reserved.</p>
                 <p class="text-[#16A34A] font-bold">Takaful & Mutual Support</p>
             </div>
@@ -876,7 +887,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
     <!-- MODALS: DONATE MODAL -->
     <!-- =================================================================== -->
     <div x-show="donateModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4 overflow-y-auto">
-        <div class="bg-white rounded-3xl max-w-lg w-full p-6 text-darkText shadow-2xl relative space-y-4 my-auto border border-emerald-200" @click.outside="donateModal = false">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-5 sm:p-6 text-darkText shadow-2xl relative space-y-4 my-auto border border-emerald-200" @click.outside="donateModal = false">
             <button @click="donateModal = false" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 cursor-pointer">
                 <i data-lucide="x" class="h-5 w-5"></i>
             </button>
@@ -885,7 +896,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                 <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-primary flex items-center justify-center mx-auto mb-2 font-bold">
                     <i data-lucide="hand-heart" class="h-6 w-6"></i>
                 </div>
-                <h3 class="text-xl font-black text-darkText">Make a Contribution</h3>
+                <h3 class="text-lg sm:text-xl font-black text-darkText">Make a Contribution</h3>
                 <p class="text-xs text-slate-500 font-medium">Support ASFI foundation programs through Sadaqah or Zakat.</p>
             </div>
 
@@ -927,7 +938,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
     <!-- MODALS: VOLUNTEER MODAL -->
     <!-- =================================================================== -->
     <div x-show="volunteerModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4 overflow-y-auto">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 text-darkText shadow-2xl relative space-y-4 my-auto border border-emerald-200" @click.outside="volunteerModal = false">
+        <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 text-darkText shadow-2xl relative space-y-4 my-auto border border-emerald-200" @click.outside="volunteerModal = false">
             <button @click="volunteerModal = false" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 cursor-pointer">
                 <i data-lucide="x" class="h-5 w-5"></i>
             </button>
@@ -936,7 +947,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                 <div class="w-12 h-12 rounded-2xl bg-blue-100 text-secondary flex items-center justify-center mx-auto mb-2 font-bold">
                     <i data-lucide="heart-handshake" class="h-6 w-6"></i>
                 </div>
-                <h3 class="text-xl font-black text-darkText">Join ASFI Volunteers</h3>
+                <h3 class="text-lg sm:text-xl font-black text-darkText">Join ASFI Volunteers</h3>
                 <p class="text-xs text-slate-500 font-medium">Become a volunteer for community outreaches in Davao City.</p>
             </div>
 
@@ -970,6 +981,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
         function asfiApp() {
             return {
                 showComingSoon: true,
+                mobileNav: false,
                 subscriberEmail: '',
                 subscribed: false,
                 donateModal: false,
