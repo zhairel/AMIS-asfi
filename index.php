@@ -170,6 +170,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                 <h2 class="text-2xl sm:text-4xl md:text-5xl font-black text-darkText tracking-tight leading-tight">
                     Coming Soon <span class="text-primary font-black">InshaAllah</span>
                 </h2>
+                <p class="text-xs sm:text-sm font-extrabold text-primary uppercase tracking-wider">Developed by: Mon Zhairel Lingasa</p>
             </div>
 
             <!-- Get Notified Subscription Form -->
