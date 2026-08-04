@@ -45,10 +45,10 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                         arabic: ['Amiri', 'serif'],
                     },
                     colors: {
-                        primary: '#16A34A',      /* Emerald Green */
-                        secondary: '#2563EB',    /* Royal Blue */
+                        primary: '#2563EB',      /* Royal Sapphire Blue - Trust & Takaful */
+                        secondary: '#16A34A',    /* Emerald Green - Hope & Peace */
                         goldAccent: '#FBBF24',   /* Golden Yellow */
-                        orangeAccent: '#F97316', /* Orange */
+                        orangeAccent: '#F97316', /* Warm Accent */
                         lightBg: '#F8FAFC',      /* Light Background */
                         darkText: '#0F172A',     /* Text Color */
                     }
@@ -160,8 +160,8 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #F8FAFC; }
-        ::-webkit-scrollbar-thumb { background: #16A34A; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #15803D; }
+        ::-webkit-scrollbar-thumb { background: #2563EB; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #1D4ED8; }
     </style>
 </head>
 <body x-data="asfiApp()" :class="showComingSoon ? 'overflow-hidden h-screen' : 'min-h-screen'" class="selection:bg-[#16A34A] selection:text-white relative text-darkText bg-asfi-pattern">
