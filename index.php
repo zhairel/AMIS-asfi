@@ -3,7 +3,7 @@
 // ASFI - AMIS SADAQAH FAMILY INCORPORATED (DAVAO CITY 2026)
 // Official Web Application & Launch Preview Portal
 // Tagline: Empowering Communities Through Compassion and Mutual Support.
-// Isolated Coming Soon Page (Non-scrollable, Standalone Launch Page)
+// Standalone Launch Page with Smooth Micro-Animations
 // ============================================================================
 
 // Strict HTTPS enforcement
@@ -23,9 +23,9 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ASFI - AMIS Sadaqah Family Incorporated | Davao City</title>
-    <meta name="description" content="AMIS Sadaqah Family Incorporated (ASFI) - Empowering Communities Through Compassion and Mutual Support in Davao City and beyond. Education Assistance, Medical Relief, Orphan Care & Takaful.">
-    <meta name="keywords" content="ASFI, AMIS Sadaqah Family Incorporated, Sadaqah, Zakat, Takaful, Davao City, Education Assistance, Medical Aid, Charity Philippines">
+    <title>ASFI - AMIS Sadaqah Family Incorporated | 2026</title>
+    <meta name="description" content="AMIS Sadaqah Family Incorporated (ASFI) - Empowering Communities Through Compassion and Mutual Support. Education Assistance, Medical Relief, Orphan Care & Takaful.">
+    <meta name="keywords" content="ASFI, AMIS Sadaqah Family Incorporated, Sadaqah, Zakat, Takaful, Education Assistance, Medical Aid, Charity Philippines">
     <link rel="icon" type="image/png" href="asfi_logo_2026.png">
 
     <!-- Fonts & Icons -->
@@ -81,6 +81,47 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
             box-shadow: 0 20px 30px -10px rgba(22, 163, 74, 0.12);
         }
 
+        /* Beautiful Micro-Animations for Coming Soon */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.08); }
+        }
+
+        @keyframes shimmerText {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .animate-float {
+            animation: floatSlow 4.5s ease-in-out infinite;
+        }
+
+        .animate-glow-ring {
+            animation: pulseGlow 3s ease-in-out infinite;
+        }
+
+        .animate-spin-slow {
+            animation: spinSlow 20s linear infinite;
+        }
+
+        .shimmer-heading {
+            background: linear-gradient(90deg, #0F172A 0%, #16A34A 50%, #0F172A 100%);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            animation: shimmerText 5s linear infinite;
+        }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #F8FAFC; }
@@ -91,54 +132,61 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 <body x-data="asfiApp()" :class="showComingSoon ? 'overflow-hidden h-screen' : 'min-h-screen'" class="selection:bg-[#16A34A] selection:text-white relative text-darkText bg-asfi-pattern">
 
     <!-- =================================================================== -->
-    <!-- 1. COMING SOON INSHAALLAH LAUNCH PAGE (STANDALONE & NON-SCROLLABLE) -->
+    <!-- 1. COMING SOON INSHAALLAH LAUNCH PAGE (ANIMATED STANDALONE PAGE) -->
     <!-- =================================================================== -->
     <div x-show="showComingSoon"
-         class="fixed inset-0 z-50 h-screen w-screen bg-gradient-to-br from-emerald-50 via-white to-blue-50/60 flex flex-col justify-between p-4 md:p-8 overflow-hidden">
+         class="fixed inset-0 z-50 h-screen w-screen bg-gradient-to-br from-emerald-50/90 via-white to-blue-50/70 flex flex-col justify-between p-4 md:p-8 overflow-hidden">
         
         <!-- Top Bar inside Coming Soon Splash -->
-        <header class="max-w-6xl mx-auto w-full flex items-center justify-between py-2">
+        <header class="max-w-6xl mx-auto w-full flex items-center justify-between py-2 relative z-10">
             <div class="flex items-center gap-3">
-                <img src="asfi_logo_2026.png" alt="ASFI Official Logo" loading="lazy" decoding="async" class="h-12 w-12 sm:h-14 sm:w-14 object-contain drop-shadow-md">
+                <img src="asfi_logo_2026.png" alt="ASFI Official Logo" loading="lazy" decoding="async" class="h-12 w-12 sm:h-14 sm:w-14 object-contain drop-shadow-md animate-float">
                 <div>
-                    <h1 class="text-xs sm:text-sm font-black tracking-wider text-darkText uppercase">AMIS SADAQAH FAMILY INCORPORATED</h1>
-                    <p class="text-[10px] sm:text-[11px] font-extrabold text-primary uppercase tracking-widest">Davao City 2026</p>
+                    <h1 class="text-xs sm:text-sm font-black tracking-wider text-darkText uppercase"><span class="text-primary font-black">AMIS</span> SADAQAH FAMILY INCORPORATED</h1>
+                    <p class="text-[10px] sm:text-[11px] font-extrabold text-primary uppercase tracking-widest">2026</p>
                 </div>
             </div>
         </header>
 
+        <!-- Background Floating Decorative Elements -->
+        <div class="absolute top-1/4 left-10 w-48 h-48 rounded-full bg-emerald-300/20 blur-3xl pointer-events-none animate-glow-ring"></div>
+        <div class="absolute bottom-1/4 right-10 w-64 h-64 rounded-full bg-amber-300/20 blur-3xl pointer-events-none animate-glow-ring" style="animation-delay: 1.5s;"></div>
+
         <!-- Center Content: Coming Soon InshaAllah -->
-        <main class="max-w-3xl mx-auto w-full text-center my-auto py-4 sm:py-6 px-2 sm:px-4 space-y-4 sm:space-y-5">
+        <main class="max-w-3xl mx-auto w-full text-center my-auto py-4 sm:py-6 px-2 sm:px-4 space-y-4 sm:space-y-5 relative z-10">
             
             <!-- Arabic Bismillah Calligraphy Banner -->
             <div class="space-y-1">
-                <p class="font-arabic text-2xl sm:text-4xl md:text-5xl text-primary font-bold tracking-wide">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
+                <p class="font-arabic text-2xl sm:text-4xl md:text-5xl text-primary font-bold tracking-wide transition transform hover:scale-105 duration-300">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
             </div>
 
-            <!-- Big Logo Display -->
+            <!-- Big Logo Display with Ambient Rotating Glow Ring -->
             <div class="relative inline-block my-1">
-                <div class="absolute inset-0 rounded-full bg-[#16A34A]/20 blur-2xl opacity-60 animate-pulse"></div>
-                <img src="asfi_logo_2026.png" alt="ASFI Logo" loading="lazy" decoding="async" class="relative h-36 w-36 sm:h-44 sm:w-44 md:h-52 md:w-52 mx-auto object-contain drop-shadow-xl hover:scale-105 transition-transform duration-300">
+                <!-- Rotating Decorative Ring -->
+                <div class="absolute -inset-4 rounded-full border-2 border-dashed border-emerald-400/40 animate-spin-slow pointer-events-none"></div>
+                <!-- Glowing Halo -->
+                <div class="absolute inset-0 rounded-full bg-[#16A34A]/25 blur-2xl animate-glow-ring"></div>
+                <img src="asfi_logo_2026.png" alt="ASFI Logo" loading="lazy" decoding="async" class="relative h-36 w-36 sm:h-48 sm:w-48 md:h-56 md:w-56 mx-auto object-contain drop-shadow-2xl animate-float">
             </div>
 
             <!-- Headline & Tagline -->
             <div class="space-y-2">
                 <h2 class="text-2xl sm:text-4xl md:text-5xl font-black text-darkText tracking-tight leading-tight">
-                    Coming Soon <span class="text-primary">InshaAllah</span>
+                    Coming Soon <span class="text-primary font-black">InshaAllah</span>
                 </h2>
                 <p class="text-xs sm:text-base md:text-lg font-extrabold text-orangeAccent italic max-w-xl mx-auto px-2">
                     "Empowering Communities Through Compassion and Mutual Support."
                 </p>
                 <p class="text-[11px] sm:text-xs text-slate-600 max-w-lg mx-auto leading-relaxed font-medium px-2">
-                    We are launching a modern, transparent humanitarian foundation platform for ASFI Davao City 2026 to power Education Grants, Emergency Medical Aid, Orphan Support, and Takaful Relief.
+                    We are launching a modern, transparent humanitarian foundation platform for ASFI 2026 to power Education Grants, Emergency Medical Aid, Orphan Support, and Takaful Relief.
                 </p>
             </div>
 
             <!-- Get Notified Subscription Form -->
             <div class="pt-1 max-w-md mx-auto w-full px-2">
                 <form @submit.prevent="subscribeNewsletter()" class="flex flex-col sm:flex-row gap-2">
-                    <input type="email" x-model="subscriberEmail" required placeholder="Enter your email address..." class="flex-1 rounded-xl bg-white border border-emerald-300 px-4 py-2.5 text-xs text-darkText placeholder-slate-400 focus:border-primary focus:outline-none shadow-sm">
-                    <button type="submit" class="rounded-xl bg-primary hover:bg-emerald-700 px-6 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-md transition active:scale-95 cursor-pointer whitespace-nowrap">
+                    <input type="email" x-model="subscriberEmail" required placeholder="Enter your email address..." class="flex-1 rounded-xl bg-white border border-emerald-300 px-4 py-2.5 text-xs text-darkText placeholder-slate-400 focus:border-primary focus:outline-none shadow-sm transition focus:ring-2 focus:ring-emerald-400">
+                    <button type="submit" class="rounded-xl bg-primary hover:bg-emerald-700 px-6 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-md transition hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap">
                         Notify Me
                     </button>
                 </form>
@@ -149,8 +197,8 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
         </main>
 
         <!-- Footer inside Coming Soon -->
-        <footer class="max-w-6xl mx-auto w-full text-center text-[10px] sm:text-[11px] text-slate-500 py-2 border-t border-slate-200 font-medium">
-            <p>© 2026 AMIS Sadaqah Family Incorporated (ASFI) - Davao City, Philippines. All Rights Reserved.</p>
+        <footer class="max-w-6xl mx-auto w-full text-center text-[10px] sm:text-[11px] text-slate-500 py-2 border-t border-slate-200 font-medium relative z-10">
+            <p>© 2026 AMIS Sadaqah Family Incorporated (ASFI). All Rights Reserved.</p>
         </footer>
     </div>
 
@@ -165,7 +213,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
             <div class="max-w-7xl mx-auto w-full flex items-center justify-between gap-2">
                 <div class="flex items-center gap-2 truncate">
                     <span class="inline-block w-2 h-2 rounded-full bg-goldAccent animate-ping shrink-0"></span>
-                    <span class="truncate">✨ Official ASFI Web Application (Davao City 2026)</span>
+                    <span class="truncate">✨ Official ASFI Web Application 2026</span>
                 </div>
             </div>
         </div>
@@ -177,8 +225,8 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                 <a href="#" class="flex items-center gap-2.5 sm:gap-3">
                     <img src="asfi_logo_2026.png" alt="ASFI Logo" loading="lazy" decoding="async" class="h-10 w-10 sm:h-12 sm:w-12 object-contain drop-shadow-sm">
                     <div>
-                        <span class="block text-xs sm:text-sm font-black tracking-wider text-darkText uppercase leading-none">ASFI DAVAO CITY</span>
-                        <span class="text-[9px] sm:text-[10px] font-extrabold text-primary tracking-wider">AMIS SADAQAH FAMILY INC.</span>
+                        <span class="block text-xs sm:text-sm font-black tracking-wider text-darkText uppercase leading-none">ASFI 2026</span>
+                        <span class="text-[9px] sm:text-[10px] font-extrabold text-primary tracking-wider"><span class="text-primary font-black">AMIS</span> SADAQAH FAMILY INC.</span>
                     </div>
                 </a>
 
@@ -245,7 +293,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                         </h1>
 
                         <p class="text-sm sm:text-lg text-slate-600 font-medium leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                            AMIS Sadaqah Family Incorporated (ASFI) is a modern humanitarian foundation dedicated to uplifting underprivileged families in Davao City and Mindanao through Education Grants, Emergency Medical Relief, Orphan Care, and Disaster Assistance.
+                            AMIS Sadaqah Family Incorporated (ASFI) is a modern humanitarian foundation dedicated to uplifting underprivileged families through Education Grants, Emergency Medical Relief, Orphan Care, and Disaster Assistance.
                         </p>
 
                         <div class="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-4">
@@ -271,7 +319,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                             </div>
                             <div>
                                 <span class="block text-xl sm:text-3xl font-black text-secondary">SEC 2026</span>
-                                <span class="text-[10px] sm:text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">Davao Registered</span>
+                                <span class="text-[10px] sm:text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">Registered</span>
                             </div>
                         </div>
                     </div>
@@ -286,7 +334,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                                 
                                 <div class="absolute bottom-3 left-3 right-3 text-white">
                                     <span class="inline-block px-2.5 py-0.5 rounded-full bg-primary text-white text-[9px] sm:text-[10px] font-black uppercase tracking-wider mb-1">Active Community Mission</span>
-                                    <h3 class="text-sm sm:text-base font-extrabold">Davao Family Relief Drive 2026</h3>
+                                    <h3 class="text-sm sm:text-base font-extrabold">Family Relief Drive 2026</h3>
                                     <p class="text-[11px] sm:text-xs text-slate-200">Delivering food baskets & health support to 450 families.</p>
                                 </div>
                             </div>
@@ -325,7 +373,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                     </span>
                     <h2 class="text-2xl sm:text-4xl font-black text-darkText">About ASFI Foundation</h2>
                     <p class="text-xs sm:text-base text-slate-600 font-medium">
-                        AMIS Sadaqah Family Incorporated (ASFI) was established in Davao City to serve as a beacon of mutual assistance (Takaful), ensuring no family struggles alone during hardship.
+                        AMIS Sadaqah Family Incorporated (ASFI) was established to serve as a beacon of mutual assistance (Takaful), ensuring no family struggles alone during hardship.
                     </p>
                 </div>
 
@@ -368,7 +416,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                         </div>
                         <h3 class="text-base sm:text-lg font-extrabold text-darkText">Ukhuwah (Unity)</h3>
                         <p class="text-xs text-slate-600 leading-relaxed font-medium">
-                            Strengthening community ties in Davao City by connecting donors, volunteers, and families in a cycle of good.
+                            Strengthening community ties by connecting donors, volunteers, and families in a cycle of good.
                         </p>
                     </div>
 
@@ -402,7 +450,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                             <div>
                                 <h3 class="text-lg sm:text-xl font-black text-darkText group-hover:text-primary transition">Education Assistance</h3>
                                 <p class="text-xs text-slate-600 mt-2 leading-relaxed font-medium">
-                                    Scholarships, learning supplies, school uniforms, and tutoring support for deserving students in Davao City.
+                                    Scholarships, learning supplies, school uniforms, and tutoring support for deserving students.
                                 </p>
                             </div>
                             <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-black text-primary">
@@ -568,7 +616,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                     </span>
                     <h2 class="text-2xl sm:text-4xl font-black text-darkText">How You Can Help</h2>
                     <p class="text-xs sm:text-base text-slate-600 font-medium">
-                        Your generosity creates an immediate impact for families and children across Davao City.
+                        Your generosity creates an immediate impact for families and children.
                     </p>
                 </div>
 
@@ -598,7 +646,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                             </div>
                             <h3 class="text-xl sm:text-2xl font-black text-darkText">Become a Volunteer</h3>
                             <p class="text-xs text-slate-600 leading-relaxed font-medium">
-                                Join our community team in Davao City to help distribute food relief, assist in medical drives, and tutor scholars.
+                                Join our community team to help distribute food relief, assist in medical drives, and tutor scholars.
                             </p>
                         </div>
                         <button @click="openVolunteerModal()" class="w-full mt-6 bg-[#16A34A] hover:bg-emerald-700 text-white py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider shadow-md transition active:scale-95 cursor-pointer">
@@ -654,7 +702,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                                 <i data-lucide="star" class="h-4 w-4 fill-current"></i>
                             </div>
                             <p class="text-xs text-slate-700 italic leading-relaxed font-medium">
-                                "Without the ASFI Education Scholarship, continuing my Grade 11 studies in Davao would have been impossible. Alhamdulillāh, now I can pursue my dream of becoming an educator."
+                                "Without the ASFI Education Scholarship, continuing my Grade 11 studies would have been impossible. Alhamdulillāh, now I can pursue my dream of becoming an educator."
                             </p>
                             <h4 class="text-xs sm:text-sm font-black text-darkText">Fatima Z. — ASFI Scholar 2026</h4>
                             <span class="text-[10px] font-extrabold text-primary uppercase tracking-wider block">Education Assistance Program</span>
@@ -713,7 +761,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                             <i data-lucide="chevron-down" class="h-4 w-4 text-primary shrink-0 transition-transform" :class="openFaq === 2 ? 'rotate-180' : ''"></i>
                         </button>
                         <div x-show="openFaq === 2" x-collapse class="px-4 sm:px-5 pb-4 sm:pb-5 text-xs text-slate-600 leading-relaxed font-medium border-t border-slate-200 pt-3">
-                            Students enrolled in Kinder to Grade 12 or college programs in Davao City who come from low-income families or orphan backgrounds can apply for education assistance through our portal.
+                            Students enrolled in Kinder to Grade 12 or college programs who come from low-income families or orphan backgrounds can apply for education assistance through our portal.
                         </div>
                     </div>
 
@@ -723,7 +771,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                             <i data-lucide="chevron-down" class="h-4 w-4 text-primary shrink-0 transition-transform" :class="openFaq === 3 ? 'rotate-180' : ''"></i>
                         </button>
                         <div x-show="openFaq === 3" x-collapse class="px-4 sm:px-5 pb-4 sm:pb-5 text-xs text-slate-600 leading-relaxed font-medium border-t border-slate-200 pt-3">
-                            Families can submit a medical assistance request by filling out our online form or visiting our Davao City office with a valid medical prescription/abstract and proof of identity.
+                            Families can submit a medical assistance request by filling out our online form or visiting our office with a valid medical prescription/abstract and proof of identity.
                         </div>
                     </div>
 
@@ -754,7 +802,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                         </span>
                         <h2 class="text-2xl sm:text-3xl font-black text-darkText">Contact ASFI Foundation</h2>
                         <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
-                            Have questions about our programs, sponsorships, or volunteering? Reach out to our Davao City team today.
+                            Have questions about our programs, sponsorships, or volunteering? Reach out to our team today.
                         </p>
 
                         <div class="space-y-4 pt-2">
@@ -764,7 +812,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                                 </div>
                                 <div>
                                     <h4 class="text-xs font-extrabold text-darkText uppercase tracking-wider">Headquarters Location</h4>
-                                    <p class="text-xs text-slate-600 mt-0.5 font-medium">AMIS Sadaqah Family Inc., Davao City, 8000 Philippines</p>
+                                    <p class="text-xs text-slate-600 mt-0.5 font-medium">AMIS Sadaqah Family Inc., Philippines</p>
                                 </div>
                             </div>
 
@@ -843,8 +891,8 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                     <div class="flex items-center gap-3">
                         <img src="asfi_logo_2026.png" alt="ASFI Logo" loading="lazy" decoding="async" class="h-10 w-10 object-contain">
                         <div>
-                            <span class="block text-xs sm:text-sm font-black text-white uppercase">ASFI DAVAO CITY 2026</span>
-                            <span class="text-[10px] text-[#FBBF24] font-bold">AMIS SADAQAH FAMILY INCORPORATED</span>
+                            <span class="block text-xs sm:text-sm font-black text-white uppercase">ASFI 2026</span>
+                            <span class="text-[10px] text-[#FBBF24] font-bold"><span class="text-primary font-black">AMIS</span> SADAQAH FAMILY INCORPORATED</span>
                         </div>
                     </div>
                     <div class="flex flex-wrap justify-center items-center gap-4 sm:gap-6 font-bold text-slate-300 text-xs">
@@ -857,7 +905,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                 </div>
                 
                 <div class="border-t border-slate-800 pt-6 flex flex-col sm:flex-row items-center justify-between text-[10px] sm:text-[11px] text-slate-400 gap-3 text-center sm:text-left">
-                    <p>© 2026 AMIS Sadaqah Family Incorporated (ASFI) - Davao City, Philippines. All Rights Reserved.</p>
+                    <p>© 2026 AMIS Sadaqah Family Incorporated (ASFI). All Rights Reserved.</p>
                     <p class="text-[#16A34A] font-bold">Takaful & Mutual Support</p>
                 </div>
             </div>
@@ -891,7 +939,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 
             <!-- Payment Details -->
             <div class="space-y-3 bg-[#F8FAFC] p-4 rounded-2xl border border-slate-200 text-xs font-medium">
-                <h4 class="font-black text-darkText uppercase text-[10px] tracking-wider">Official Bank & GCash Accounts (ASFI Davao)</h4>
+                <h4 class="font-black text-darkText uppercase text-[10px] tracking-wider">Official Bank & GCash Accounts</h4>
                 <div class="flex items-center justify-between border-b border-slate-200 pb-2">
                     <span class="font-bold text-slate-700">GCash Transfer:</span>
                     <span class="font-mono font-black text-primary">09XX-XXX-XXXX</span>
@@ -931,7 +979,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                     <i data-lucide="heart-handshake" class="h-6 w-6"></i>
                 </div>
                 <h3 class="text-lg sm:text-xl font-black text-darkText">Join ASFI Volunteers</h3>
-                <p class="text-xs text-slate-500 font-medium">Become a volunteer for community outreaches in Davao City.</p>
+                <p class="text-xs text-slate-500 font-medium">Become a volunteer for community outreaches.</p>
             </div>
 
             <form @submit.prevent="submitVolunteer()" class="space-y-3 text-xs font-medium">
