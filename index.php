@@ -1007,22 +1007,22 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
              class="flex flex-col gap-2.5 items-end">
             
             <!-- Facebook Link -->
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" title="Facebook Page" class="flex items-center gap-2 rounded-full bg-[#1877F2] hover:bg-blue-600 text-white px-4 py-2.5 text-xs font-black shadow-xl transition hover:scale-105 active:scale-95">
+            <a href="https://www.facebook.com/almunawwaraislamicschool" target="_blank" rel="noopener noreferrer" title="Official Facebook Page" class="flex items-center gap-2 rounded-full bg-[#1877F2] hover:bg-blue-600 text-white px-4 py-2.5 text-xs font-black shadow-xl transition hover:scale-105 active:scale-95">
                 <span>Facebook</span>
                 <i data-lucide="facebook" class="h-4 w-4"></i>
             </a>
 
-            <!-- WhatsApp Link -->
-            <a href="https://wa.me/639000000000" target="_blank" rel="noopener noreferrer" title="WhatsApp Chat" class="flex items-center gap-2 rounded-full bg-[#25D366] hover:bg-emerald-600 text-white px-4 py-2.5 text-xs font-black shadow-xl transition hover:scale-105 active:scale-95">
-                <span>WhatsApp</span>
+            <!-- WhatsApp Link (Coming Soon) -->
+            <button @click="alert('WhatsApp Support: Coming Soon InshaAllah')" type="button" title="WhatsApp Chat (Coming Soon)" class="flex items-center gap-2 rounded-full bg-[#25D366] hover:bg-emerald-600 text-white px-4 py-2.5 text-xs font-black shadow-xl transition hover:scale-105 active:scale-95 cursor-pointer">
+                <span>WhatsApp (Coming Soon)</span>
                 <i data-lucide="message-circle" class="h-4 w-4"></i>
-            </a>
+            </button>
 
-            <!-- Gmail Link -->
-            <a href="mailto:asfi@amis.edu.ph" title="Send Gmail" class="flex items-center gap-2 rounded-full bg-[#EA4335] hover:bg-red-600 text-white px-4 py-2.5 text-xs font-black shadow-xl transition hover:scale-105 active:scale-95">
-                <span>Gmail</span>
+            <!-- Gmail Link (Coming Soon) -->
+            <button @click="alert('Gmail Support: Coming Soon InshaAllah')" type="button" title="Send Gmail (Coming Soon)" class="flex items-center gap-2 rounded-full bg-[#EA4335] hover:bg-red-600 text-white px-4 py-2.5 text-xs font-black shadow-xl transition hover:scale-105 active:scale-95 cursor-pointer">
+                <span>Gmail (Coming Soon)</span>
                 <i data-lucide="mail" class="h-4 w-4"></i>
-            </a>
+            </button>
         </div>
 
         <!-- Main Floating Toggle Button -->
