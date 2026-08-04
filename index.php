@@ -221,9 +221,8 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
         </main>
 
         <!-- Footer inside Coming Soon -->
-        <footer class="max-w-6xl mx-auto w-full text-center text-[10px] sm:text-[11px] text-slate-500 py-2 border-t border-slate-200 font-medium relative z-10 space-y-0.5">
+        <footer class="max-w-6xl mx-auto w-full text-center text-[10px] sm:text-[11px] text-slate-500 py-2 border-t border-slate-200 font-medium relative z-10">
             <p>© 2026 AMIS Sadaqah Family Incorporated (ASFI). All Rights Reserved.</p>
-            <p class="text-primary font-extrabold">Developed by: Mon Zhairel Lingasa</p>
         </footer>
     </div>
 
@@ -837,7 +836,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                                 </div>
                                 <div>
                                     <h4 class="text-xs font-extrabold text-darkText uppercase tracking-wider">Headquarters Location</h4>
-                                    <p class="text-xs text-slate-600 mt-0.5 font-medium">AMIS Sadaqah Family Inc., Philippines</p>
+                                    <p class="text-xs text-slate-600 mt-0.5 font-medium">Don Julian Rodriguez Avenue, Ma-a, Davao City, Philippines, 8000</p>
                                 </div>
                             </div>
 
