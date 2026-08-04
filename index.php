@@ -3,7 +3,7 @@
 // ASFI - AMIS SADAQAH FAMILY INCORPORATED (DAVAO CITY 2026)
 // Official Web Application & Launch Preview Portal
 // Tagline: Empowering Communities Through Compassion and Mutual Support.
-// Design System: Clean Light Mode (Emerald, Lime, Sky Blue, Royal Blue, Gold)
+// Design System: Vibrant Light Theme with ASFI Logo Rainbow Gradients
 // ============================================================================
 
 // Strict HTTPS enforcement
@@ -86,48 +86,49 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 
     <style>
         [x-cloak] { display: none !important; }
-        body { font-family: 'Outfit', sans-serif; background-color: #f8fafc; color: #0f172a; }
+        body { font-family: 'Outfit', sans-serif; background-color: #ffffff; color: #0f172a; }
         
-        /* Light Subtle Geometric Pattern */
-        .bg-light-pattern {
-            background-color: #f8fafc;
-            background-image: radial-gradient(rgba(5, 150, 105, 0.07) 1px, transparent 1px), radial-gradient(rgba(14, 165, 233, 0.05) 1px, #f8fafc 1px);
-            background-size: 36px 36px;
-            background-position: 0 0, 18px 18px;
+        /* Vibrant ASFI Logo Rainbow Gradient Background */
+        .bg-asfi-gradient {
+            background: linear-gradient(135deg, rgba(236,253,245,0.9) 0%, rgba(240,249,255,0.9) 25%, rgba(254,243,199,0.8) 50%, rgba(253,230,138,0.7) 75%, rgba(224,231,255,0.9) 100%);
         }
 
-        .gold-gradient-text {
-            background: linear-gradient(135deg, #d97706 0%, #b45309 50%, #f59e0b 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .bg-asfi-splash-gradient {
+            background: radial-gradient(circle at 50% 30%, rgba(16, 185, 129, 0.15), transparent 60%),
+                        linear-gradient(135deg, #f0fdf4 0%, #f0f9ff 25%, #fffbeb 50%, #faf5ff 75%, #f0fdf4 100%);
         }
 
-        .emerald-gradient-text {
-            background: linear-gradient(135deg, #059669 0%, #047857 50%, #0d9488 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
+        /* ASFI Rainbow Spectrum Border Card */
         .rainbow-border-card {
             position: relative;
             background: #ffffff;
-            border-radius: 1.5rem;
-            box-shadow: 0 20px 40px -15px rgba(5, 150, 105, 0.08);
+            border-radius: 1.75rem;
+            box-shadow: 0 20px 40px -15px rgba(16, 185, 129, 0.12);
         }
         
         .rainbow-border-card::before {
             content: '';
             position: absolute;
-            inset: -2px;
-            border-radius: 1.6rem;
-            background: linear-gradient(135deg, #10b981, #38bdf8, #6366f1, #f59e0b);
+            inset: -3px;
+            border-radius: 1.9rem;
+            background: linear-gradient(135deg, #10b981, #84cc16, #0ea5e9, #6366f1, #ec4899, #f59e0b);
             z-index: -1;
-            opacity: 0.15;
+            opacity: 0.4;
             transition: opacity 0.3s ease;
         }
         
         .rainbow-border-card:hover::before {
-            opacity: 0.4;
+            opacity: 0.8;
+        }
+
+        .logo-rainbow-text {
+            background: linear-gradient(135deg, #059669 0%, #0284c7 35%, #6366f1 70%, #d97706 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-rainbow-bg {
+            background: linear-gradient(135deg, #10b981 0%, #84cc16 20%, #0ea5e9 40%, #4f46e5 60%, #ec4899 80%, #f59e0b 100%);
         }
 
         /* Custom Scrollbar */
@@ -137,16 +138,16 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
         ::-webkit-scrollbar-thumb:hover { background: #059669; }
     </style>
 </head>
-<body x-data="asfiApp()" class="bg-light-pattern min-h-screen selection:bg-emerald-600 selection:text-white relative text-slate-800">
+<body x-data="asfiApp()" class="min-h-screen selection:bg-emerald-600 selection:text-white relative text-slate-800 bg-white">
 
     <!-- =================================================================== -->
-    <!-- 1. COMING SOON INSHAALLAH LOADING / SPLASH LAYER (LIGHT MODE) -->
+    <!-- 1. COMING SOON INSHAALLAH LOADING / SPLASH LAYER (RAINBOW GRADIENT) -->
     <!-- =================================================================== -->
     <div x-show="showComingSoon"
          x-transition:leave="transition ease-in-out duration-700 transform"
          x-transition:leave-start="opacity-100 scale-100"
          x-transition:leave-end="opacity-0 scale-95"
-         class="fixed inset-0 z-50 bg-gradient-to-br from-emerald-50/95 via-white/98 to-sky-50/95 backdrop-blur-xl flex flex-col justify-between p-4 md:p-8 overflow-y-auto border-4 border-emerald-500/20">
+         class="fixed inset-0 z-50 bg-asfi-splash-gradient backdrop-blur-xl flex flex-col justify-between p-4 md:p-8 overflow-y-auto">
         
         <!-- Top Bar inside Coming Soon Splash -->
         <header class="max-w-6xl mx-auto w-full flex items-center justify-between py-2">
@@ -154,72 +155,56 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                 <img src="asfi_logo_2026.png" alt="ASFI Official Logo" class="h-14 w-14 object-contain drop-shadow-md">
                 <div>
                     <h1 class="text-sm font-black tracking-wider text-slate-900 uppercase">AMIS SADAQAH FAMILY INCORPORATED</h1>
-                    <p class="text-[11px] font-extrabold text-emerald-700 uppercase tracking-widest">Davao City 2026</p>
+                    <p class="text-[11px] font-extrabold logo-rainbow-text uppercase tracking-widest">Davao City 2026</p>
                 </div>
             </div>
             
-            <button @click="dismissComingSoon()" type="button" class="inline-flex items-center gap-2 rounded-full border border-emerald-300 bg-white px-5 py-2.5 text-xs font-black text-emerald-800 shadow-md transition hover:bg-emerald-600 hover:text-white cursor-pointer">
-                <span>Explore Full Website Preview</span>
-                <i data-lucide="arrow-down-right" class="h-4 w-4"></i>
+            <button @click="dismissComingSoon()" type="button" class="inline-flex items-center gap-2 rounded-full logo-rainbow-bg p-0.5 shadow-md transition hover:scale-105 cursor-pointer">
+                <span class="rounded-full bg-white px-5 py-2 text-xs font-black text-slate-900 flex items-center gap-2">
+                    <span>Explore Website Preview</span>
+                    <i data-lucide="arrow-down-right" class="h-4 w-4 text-emerald-600"></i>
+                </span>
             </button>
         </header>
 
-        <!-- Center Content: Coming Soon InshaAllah (Light Theme) -->
+        <!-- Center Content: Coming Soon InshaAllah -->
         <main class="max-w-3xl mx-auto w-full text-center my-auto py-8 px-4 space-y-6">
             
             <!-- Arabic Bismillah Calligraphy Banner -->
             <div class="space-y-2">
-                <p class="font-arabic text-3xl md:text-4xl text-emerald-800 font-bold tracking-wide">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
-                <span class="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-emerald-800 border border-emerald-300 shadow-xs">
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-ping"></span>
-                    <span>Official Portal Launching Soon</span>
+                <p class="font-arabic text-3xl md:text-5xl text-emerald-800 font-bold tracking-wide">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
+                <span class="inline-flex items-center gap-2 rounded-full logo-rainbow-bg p-0.5 shadow-sm">
+                    <span class="rounded-full bg-white px-4 py-1.5 text-xs font-black uppercase tracking-widest text-slate-900 flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-ping"></span>
+                        <span>Official Portal Launching Soon</span>
+                    </span>
                 </span>
             </div>
 
             <!-- Big Logo Display -->
             <div class="relative inline-block my-2">
-                <div class="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-400 via-sky-400 to-amber-400 blur-2xl opacity-30 animate-pulse"></div>
-                <img src="asfi_logo_2026.png" alt="ASFI Logo" class="relative h-44 w-44 md:h-52 md:w-52 mx-auto object-contain drop-shadow-xl hover:scale-105 transition-transform duration-300">
+                <div class="absolute inset-0 rounded-full logo-rainbow-bg blur-2xl opacity-40 animate-pulse"></div>
+                <img src="asfi_logo_2026.png" alt="ASFI Logo" class="relative h-48 w-48 md:h-56 md:w-56 mx-auto object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-300">
             </div>
 
             <!-- Headline & Tagline -->
             <div class="space-y-3">
                 <h2 class="text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-                    Coming Soon <span class="emerald-gradient-text">InshaAllah</span>
+                    Coming Soon <span class="logo-rainbow-text">InshaAllah</span>
                 </h2>
                 <p class="text-base md:text-xl font-extrabold text-amber-700 italic max-w-xl mx-auto">
                     "Empowering Communities Through Compassion and Mutual Support."
                 </p>
                 <p class="text-xs md:text-sm text-slate-600 max-w-lg mx-auto leading-relaxed font-medium">
-                    We are launching a modern, transparent humanitarian foundation platform for ASFI Davao City 2026 to power Education Grants, Emergency Medical Aid, Orphan Support, and Takaful Relief.
+                    We are building a modern, transparent humanitarian foundation platform for ASFI Davao City 2026 to power Education Grants, Emergency Medical Aid, Orphan Support, and Takaful Relief.
                 </p>
-            </div>
-
-            <!-- Light Mode Countdown Timer Cards -->
-            <div class="grid grid-cols-4 gap-3 max-w-md mx-auto pt-2">
-                <div class="bg-white rounded-2xl p-3 text-center border border-emerald-200 shadow-sm">
-                    <span class="block text-2xl md:text-3xl font-black text-emerald-700" x-text="countdown.days">00</span>
-                    <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500">Days</span>
-                </div>
-                <div class="bg-white rounded-2xl p-3 text-center border border-emerald-200 shadow-sm">
-                    <span class="block text-2xl md:text-3xl font-black text-emerald-700" x-text="countdown.hours">00</span>
-                    <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500">Hours</span>
-                </div>
-                <div class="bg-white rounded-2xl p-3 text-center border border-emerald-200 shadow-sm">
-                    <span class="block text-2xl md:text-3xl font-black text-emerald-700" x-text="countdown.minutes">00</span>
-                    <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500">Minutes</span>
-                </div>
-                <div class="bg-white rounded-2xl p-3 text-center border border-emerald-200 shadow-sm">
-                    <span class="block text-2xl md:text-3xl font-black text-emerald-700" x-text="countdown.seconds">00</span>
-                    <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500">Seconds</span>
-                </div>
             </div>
 
             <!-- Get Notified Subscription Form -->
             <div class="pt-2 max-w-md mx-auto">
                 <form @submit.prevent="subscribeNewsletter()" class="flex flex-col sm:flex-row gap-2">
-                    <input type="email" x-model="subscriberEmail" required placeholder="Enter your email address..." class="flex-1 rounded-xl bg-white border border-slate-300 px-4 py-3 text-xs text-slate-900 placeholder-slate-400 focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600 shadow-sm">
-                    <button type="submit" class="rounded-xl bg-emerald-600 hover:bg-emerald-700 px-6 py-3 text-xs font-black uppercase tracking-wider text-white shadow-md transition active:scale-95 cursor-pointer whitespace-nowrap">
+                    <input type="email" x-model="subscriberEmail" required placeholder="Enter your email address..." class="flex-1 rounded-xl bg-white border-2 border-emerald-300 px-4 py-3 text-xs text-slate-900 placeholder-slate-400 focus:border-emerald-600 focus:outline-none shadow-sm">
+                    <button type="submit" class="rounded-xl logo-rainbow-bg px-7 py-3 text-xs font-black uppercase tracking-wider text-white shadow-md hover:opacity-95 transition active:scale-95 cursor-pointer whitespace-nowrap">
                         Notify Me
                     </button>
                 </form>
@@ -230,9 +215,11 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 
             <!-- Explore Preview Button -->
             <div class="pt-3">
-                <button @click="dismissComingSoon()" type="button" class="inline-flex items-center gap-2.5 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500 px-8 py-4 text-sm font-black uppercase tracking-wider text-slate-950 shadow-xl transition hover:scale-105 active:scale-95 cursor-pointer">
-                    <span>Preview Foundation Website</span>
-                    <i data-lucide="arrow-down" class="h-4 w-4"></i>
+                <button @click="dismissComingSoon()" type="button" class="inline-flex items-center gap-2.5 rounded-2xl logo-rainbow-bg p-1 shadow-xl transition hover:scale-105 active:scale-95 cursor-pointer">
+                    <span class="rounded-xl bg-white px-8 py-3.5 text-sm font-black uppercase tracking-wider text-slate-950 flex items-center gap-2">
+                        <span>Preview Foundation Website</span>
+                        <i data-lucide="arrow-down" class="h-4 w-4 text-emerald-600"></i>
+                    </span>
                 </button>
             </div>
         </main>
@@ -245,14 +232,14 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 
 
     <!-- =================================================================== -->
-    <!-- 2. MAIN WEBSITE APP (LIGHT THEME - WORLD CLASS FOUNDATION) -->
+    <!-- 2. MAIN WEBSITE APP (VIBRANT RAINBOW GRADIENT ACCENTS) -->
     <!-- =================================================================== -->
     
     <!-- Top Preview Banner -->
-    <div x-show="!showComingSoon" x-cloak class="bg-gradient-to-r from-emerald-600 via-emerald-700 to-sky-600 text-white px-4 py-2 text-xs font-bold text-center flex items-center justify-between shadow-xs">
+    <div x-show="!showComingSoon" x-cloak class="logo-rainbow-bg text-white px-4 py-2 text-xs font-bold text-center flex items-center justify-between shadow-xs">
         <div class="max-w-7xl mx-auto w-full flex items-center justify-between gap-2">
             <div class="flex items-center gap-2">
-                <span class="inline-block w-2 h-2 rounded-full bg-amber-300 animate-ping"></span>
+                <span class="inline-block w-2 h-2 rounded-full bg-white animate-ping"></span>
                 <span>✨ Previewing Official ASFI Web Application (Davao City 2026)</span>
             </div>
             <button @click="showComingSoon = true" class="text-[11px] font-black uppercase underline text-amber-200 hover:text-white cursor-pointer">
@@ -261,15 +248,15 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
         </div>
     </div>
 
-    <!-- Main Navigation Header (Light Glassmorphic) -->
-    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-xl border-b border-emerald-100 px-4 py-3.5 shadow-xs transition-all">
+    <!-- Main Navigation Header -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-xl border-b border-slate-200 px-4 py-3.5 shadow-xs transition-all">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
             <!-- Brand Logo -->
             <a href="#" class="flex items-center gap-3">
                 <img src="asfi_logo_2026.png" alt="ASFI Logo" class="h-12 w-12 object-contain drop-shadow-sm">
                 <div>
-                    <span class="block text-sm font-black tracking-wider text-emerald-950 uppercase leading-none">ASFI DAVAO CITY</span>
-                    <span class="text-[10px] font-extrabold text-emerald-700 tracking-wider">AMIS SADAQAH FAMILY INCORPORATED</span>
+                    <span class="block text-sm font-black tracking-wider text-slate-900 uppercase leading-none">ASFI DAVAO CITY</span>
+                    <span class="text-[10px] font-extrabold logo-rainbow-text tracking-wider">AMIS SADAQAH FAMILY INCORPORATED</span>
                 </div>
             </a>
 
@@ -285,11 +272,11 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 
             <!-- Action Buttons -->
             <div class="flex items-center gap-2.5">
-                <button @click="openVolunteerModal()" type="button" class="hidden sm:inline-flex items-center gap-1.5 rounded-xl border border-sky-300 bg-sky-50 px-4 py-2.5 text-xs font-bold text-sky-800 hover:bg-sky-100 transition shadow-2xs">
+                <button @click="openVolunteerModal()" type="button" class="hidden sm:inline-flex items-center gap-1.5 rounded-xl border-2 border-sky-400 bg-sky-50 px-4 py-2 text-xs font-bold text-sky-800 hover:bg-sky-100 transition shadow-2xs">
                     <i data-lucide="heart-handshake" class="h-4 w-4 text-sky-600"></i>
                     <span>Volunteer</span>
                 </button>
-                <button @click="openDonateModal()" type="button" class="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-md transition active:scale-95 cursor-pointer">
+                <button @click="openDonateModal()" type="button" class="inline-flex items-center gap-1.5 rounded-xl logo-rainbow-bg px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-md hover:opacity-95 transition active:scale-95 cursor-pointer">
                     <i data-lucide="hand-heart" class="h-4 w-4 text-amber-300"></i>
                     <span>Donate Now</span>
                 </button>
@@ -298,50 +285,50 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
     </header>
 
 
-    <!-- HERO SECTION (BRIGHT & HOPEFUL LIGHT MODE) -->
-    <section class="relative pt-12 pb-20 md:py-24 bg-gradient-to-br from-emerald-50/80 via-white to-sky-50/60 overflow-hidden border-b border-emerald-100">
+    <!-- HERO SECTION (WITH VIBRANT LOGO RAINBOW GRADIENT OVERLAYS) -->
+    <section class="relative pt-12 pb-20 md:py-24 bg-asfi-gradient overflow-hidden border-b border-emerald-100">
         <div class="max-w-7xl mx-auto px-4 relative z-10">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 
                 <!-- Left Hero Content -->
                 <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-                    <div class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-100/80 px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest text-emerald-800 shadow-2xs">
+                    <div class="inline-flex items-center gap-2 rounded-full border border-emerald-300 bg-white/80 px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest text-emerald-800 shadow-sm">
                         <i data-lucide="sparkles" class="h-3.5 w-3.5 text-amber-600"></i>
                         <span>Takaful & Mutual Community Support</span>
                     </div>
 
                     <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.15]">
-                        Empowering Communities Through <span class="emerald-gradient-text">Compassion & Mutual Support</span>
+                        Empowering Communities Through <span class="logo-rainbow-text">Compassion & Mutual Support</span>
                     </h1>
 
-                    <p class="text-base sm:text-lg text-slate-600 font-medium leading-relaxed max-w-2xl">
+                    <p class="text-base sm:text-lg text-slate-700 font-medium leading-relaxed max-w-2xl">
                         AMIS Sadaqah Family Incorporated (ASFI) is a modern humanitarian foundation dedicated to uplifting underprivileged families in Davao City and Mindanao through Education Grants, Emergency Medical Relief, Orphan Care, and Disaster Assistance.
                     </p>
 
                     <div class="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                        <button @click="openDonateModal()" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 hover:bg-emerald-700 px-8 py-4 text-sm font-black uppercase tracking-wider text-white shadow-xl transition active:scale-95 cursor-pointer">
+                        <button @click="openDonateModal()" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl logo-rainbow-bg px-8 py-4 text-sm font-black uppercase tracking-wider text-white shadow-xl hover:opacity-95 transition active:scale-95 cursor-pointer">
                             <i data-lucide="heart" class="h-4 w-4 text-amber-300"></i>
                             <span>Donate Sadaqah & Zakat</span>
                         </button>
-                        <a href="#programs" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-300 bg-white px-7 py-4 text-sm font-bold text-slate-800 shadow-sm hover:bg-slate-50 hover:border-emerald-400 transition">
+                        <a href="#programs" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-slate-300 bg-white px-7 py-4 text-sm font-bold text-slate-800 shadow-sm hover:bg-slate-50 transition">
                             <span>Explore Our Programs</span>
                             <i data-lucide="chevron-right" class="h-4 w-4 text-emerald-600"></i>
                         </a>
                     </div>
 
                     <!-- Quick Trust Indicators -->
-                    <div class="pt-6 border-t border-slate-200 grid grid-cols-3 gap-4 text-center lg:text-left">
+                    <div class="pt-6 border-t border-slate-300/80 grid grid-cols-3 gap-4 text-center lg:text-left">
                         <div>
                             <span class="block text-2xl md:text-3xl font-black text-emerald-700">100%</span>
-                            <span class="text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">Audited Amanah</span>
+                            <span class="text-[11px] font-extrabold text-slate-600 uppercase tracking-wider">Audited Amanah</span>
                         </div>
                         <div>
                             <span class="block text-2xl md:text-3xl font-black text-amber-600">12,500+</span>
-                            <span class="text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">Lives Touched</span>
+                            <span class="text-[11px] font-extrabold text-slate-600 uppercase tracking-wider">Lives Touched</span>
                         </div>
                         <div>
                             <span class="block text-2xl md:text-3xl font-black text-sky-600">SEC 2026</span>
-                            <span class="text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">Davao Registered</span>
+                            <span class="text-[11px] font-extrabold text-slate-600 uppercase tracking-wider">Davao Registered</span>
                         </div>
                     </div>
                 </div>
@@ -352,16 +339,16 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                         <!-- Hero Image Banner -->
                         <div class="relative h-72 sm:h-80 rounded-2xl overflow-hidden bg-slate-100 shadow-md">
                             <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1200&auto=format&fit=crop" alt="Volunteers helping children" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent"></div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/85 via-slate-900/20 to-transparent"></div>
                             
                             <div class="absolute bottom-4 left-4 right-4 text-white">
-                                <span class="inline-block px-3 py-1 rounded-full bg-emerald-600 text-white text-[10px] font-black uppercase tracking-wider mb-1">Active Community Mission</span>
+                                <span class="inline-block px-3 py-1 rounded-full logo-rainbow-bg text-white text-[10px] font-black uppercase tracking-wider mb-1">Active Community Mission</span>
                                 <h3 class="text-base font-extrabold">Davao Family Relief Drive 2026</h3>
                                 <p class="text-xs text-slate-200">Delivering food baskets & health support to 450 families.</p>
                             </div>
                         </div>
 
-                        <!-- Featured Program Mini Cards (Light Theme) -->
+                        <!-- Featured Program Mini Cards -->
                         <div class="grid grid-cols-2 gap-3">
                             <div class="rounded-xl bg-emerald-50 p-3.5 border border-emerald-200 shadow-2xs">
                                 <div class="flex items-center gap-2 text-emerald-800 font-extrabold text-xs">
@@ -402,8 +389,8 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
             <!-- 4 Core Pillars Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 
-                <div class="bg-slate-50 rounded-3xl p-6 space-y-3 border border-slate-200 shadow-xs hover:border-emerald-500 hover:shadow-md transition">
-                    <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xl border border-emerald-300">
+                <div class="bg-gradient-to-b from-emerald-50 to-white rounded-3xl p-6 space-y-3 border border-emerald-200 shadow-xs hover:shadow-md transition">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center font-bold text-xl shadow-sm">
                         <i data-lucide="shield-check" class="h-6 w-6"></i>
                     </div>
                     <h3 class="text-lg font-extrabold text-slate-900">Amanah (Trust)</h3>
@@ -412,8 +399,8 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                     </p>
                 </div>
 
-                <div class="bg-slate-50 rounded-3xl p-6 space-y-3 border border-slate-200 shadow-xs hover:border-sky-500 hover:shadow-md transition">
-                    <div class="w-12 h-12 rounded-2xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-xl border border-sky-300">
+                <div class="bg-gradient-to-b from-sky-50 to-white rounded-3xl p-6 space-y-3 border border-sky-200 shadow-xs hover:shadow-md transition">
+                    <div class="w-12 h-12 rounded-2xl bg-sky-500 text-white flex items-center justify-center font-bold text-xl shadow-sm">
                         <i data-lucide="users" class="h-6 w-6"></i>
                     </div>
                     <h3 class="text-lg font-extrabold text-slate-900">Takaful (Mutual Support)</h3>
@@ -422,8 +409,8 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                     </p>
                 </div>
 
-                <div class="bg-slate-50 rounded-3xl p-6 space-y-3 border border-slate-200 shadow-xs hover:border-amber-500 hover:shadow-md transition">
-                    <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-xl border border-amber-300">
+                <div class="bg-gradient-to-b from-amber-50 to-white rounded-3xl p-6 space-y-3 border border-amber-200 shadow-xs hover:shadow-md transition">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center font-bold text-xl shadow-sm">
                         <i data-lucide="heart" class="h-6 w-6"></i>
                     </div>
                     <h3 class="text-lg font-extrabold text-slate-900">Ikhlas (Pure Intent)</h3>
@@ -432,8 +419,8 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                     </p>
                 </div>
 
-                <div class="bg-slate-50 rounded-3xl p-6 space-y-3 border border-slate-200 shadow-xs hover:border-emerald-500 hover:shadow-md transition">
-                    <div class="w-12 h-12 rounded-2xl bg-lime-100 text-lime-800 flex items-center justify-center font-bold text-xl border border-lime-300">
+                <div class="bg-gradient-to-b from-lime-50 to-white rounded-3xl p-6 space-y-3 border border-lime-200 shadow-xs hover:shadow-md transition">
+                    <div class="w-12 h-12 rounded-2xl bg-lime-500 text-white flex items-center justify-center font-bold text-xl shadow-sm">
                         <i data-lucide="sparkles" class="h-6 w-6"></i>
                     </div>
                     <h3 class="text-lg font-extrabold text-slate-900">Ukhuwah (Unity)</h3>
@@ -587,8 +574,8 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
     </section>
 
 
-    <!-- IMPACT STATISTICS COUNTER SECTION (VIBRANT LIGHT BRAND BANNER) -->
-    <section id="impact" class="py-16 bg-gradient-to-r from-emerald-700 via-emerald-600 to-sky-600 text-white shadow-md">
+    <!-- IMPACT STATISTICS COUNTER SECTION (RAINBOW BRAND BANNER) -->
+    <section id="impact" class="py-16 logo-rainbow-bg text-white shadow-md">
         <div class="max-w-7xl mx-auto px-4">
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
                 
@@ -601,7 +588,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                 </div>
 
                 <div class="space-y-2">
-                    <div class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-400/30 text-amber-200 mb-2 shadow-inner">
+                    <div class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 text-amber-200 mb-2 shadow-inner">
                         <i data-lucide="graduation-cap" class="h-6 w-6"></i>
                     </div>
                     <span class="block text-4xl sm:text-5xl font-black text-amber-300">250+</span>
@@ -617,7 +604,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                 </div>
 
                 <div class="space-y-2">
-                    <div class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-400/30 text-amber-200 mb-2 shadow-inner">
+                    <div class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 text-amber-200 mb-2 shadow-inner">
                         <i data-lucide="building-2" class="h-6 w-6"></i>
                     </div>
                     <span class="block text-4xl sm:text-5xl font-black text-amber-300">50+</span>
@@ -891,7 +878,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                                 <label class="block text-[11px] font-extrabold text-slate-700 mb-1 uppercase tracking-wider">Message Details</label>
                                 <textarea x-model="contactForm.message" rows="4" required placeholder="Write your message here..." class="w-full rounded-xl bg-slate-50 border border-slate-300 px-4 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:border-emerald-600 focus:outline-none"></textarea>
                             </div>
-                            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-black text-xs uppercase tracking-wider shadow-md transition active:scale-95 cursor-pointer">
+                            <button type="submit" class="w-full logo-rainbow-bg text-white py-3 rounded-xl font-black text-xs uppercase tracking-wider shadow-md hover:opacity-95 transition active:scale-95 cursor-pointer">
                                 Send Message
                             </button>
                             <p x-show="contactSent" x-cloak class="text-xs text-emerald-700 font-black text-center mt-2">
@@ -906,7 +893,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
     </section>
 
 
-    <!-- FOOTER (LIGHT MODE) -->
+    <!-- FOOTER -->
     <footer class="bg-slate-900 text-slate-300 text-xs py-12">
         <div class="max-w-7xl mx-auto px-4 space-y-8">
             <div class="flex flex-col md:flex-row items-center justify-between gap-6">
@@ -1020,7 +1007,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                         <option>Disaster Emergency Response</option>
                     </select>
                 </div>
-                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-black text-xs uppercase shadow-md cursor-pointer">
+                <button type="submit" class="w-full logo-rainbow-bg text-white py-3 rounded-xl font-black text-xs uppercase shadow-md cursor-pointer">
                     Submit Volunteer Registration
                 </button>
             </form>
@@ -1044,15 +1031,8 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                     subject: '',
                     message: ''
                 },
-                countdown: {
-                    days: '30',
-                    hours: '12',
-                    minutes: '45',
-                    seconds: '00'
-                },
 
                 init() {
-                    this.startCountdown();
                     this.$nextTick(() => lucide.createIcons());
                 },
 
@@ -1090,20 +1070,6 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                 submitVolunteer() {
                     alert('JazakAllahu Khairan! Volunteer application submitted successfully.');
                     this.volunteerModal = false;
-                },
-
-                startCountdown() {
-                    const target = new Date().getTime() + (30 * 24 * 60 * 60 * 1000);
-                    setInterval(() => {
-                        const now = new Date().getTime();
-                        const diff = target - now;
-                        if (diff > 0) {
-                            this.countdown.days = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
-                            this.countdown.hours = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-                            this.countdown.minutes = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-                            this.countdown.seconds = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
-                        }
-                    }, 1000);
                 }
             }
         }
