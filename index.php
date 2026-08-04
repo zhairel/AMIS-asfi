@@ -31,7 +31,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Scheherazade+New:wght@400;700 font-bold&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -42,7 +42,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                 extend: {
                     fontFamily: {
                         sans: ['Outfit', 'sans-serif'],
-                        arabic: ['Amiri', 'serif'],
+                        arabic: ['"Scheherazade New"', 'Amiri', 'serif'],
                     },
                     colors: {
                         primary: '#16A34A',      /* Emerald Green */
@@ -188,7 +188,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
             
             <!-- Arabic Bismillah Calligraphy Banner -->
             <div class="space-y-1">
-                <p class="font-arabic text-2xl sm:text-4xl md:text-5xl text-primary font-bold tracking-wide">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
+                <p class="font-arabic text-3xl sm:text-5xl md:text-6xl text-primary font-bold tracking-wide leading-relaxed drop-shadow-xs">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
             </div>
 
             <!-- Shiny Logo Display (Shiny Light Sweep Effect) -->
