@@ -153,7 +153,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                     <img src="asfi_logo_2026.png" alt="ASFI Logo" loading="lazy" decoding="async" class="h-32 w-32 sm:h-44 sm:w-44 md:h-52 md:w-52 mx-auto object-contain">
                 </div>
                 <h3 class="text-[11px] sm:text-sm md:text-base font-black tracking-widest text-darkText uppercase pt-1">
-                    <span class="text-primary font-black">AMIS</span> SADAQAH FAMILY INCORPORATED
+                    <span class="text-[#16A34A] font-black">AMIS</span> SADAQAH FAMILY INCORPORATED
                 </h3>
             </div>
 
@@ -209,7 +209,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                     <img src="asfi_logo_2026.png" alt="ASFI Logo" loading="lazy" decoding="async" class="h-10 w-10 sm:h-12 sm:w-12 object-contain drop-shadow-sm">
                     <div>
                         <span class="block text-xs sm:text-sm font-black tracking-wider text-darkText uppercase leading-none">ASFI 2026</span>
-                        <span class="text-[9px] sm:text-[10px] font-extrabold text-primary tracking-wider"><span class="text-primary font-black">AMIS</span> SADAQAH FAMILY INC.</span>
+                        <span class="text-[9px] sm:text-[10px] font-extrabold text-primary tracking-wider"><span class="text-[#16A34A] font-black">AMIS</span> SADAQAH FAMILY INC.</span>
                     </div>
                 </a>
 
