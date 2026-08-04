@@ -132,10 +132,6 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
             <!-- Arabic Bismillah Calligraphy Banner -->
             <div class="space-y-2">
                 <p class="font-arabic text-3xl md:text-5xl text-primary font-bold tracking-wide">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
-                <span class="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-primary border border-emerald-300 shadow-xs">
-                    <span class="w-2.5 h-2.5 rounded-full bg-primary animate-ping"></span>
-                    <span>Official Foundation Portal Launching Soon</span>
-                </span>
             </div>
 
             <!-- Big Logo Display -->
