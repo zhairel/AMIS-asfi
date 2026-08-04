@@ -990,6 +990,51 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
         </div>
     </div>
 
+    <!-- =================================================================== -->
+    <!-- FLOATING QUICK CONTACT WIDGET (BOTTOM-RIGHT CORNER) -->
+    <!-- =================================================================== -->
+    <div x-data="{ openQuickContact: false }" class="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-2.5">
+        
+        <!-- Expanded Contact Buttons -->
+        <div x-show="openQuickContact"
+             x-cloak
+             x-transition:enter="transition ease-out duration-300 transform"
+             x-transition:enter-start="opacity-0 translate-y-4 scale-95"
+             x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+             x-transition:leave="transition ease-in duration-200 transform"
+             x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+             x-transition:leave-end="opacity-0 translate-y-4 scale-95"
+             class="flex flex-col gap-2.5 items-end">
+            
+            <!-- Facebook Link -->
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" title="Facebook Page" class="flex items-center gap-2 rounded-full bg-[#1877F2] hover:bg-blue-600 text-white px-4 py-2.5 text-xs font-black shadow-xl transition hover:scale-105 active:scale-95">
+                <span>Facebook</span>
+                <i data-lucide="facebook" class="h-4 w-4"></i>
+            </a>
+
+            <!-- WhatsApp Link -->
+            <a href="https://wa.me/639000000000" target="_blank" rel="noopener noreferrer" title="WhatsApp Chat" class="flex items-center gap-2 rounded-full bg-[#25D366] hover:bg-emerald-600 text-white px-4 py-2.5 text-xs font-black shadow-xl transition hover:scale-105 active:scale-95">
+                <span>WhatsApp</span>
+                <i data-lucide="message-circle" class="h-4 w-4"></i>
+            </a>
+
+            <!-- Gmail Link -->
+            <a href="mailto:asfi@amis.edu.ph" title="Send Gmail" class="flex items-center gap-2 rounded-full bg-[#EA4335] hover:bg-red-600 text-white px-4 py-2.5 text-xs font-black shadow-xl transition hover:scale-105 active:scale-95">
+                <span>Gmail</span>
+                <i data-lucide="mail" class="h-4 w-4"></i>
+            </a>
+        </div>
+
+        <!-- Main Floating Toggle Button -->
+        <button @click="openQuickContact = !openQuickContact; $nextTick(() => lucide.createIcons());"
+                type="button"
+                class="w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-primary hover:bg-blue-700 text-white flex items-center justify-center shadow-2xl border-2 border-white transition transform hover:scale-110 active:scale-95 cursor-pointer"
+                title="Quick Contact Us">
+            <i data-lucide="message-square" class="h-6 w-6" x-show="!openQuickContact"></i>
+            <i data-lucide="x" class="h-6 w-6" x-show="openQuickContact" x-cloak></i>
+        </button>
+    </div>
+
     <!-- Alpine App State Script -->
     <script>
         function asfiApp() {
