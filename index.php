@@ -42,7 +42,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                 extend: {
                     fontFamily: {
                         sans: ['Outfit', 'sans-serif'],
-                        arabic: ['"Scheherazade New"', 'Amiri', 'serif'],
+                        arabic: ['Amiri', 'serif'],
                     },
                     colors: {
                         primary: '#16A34A',      /* Emerald Green */
