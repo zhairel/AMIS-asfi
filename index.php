@@ -3,7 +3,7 @@
 // ASFI - AMIS SADAQAH FAMILY INCORPORATED (DAVAO CITY 2026)
 // Official Web Application & Launch Preview Portal
 // Tagline: Empowering Communities Through Compassion and Mutual Support.
-// Standalone Launch Page with Smooth Micro-Animations
+// Mobile Font & Typography Responsive Fixed
 // ============================================================================
 
 // Strict HTTPS enforcement
@@ -28,10 +28,11 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
     <meta name="keywords" content="ASFI, AMIS Sadaqah Family Incorporated, Sadaqah, Zakat, Takaful, Education Assistance, Medical Aid, Charity Philippines">
     <link rel="icon" type="image/png" href="asfi_logo_2026.png">
 
-    <!-- Fonts & Icons -->
+    <!-- Direct Fonts Import for Guaranteed Mobile Compatibility -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Scheherazade+New:wght@400;700 font-bold&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -41,7 +42,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Outfit', 'sans-serif'],
+                        sans: ['Outfit', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
                         arabic: ['Amiri', 'serif'],
                     },
                     colors: {
@@ -58,12 +59,25 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
     </script>
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+
         [x-cloak] { display: none !important; }
-        body { font-family: 'Outfit', sans-serif; background-color: #F8FAFC; color: #0F172A; }
+        
+        html, body {
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+            background-color: #F8FAFC;
+            color: #0F172A;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .font-arabic {
+            font-family: 'Amiri', serif !important;
+        }
         
         .bg-asfi-pattern {
             background-color: #F8FAFC;
-            background-image: radial-gradient(rgba(22, 163, 74, 0.05) 1px, transparent 1px), radial-gradient(rgba(37, 99, 235, 0.04) 1px, #F8FAFC 1px);
+            background-image: radial-gradient(rgba(37, 99, 235, 0.05) 1px, transparent 1px), radial-gradient(rgba(22, 163, 74, 0.04) 1px, #F8FAFC 1px);
             background-size: 32px 32px;
             background-position: 0 0, 16px 16px;
         }
@@ -71,55 +85,9 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
         .asfi-card {
             background: #FFFFFF;
             border-radius: 1.5rem;
-            border: 1px solid rgba(22, 163, 74, 0.18);
-            box-shadow: 0 10px 25px -5px rgba(22, 163, 74, 0.06);
+            border: 1px solid rgba(37, 99, 235, 0.18);
+            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.06);
             transition: all 0.3s ease;
-        }
-
-        .asfi-card:hover {
-            border-color: rgba(22, 163, 74, 0.35);
-            box-shadow: 0 20px 30px -10px rgba(22, 163, 74, 0.12);
-        }
-
-        /* Beautiful Micro-Animations for Coming Soon */
-        @keyframes floatSlow {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-12px); }
-        }
-
-        @keyframes pulseGlow {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.08); }
-        }
-
-        @keyframes shimmerText {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-
-        @keyframes spinSlow {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .animate-float {
-            animation: floatSlow 4.5s ease-in-out infinite;
-        }
-
-        .animate-glow-ring {
-            animation: pulseGlow 3s ease-in-out infinite;
-        }
-
-        .animate-spin-slow {
-            animation: spinSlow 20s linear infinite;
-        }
-
-        .shimmer-heading {
-            background: linear-gradient(90deg, #0F172A 0%, #16A34A 50%, #0F172A 100%);
-            background-size: 200% auto;
-            color: transparent;
-            -webkit-background-clip: text;
-            animation: shimmerText 5s linear infinite;
         }
 
         /* Shiny Logo Sweep Animation */
@@ -164,32 +132,29 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
         ::-webkit-scrollbar-thumb:hover { background: #1D4ED8; }
     </style>
 </head>
-<body x-data="asfiApp()" :class="showComingSoon ? 'overflow-hidden h-screen' : 'min-h-screen'" class="selection:bg-[#16A34A] selection:text-white relative text-darkText bg-asfi-pattern">
+<body x-data="asfiApp()" :class="showComingSoon ? 'overflow-hidden h-screen' : 'min-h-screen'" class="selection:bg-[#2563EB] selection:text-white relative text-darkText bg-asfi-pattern">
 
     <!-- =================================================================== -->
-    <!-- 1. COMING SOON INSHAALLAH LAUNCH PAGE (CLEAN BACKGROUND, SHINY LOGO) -->
+    <!-- 1. COMING SOON INSHAALLAH LAUNCH PAGE (RESPONSIVE TYPOGRAPHY) -->
     <!-- =================================================================== -->
     <div x-show="showComingSoon"
-         class="fixed inset-0 z-50 h-screen w-screen bg-gradient-to-br from-emerald-50/90 via-white to-blue-50/70 flex flex-col justify-between p-4 md:p-8 overflow-hidden">
+         class="fixed inset-0 z-50 h-screen w-screen bg-gradient-to-br from-blue-50/90 via-white to-emerald-50/70 flex flex-col justify-between p-4 md:p-8 overflow-hidden">
         
-        <!-- Top Bar inside Coming Soon Splash (Clean Header) -->
+        <!-- Top Bar inside Coming Soon Splash -->
         <header class="max-w-6xl mx-auto w-full flex items-center justify-between py-2 relative z-10">
         </header>
 
         <!-- Center Content: Coming Soon InshaAllah -->
         <main class="max-w-3xl mx-auto w-full text-center my-auto py-4 sm:py-6 px-2 sm:px-4 space-y-4 sm:space-y-5 relative z-10">
-            
-            <!-- Arabic Bismillah Calligraphy Banner -->
-            <div class="space-y-1">
-                <p class="font-arabic text-3xl sm:text-5xl md:text-6xl text-primary font-bold tracking-wide leading-relaxed drop-shadow-xs">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
-            </div>
 
             <!-- Shiny Logo Display (Shiny Light Sweep Effect with Full Brand Title) -->
             <div class="relative inline-block my-1 space-y-1">
                 <div class="shiny-logo-container drop-shadow-2xl">
-                    <img src="asfi_logo_2026.png" alt="ASFI Logo" loading="lazy" decoding="async" class="h-36 w-36 sm:h-48 sm:w-48 md:h-56 md:w-56 mx-auto object-contain">
+                    <img src="asfi_logo_2026.png" alt="ASFI Logo" loading="lazy" decoding="async" class="h-32 w-32 sm:h-44 sm:w-44 md:h-52 md:w-52 mx-auto object-contain">
                 </div>
-                <h3 class="text-xs sm:text-base font-black tracking-wider text-darkText uppercase pt-1"><span class="text-primary font-black">AMIS</span> SADAQAH FAMILY INCORPORATED</h3>
+                <h3 class="text-[11px] sm:text-sm md:text-base font-black tracking-widest text-darkText uppercase pt-1">
+                    <span class="text-primary font-black">AMIS</span> SADAQAH FAMILY INCORPORATED
+                </h3>
             </div>
 
             <!-- Headline & Tagline -->
@@ -197,14 +162,14 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                 <h2 class="text-2xl sm:text-4xl md:text-5xl font-black text-darkText tracking-tight leading-tight">
                     Coming Soon <span class="text-primary font-black">InshaAllah</span>
                 </h2>
-                <p class="text-xs sm:text-sm font-extrabold text-primary uppercase tracking-wider">Developed by: Mon Zhairel Lingasa</p>
+                <p class="text-[11px] sm:text-xs font-black text-primary uppercase tracking-widest">Developed by: Mon Zhairel Lingasa</p>
             </div>
 
             <!-- Get Notified Subscription Form -->
             <div class="pt-1 max-w-md mx-auto w-full px-2">
                 <form @submit.prevent="subscribeNewsletter()" class="flex flex-col sm:flex-row gap-2">
-                    <input type="email" x-model="subscriberEmail" required placeholder="Enter your email address..." class="flex-1 rounded-xl bg-white border border-emerald-300 px-4 py-2.5 text-xs text-darkText placeholder-slate-400 focus:border-primary focus:outline-none shadow-sm transition focus:ring-2 focus:ring-emerald-400">
-                    <button type="submit" class="rounded-xl bg-primary hover:bg-emerald-700 px-6 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-md transition hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap">
+                    <input type="email" x-model="subscriberEmail" required placeholder="Enter your email address..." class="flex-1 rounded-xl bg-white border border-blue-300 px-4 py-2.5 text-xs text-darkText placeholder-slate-400 focus:border-primary focus:outline-none shadow-sm transition focus:ring-2 focus:ring-blue-400">
+                    <button type="submit" class="rounded-xl bg-primary hover:bg-blue-700 px-6 py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-md transition hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap">
                         Notify Me
                     </button>
                 </form>
@@ -237,7 +202,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
         </div>
 
         <!-- Main Navigation Header -->
-        <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-emerald-100 px-4 py-3.5 shadow-xs transition-all">
+        <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-blue-100 px-4 py-3.5 shadow-xs transition-all">
             <div class="max-w-7xl mx-auto flex items-center justify-between">
                 <!-- Brand Logo -->
                 <a href="#" class="flex items-center gap-2.5 sm:gap-3">
@@ -260,11 +225,11 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 
                 <!-- Action Buttons & Mobile Hamburger -->
                 <div class="flex items-center gap-2">
-                    <button @click="openVolunteerModal()" type="button" class="hidden sm:inline-flex items-center gap-1.5 rounded-xl border border-secondary/30 bg-blue-50 px-3.5 py-2 text-xs font-bold text-secondary hover:bg-blue-100 transition shadow-2xs">
+                    <button @click="openVolunteerModal()" type="button" class="hidden sm:inline-flex items-center gap-1.5 rounded-xl border border-secondary/30 bg-emerald-50 px-3.5 py-2 text-xs font-bold text-secondary hover:bg-emerald-100 transition shadow-2xs">
                         <i data-lucide="heart-handshake" class="h-4 w-4 text-secondary"></i>
                         <span>Volunteer</span>
                     </button>
-                    <button @click="openDonateModal()" type="button" class="inline-flex items-center gap-1.5 rounded-xl bg-primary hover:bg-emerald-700 px-3.5 sm:px-5 py-2 sm:py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-md transition active:scale-95 cursor-pointer">
+                    <button @click="openDonateModal()" type="button" class="inline-flex items-center gap-1.5 rounded-xl bg-primary hover:bg-blue-700 px-3.5 sm:px-5 py-2 sm:py-2.5 text-xs font-black uppercase tracking-wider text-white shadow-md transition active:scale-95 cursor-pointer">
                         <i data-lucide="hand-heart" class="h-4 w-4 text-goldAccent"></i>
                         <span>Donate</span>
                     </button>
@@ -295,13 +260,13 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 
 
         <!-- HERO SECTION -->
-        <section class="relative pt-8 sm:pt-12 pb-16 sm:pb-20 md:py-24 bg-gradient-to-br from-emerald-50/70 via-white to-blue-50/50 overflow-hidden border-b border-emerald-100">
+        <section class="relative pt-8 sm:pt-12 pb-16 sm:pb-20 md:py-24 bg-gradient-to-br from-blue-50/70 via-white to-emerald-50/50 overflow-hidden border-b border-blue-100">
             <div class="max-w-7xl mx-auto px-4 relative z-10">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
                     
                     <!-- Left Hero Content -->
                     <div class="lg:col-span-7 space-y-5 sm:space-y-6 text-center lg:text-left">
-                        <div class="inline-flex items-center gap-2 rounded-full border border-emerald-300 bg-emerald-100/80 px-3.5 sm:px-4 py-1 sm:py-1.5 text-[11px] sm:text-xs font-extrabold uppercase tracking-widest text-primary shadow-2xs">
+                        <div class="inline-flex items-center gap-2 rounded-full border border-blue-300 bg-blue-100/80 px-3.5 sm:px-4 py-1 sm:py-1.5 text-[11px] sm:text-xs font-extrabold uppercase tracking-widest text-primary shadow-2xs">
                             <i data-lucide="sparkles" class="h-3.5 w-3.5 text-orangeAccent"></i>
                             <span>Takaful & Mutual Community Support</span>
                         </div>
@@ -315,7 +280,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                         </p>
 
                         <div class="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-4">
-                            <button @click="openDonateModal()" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl bg-primary hover:bg-emerald-700 px-8 py-3.5 sm:py-4 text-xs sm:text-sm font-black uppercase tracking-wider text-white shadow-xl transition active:scale-95 cursor-pointer">
+                            <button @click="openDonateModal()" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl bg-primary hover:bg-blue-700 px-8 py-3.5 sm:py-4 text-xs sm:text-sm font-black uppercase tracking-wider text-white shadow-xl transition active:scale-95 cursor-pointer">
                                 <i data-lucide="heart" class="h-4 w-4 text-goldAccent"></i>
                                 <span>Donate Sadaqah & Zakat</span>
                             </button>
@@ -359,14 +324,14 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 
                             <!-- Featured Program Mini Cards -->
                             <div class="grid grid-cols-2 gap-2.5 sm:gap-3">
-                                <div class="rounded-xl bg-emerald-50 p-3 border border-emerald-200 shadow-2xs">
+                                <div class="rounded-xl bg-blue-50 p-3 border border-blue-200 shadow-2xs">
                                     <div class="flex items-center gap-1.5 text-primary font-extrabold text-xs">
                                         <i data-lucide="graduation-cap" class="h-4 w-4 text-primary shrink-0"></i>
                                         <span class="truncate">Education Grants</span>
                                     </div>
                                     <span class="block text-[11px] font-bold text-slate-600 mt-1">250+ Scholars</span>
                                 </div>
-                                <div class="rounded-xl bg-blue-50 p-3 border border-blue-200 shadow-2xs">
+                                <div class="rounded-xl bg-emerald-50 p-3 border border-emerald-200 shadow-2xs">
                                     <div class="flex items-center gap-1.5 text-secondary font-extrabold text-xs">
                                         <i data-lucide="stethoscope" class="h-4 w-4 text-secondary shrink-0"></i>
                                         <span class="truncate">Medical Aid</span>
@@ -398,8 +363,8 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                 <!-- 4 Core Pillars Grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                     
-                    <div class="bg-emerald-50/60 rounded-3xl p-5 sm:p-6 space-y-3 border border-emerald-200 shadow-xs hover:border-primary hover:shadow-md transition">
-                        <div class="w-12 h-12 rounded-2xl bg-[#16A34A] text-white flex items-center justify-center font-bold text-xl shadow-sm">
+                    <div class="bg-blue-50/60 rounded-3xl p-5 sm:p-6 space-y-3 border border-blue-200 shadow-xs hover:border-primary hover:shadow-md transition">
+                        <div class="w-12 h-12 rounded-2xl bg-[#2563EB] text-white flex items-center justify-center font-bold text-xl shadow-sm">
                             <i data-lucide="shield-check" class="h-6 w-6"></i>
                         </div>
                         <h3 class="text-base sm:text-lg font-extrabold text-darkText">Amanah (Trust)</h3>
@@ -408,8 +373,8 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                         </p>
                     </div>
 
-                    <div class="bg-blue-50/60 rounded-3xl p-5 sm:p-6 space-y-3 border border-blue-200 shadow-xs hover:border-secondary hover:shadow-md transition">
-                        <div class="w-12 h-12 rounded-2xl bg-[#2563EB] text-white flex items-center justify-center font-bold text-xl shadow-sm">
+                    <div class="bg-emerald-50/60 rounded-3xl p-5 sm:p-6 space-y-3 border border-emerald-200 shadow-xs hover:border-secondary hover:shadow-md transition">
+                        <div class="w-12 h-12 rounded-2xl bg-[#16A34A] text-white flex items-center justify-center font-bold text-xl shadow-sm">
                             <i data-lucide="users" class="h-6 w-6"></i>
                         </div>
                         <h3 class="text-base sm:text-lg font-extrabold text-darkText">Takaful (Mutual Support)</h3>
@@ -428,8 +393,8 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                         </p>
                     </div>
 
-                    <div class="bg-emerald-50/60 rounded-3xl p-5 sm:p-6 space-y-3 border border-emerald-200 shadow-xs hover:border-primary hover:shadow-md transition">
-                        <div class="w-12 h-12 rounded-2xl bg-[#16A34A] text-white flex items-center justify-center font-bold text-xl shadow-sm">
+                    <div class="bg-blue-50/60 rounded-3xl p-5 sm:p-6 space-y-3 border border-blue-200 shadow-xs hover:border-primary hover:shadow-md transition">
+                        <div class="w-12 h-12 rounded-2xl bg-[#2563EB] text-white flex items-center justify-center font-bold text-xl shadow-sm">
                             <i data-lucide="sparkles" class="h-6 w-6"></i>
                         </div>
                         <h3 class="text-base sm:text-lg font-extrabold text-darkText">Ukhuwah (Unity)</h3>
@@ -447,7 +412,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
         <section id="programs" class="py-16 sm:py-20 bg-[#F8FAFC] relative border-b border-slate-200">
             <div class="max-w-7xl mx-auto px-4">
                 <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16 space-y-3">
-                    <span class="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-1 text-xs font-extrabold uppercase tracking-widest text-primary border border-emerald-300">
+                    <span class="inline-flex items-center gap-2 rounded-full bg-blue-100 px-4 py-1 text-xs font-extrabold uppercase tracking-widest text-primary border border-blue-300">
                         Humanitarian Initiatives
                     </span>
                     <h2 class="text-2xl sm:text-4xl font-black text-darkText">Our Core Programs</h2>
@@ -459,10 +424,10 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                     
                     <!-- Program 1: Education Assistance -->
-                    <div class="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between group hover:border-[#16A34A] hover:shadow-xl transition duration-300">
+                    <div class="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between group hover:border-[#2563EB] hover:shadow-xl transition duration-300">
                         <div class="relative h-44 sm:h-48 overflow-hidden bg-slate-100">
                             <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=800&auto=format&fit=crop" alt="Education Assistance" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                            <span class="absolute top-3 left-3 bg-[#16A34A] text-white text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">Education</span>
+                            <span class="absolute top-3 left-3 bg-[#2563EB] text-white text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">Education</span>
                         </div>
                         <div class="p-5 sm:p-6 space-y-3 flex-1 flex flex-col justify-between">
                             <div>
@@ -479,10 +444,10 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                     </div>
 
                     <!-- Program 2: Medical Assistance -->
-                    <div class="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between group hover:border-[#2563EB] hover:shadow-xl transition duration-300">
+                    <div class="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between group hover:border-[#16A34A] hover:shadow-xl transition duration-300">
                         <div class="relative h-44 sm:h-48 overflow-hidden bg-slate-100">
                             <img src="https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?q=80&w=800&auto=format&fit=crop" alt="Medical Assistance" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                            <span class="absolute top-3 left-3 bg-[#2563EB] text-white text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">Healthcare</span>
+                            <span class="absolute top-3 left-3 bg-[#16A34A] text-white text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">Healthcare</span>
                         </div>
                         <div class="p-5 sm:p-6 space-y-3 flex-1 flex flex-col justify-between">
                             <div>
@@ -519,10 +484,10 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                     </div>
 
                     <!-- Program 4: Livelihood Support -->
-                    <div class="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between group hover:border-[#16A34A] hover:shadow-xl transition duration-300">
+                    <div class="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between group hover:border-[#2563EB] hover:shadow-xl transition duration-300">
                         <div class="relative h-44 sm:h-48 overflow-hidden bg-slate-100">
                             <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=800&auto=format&fit=crop" alt="Livelihood Support" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                            <span class="absolute top-3 left-3 bg-[#16A34A] text-white text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">Livelihood</span>
+                            <span class="absolute top-3 left-3 bg-[#2563EB] text-white text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">Livelihood</span>
                         </div>
                         <div class="p-5 sm:p-6 space-y-3 flex-1 flex flex-col justify-between">
                             <div>
@@ -559,10 +524,10 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                     </div>
 
                     <!-- Program 6: Community Development -->
-                    <div class="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between group hover:border-[#2563EB] hover:shadow-xl transition duration-300">
+                    <div class="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between group hover:border-[#16A34A] hover:shadow-xl transition duration-300">
                         <div class="relative h-44 sm:h-48 overflow-hidden bg-slate-100">
                             <img src="https://images.unsplash.com/photo-1541976844346-f18aeac57b06?q=80&w=800&auto=format&fit=crop" alt="Community Development" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                            <span class="absolute top-3 left-3 bg-[#2563EB] text-white text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">Development</span>
+                            <span class="absolute top-3 left-3 bg-[#16A34A] text-white text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">Development</span>
                         </div>
                         <div class="p-5 sm:p-6 space-y-3 flex-1 flex flex-col justify-between">
                             <div>
@@ -584,7 +549,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 
 
         <!-- IMPACT STATISTICS COUNTER SECTION -->
-        <section id="impact" class="py-12 sm:py-16 bg-[#16A34A] text-white shadow-md">
+        <section id="impact" class="py-12 sm:py-16 bg-[#2563EB] text-white shadow-md">
             <div class="max-w-7xl mx-auto px-4">
                 <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 text-center">
                     
@@ -593,7 +558,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                             <i data-lucide="users" class="h-5 w-5 sm:h-6 sm:w-6"></i>
                         </div>
                         <span class="block text-3xl sm:text-5xl font-black">12,500+</span>
-                        <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-wider text-emerald-100">Beneficiaries Reached</span>
+                        <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-wider text-blue-100">Beneficiaries Reached</span>
                     </div>
 
                     <div class="space-y-1 sm:space-y-2">
@@ -601,7 +566,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                             <i data-lucide="graduation-cap" class="h-5 w-5 sm:h-6 sm:w-6"></i>
                         </div>
                         <span class="block text-3xl sm:text-5xl font-black text-goldAccent">250+</span>
-                        <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-wider text-emerald-100">Scholarships Granted</span>
+                        <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-wider text-blue-100">Scholarships Granted</span>
                     </div>
 
                     <div class="space-y-1 sm:space-y-2">
@@ -609,7 +574,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                             <i data-lucide="heart-pulse" class="h-5 w-5 sm:h-6 sm:w-6"></i>
                         </div>
                         <span class="block text-3xl sm:text-5xl font-black">1,000+</span>
-                        <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-wider text-emerald-100">Medical Aid Cases</span>
+                        <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-wider text-blue-100">Medical Aid Cases</span>
                     </div>
 
                     <div class="space-y-1 sm:space-y-2">
@@ -617,7 +582,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                             <i data-lucide="building-2" class="h-5 w-5 sm:h-6 sm:w-6"></i>
                         </div>
                         <span class="block text-3xl sm:text-5xl font-black text-goldAccent">50+</span>
-                        <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-wider text-emerald-100">Community Projects</span>
+                        <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-wider text-blue-100">Community Projects</span>
                     </div>
 
                 </div>
@@ -657,9 +622,9 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                     </div>
 
                     <!-- Option 2: Volunteer -->
-                    <div class="bg-[#F8FAFC] rounded-3xl p-6 sm:p-8 text-center border border-slate-200 shadow-sm hover:border-[#16A34A] hover:shadow-xl transition flex flex-col justify-between">
+                    <div class="bg-[#F8FAFC] rounded-3xl p-6 sm:p-8 text-center border border-slate-200 shadow-sm hover:border-[#2563EB] hover:shadow-xl transition flex flex-col justify-between">
                         <div class="space-y-4">
-                            <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-emerald-100 text-primary flex items-center justify-center mx-auto border border-emerald-300">
+                            <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-blue-100 text-primary flex items-center justify-center mx-auto border border-blue-300">
                                 <i data-lucide="heart-handshake" class="h-7 w-7 sm:h-8 sm:w-8"></i>
                             </div>
                             <h3 class="text-xl sm:text-2xl font-black text-darkText">Become a Volunteer</h3>
@@ -667,15 +632,15 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                                 Join our community team to help distribute food relief, assist in medical drives, and tutor scholars.
                             </p>
                         </div>
-                        <button @click="openVolunteerModal()" class="w-full mt-6 bg-[#16A34A] hover:bg-emerald-700 text-white py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider shadow-md transition active:scale-95 cursor-pointer">
+                        <button @click="openVolunteerModal()" class="w-full mt-6 bg-[#2563EB] hover:bg-blue-700 text-white py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider shadow-md transition active:scale-95 cursor-pointer">
                             Join as Volunteer
                         </button>
                     </div>
 
                     <!-- Option 3: Partner -->
-                    <div class="bg-[#F8FAFC] rounded-3xl p-6 sm:p-8 text-center border border-slate-200 shadow-sm hover:border-[#2563EB] hover:shadow-xl transition flex flex-col justify-between">
+                    <div class="bg-[#F8FAFC] rounded-3xl p-6 sm:p-8 text-center border border-slate-200 shadow-sm hover:border-[#16A34A] hover:shadow-xl transition flex flex-col justify-between">
                         <div class="space-y-4">
-                            <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-blue-100 text-secondary flex items-center justify-center mx-auto border border-blue-300">
+                            <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-emerald-100 text-secondary flex items-center justify-center mx-auto border border-emerald-300">
                                 <i data-lucide="building-2" class="h-7 w-7 sm:h-8 sm:w-8"></i>
                             </div>
                             <h3 class="text-xl sm:text-2xl font-black text-darkText">Partner With Us</h3>
@@ -683,7 +648,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                                 Collaborate with ASFI as a corporate CSR partner, educational institution, or NGO to multiply community impact.
                             </p>
                         </div>
-                        <a href="#contact" class="w-full mt-6 inline-block bg-[#2563EB] hover:bg-blue-700 text-white py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider shadow-md transition">
+                        <a href="#contact" class="w-full mt-6 inline-block bg-[#16A34A] hover:bg-emerald-700 text-white py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider shadow-md transition">
                             Partner Inquiries
                         </a>
                     </div>
@@ -697,7 +662,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
         <section id="stories" class="py-16 sm:py-20 bg-[#F8FAFC] border-b border-slate-200">
             <div class="max-w-7xl mx-auto px-4">
                 <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16 space-y-3">
-                    <span class="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-1 text-xs font-extrabold uppercase tracking-widest text-primary border border-emerald-300">
+                    <span class="inline-flex items-center gap-2 rounded-full bg-blue-100 px-4 py-1 text-xs font-extrabold uppercase tracking-widest text-primary border border-blue-300">
                         Real Impact
                     </span>
                     <h2 class="text-2xl sm:text-4xl font-black text-darkText">Success Stories</h2>
@@ -755,7 +720,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
         <section id="faq" class="py-16 sm:py-20 bg-white relative border-b border-slate-200">
             <div class="max-w-4xl mx-auto px-4">
                 <div class="text-center max-w-2xl mx-auto mb-12 sm:mb-16 space-y-3">
-                    <span class="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-1 text-xs font-extrabold uppercase tracking-widest text-primary border border-emerald-300">
+                    <span class="inline-flex items-center gap-2 rounded-full bg-blue-100 px-4 py-1 text-xs font-extrabold uppercase tracking-widest text-primary border border-blue-300">
                         Got Questions?
                     </span>
                     <h2 class="text-2xl sm:text-4xl font-black text-darkText">Frequently Asked Questions</h2>
@@ -815,7 +780,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                     
                     <!-- Contact Info -->
                     <div class="lg:col-span-5 space-y-5 sm:space-y-6">
-                        <span class="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-1 text-xs font-extrabold uppercase tracking-widest text-primary border border-emerald-300">
+                        <span class="inline-flex items-center gap-2 rounded-full bg-blue-100 px-4 py-1 text-xs font-extrabold uppercase tracking-widest text-primary border border-blue-300">
                             Get In Touch
                         </span>
                         <h2 class="text-2xl sm:text-3xl font-black text-darkText">Contact ASFI Foundation</h2>
@@ -825,7 +790,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 
                         <div class="space-y-4 pt-2">
                             <div class="flex items-start gap-3">
-                                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-primary flex items-center justify-center shrink-0 border border-emerald-300">
+                                <div class="w-10 h-10 rounded-xl bg-blue-100 text-primary flex items-center justify-center shrink-0 border border-blue-300">
                                     <i data-lucide="map-pin" class="h-5 w-5"></i>
                                 </div>
                                 <div>
@@ -846,7 +811,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                             </div>
 
                             <div class="flex items-start gap-3">
-                                <div class="w-10 h-10 rounded-xl bg-blue-100 text-secondary flex items-center justify-center shrink-0 border border-blue-300">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-secondary flex items-center justify-center shrink-0 border border-emerald-300">
                                     <i data-lucide="mail" class="h-5 w-5"></i>
                                 </div>
                                 <div>
@@ -887,7 +852,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                                     <label class="block text-[11px] font-extrabold text-slate-700 mb-1 uppercase tracking-wider">Message Details</label>
                                     <textarea x-model="contactForm.message" rows="4" required placeholder="Write your message here..." class="w-full rounded-xl bg-[#F8FAFC] border border-slate-300 px-4 py-2.5 text-xs text-darkText placeholder-slate-400 focus:border-primary focus:outline-none"></textarea>
                                 </div>
-                                <button type="submit" class="w-full bg-[#16A34A] hover:bg-emerald-700 text-white py-3 rounded-xl font-black text-xs uppercase tracking-wider shadow-md transition active:scale-95 cursor-pointer">
+                                <button type="submit" class="w-full bg-[#2563EB] hover:bg-blue-700 text-white py-3 rounded-xl font-black text-xs uppercase tracking-wider shadow-md transition active:scale-95 cursor-pointer">
                                     Send Message
                                 </button>
                                 <p x-show="contactSent" x-cloak class="text-xs text-primary font-black text-center mt-2">
@@ -924,7 +889,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                 
                 <div class="border-t border-slate-800 pt-6 flex flex-col sm:flex-row items-center justify-between text-[10px] sm:text-[11px] text-slate-400 gap-3 text-center sm:text-left">
                     <p>© 2026 AMIS Sadaqah Family Incorporated (ASFI). All Rights Reserved.</p>
-                    <p class="text-[#16A34A] font-bold">Takaful & Mutual Support</p>
+                    <p class="text-[#2563EB] font-bold">Takaful & Mutual Support</p>
                 </div>
             </div>
         </footer>
@@ -936,13 +901,13 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
     <!-- MODALS: DONATE MODAL -->
     <!-- =================================================================== -->
     <div x-show="donateModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4 overflow-y-auto">
-        <div class="bg-white rounded-3xl max-w-lg w-full p-5 sm:p-6 text-darkText shadow-2xl relative space-y-4 my-auto border border-emerald-200" @click.outside="donateModal = false">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-5 sm:p-6 text-darkText shadow-2xl relative space-y-4 my-auto border border-blue-200" @click.outside="donateModal = false">
             <button @click="donateModal = false" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 cursor-pointer">
                 <i data-lucide="x" class="h-5 w-5"></i>
             </button>
 
             <div class="text-center space-y-1">
-                <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-primary flex items-center justify-center mx-auto mb-2 font-bold">
+                <div class="w-12 h-12 rounded-2xl bg-blue-100 text-primary flex items-center justify-center mx-auto mb-2 font-bold">
                     <i data-lucide="hand-heart" class="h-6 w-6"></i>
                 </div>
                 <h3 class="text-lg sm:text-xl font-black text-darkText">Make a Contribution</h3>
@@ -951,8 +916,8 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 
             <!-- Donation Type Selection -->
             <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-xl font-black text-xs">
-                <button type="button" @click="donationType = 'Sadaqah'" :class="donationType === 'Sadaqah' ? 'bg-[#16A34A] text-white shadow-xs' : 'text-slate-600'" class="py-2.5 rounded-lg transition">Sadaqah (Voluntary)</button>
-                <button type="button" @click="donationType = 'Zakat'" :class="donationType === 'Zakat' ? 'bg-[#16A34A] text-white shadow-xs' : 'text-slate-600'" class="py-2.5 rounded-lg transition">Zakat (Obligatory)</button>
+                <button type="button" @click="donationType = 'Sadaqah'" :class="donationType === 'Sadaqah' ? 'bg-[#2563EB] text-white shadow-xs' : 'text-slate-600'" class="py-2.5 rounded-lg transition">Sadaqah (Voluntary)</button>
+                <button type="button" @click="donationType = 'Zakat'" :class="donationType === 'Zakat' ? 'bg-[#2563EB] text-white shadow-xs' : 'text-slate-600'" class="py-2.5 rounded-lg transition">Zakat (Obligatory)</button>
             </div>
 
             <!-- Payment Details -->
@@ -987,13 +952,13 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
     <!-- MODALS: VOLUNTEER MODAL -->
     <!-- =================================================================== -->
     <div x-show="volunteerModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4 overflow-y-auto">
-        <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 text-darkText shadow-2xl relative space-y-4 my-auto border border-emerald-200" @click.outside="volunteerModal = false">
+        <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 text-darkText shadow-2xl relative space-y-4 my-auto border border-blue-200" @click.outside="volunteerModal = false">
             <button @click="volunteerModal = false" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 cursor-pointer">
                 <i data-lucide="x" class="h-5 w-5"></i>
             </button>
 
             <div class="text-center space-y-1">
-                <div class="w-12 h-12 rounded-2xl bg-blue-100 text-secondary flex items-center justify-center mx-auto mb-2 font-bold">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-secondary flex items-center justify-center mx-auto mb-2 font-bold">
                     <i data-lucide="heart-handshake" class="h-6 w-6"></i>
                 </div>
                 <h3 class="text-lg sm:text-xl font-black text-darkText">Join ASFI Volunteers</h3>
@@ -1018,7 +983,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                         <option>Disaster Emergency Response</option>
                     </select>
                 </div>
-                <button type="submit" class="w-full bg-[#16A34A] text-white py-3 rounded-xl font-black text-xs uppercase shadow-md cursor-pointer">
+                <button type="submit" class="w-full bg-[#2563EB] text-white py-3 rounded-xl font-black text-xs uppercase shadow-md cursor-pointer">
                     Submit Volunteer Registration
                 </button>
             </form>
