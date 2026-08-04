@@ -1,6 +1,6 @@
 <?php
 // ============================================================================
-// ASFI - AMIS SADAQAH FAMILY INCORPORATED (DAVAO CITY 2026)
+// ASFI - AMIS SADAQAH FAMILY INCORPORATION (DAVAO CITY 2026)
 // Official Web Application & Launch Preview Portal
 // Tagline: Empowering Communities Through Compassion and Mutual Support.
 // Mobile Font & Typography Responsive Fixed
@@ -23,9 +23,9 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ASFI - AMIS Sadaqah Family Incorporated | 2026</title>
-    <meta name="description" content="AMIS Sadaqah Family Incorporated (ASFI) - Empowering Communities Through Compassion and Mutual Support. Education Assistance, Medical Relief, Orphan Care & Takaful.">
-    <meta name="keywords" content="ASFI, AMIS Sadaqah Family Incorporated, Sadaqah, Zakat, Takaful, Education Assistance, Medical Aid, Charity Philippines">
+    <title>ASFI - AMIS Sadaqah Family Incorporation | 2026</title>
+    <meta name="description" content="AMIS Sadaqah Family Incorporation (ASFI) - Empowering Communities Through Compassion and Mutual Support. Education Assistance, Medical Relief, Orphan Care & Takaful.">
+    <meta name="keywords" content="ASFI, AMIS Sadaqah Family Incorporation, Sadaqah, Zakat, Takaful, Education Assistance, Medical Aid, Charity Philippines">
     <link rel="icon" type="image/png" href="asfi_logo_2026.png">
 
     <!-- Direct Fonts Import for Guaranteed Mobile Compatibility -->
@@ -147,13 +147,13 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
         <!-- Center Content: Coming Soon InshaAllah -->
         <main class="max-w-3xl mx-auto w-full text-center my-auto py-4 sm:py-6 px-2 sm:px-4 space-y-4 sm:space-y-5 relative z-10">
 
-            <!-- Shiny Logo Display (Shiny Light Sweep Effect with Full Brand Title) -->
-            <div class="relative inline-block my-1 space-y-1">
+            <!-- Shiny Logo Display (Shiny Light Sweep Effect with Larger Brand Title) -->
+            <div class="relative inline-block my-1 space-y-2">
                 <div class="shiny-logo-container drop-shadow-2xl">
-                    <img src="asfi_logo_2026.png" alt="ASFI Logo" loading="lazy" decoding="async" class="h-32 w-32 sm:h-44 sm:w-44 md:h-52 md:w-52 mx-auto object-contain">
+                    <img src="asfi_logo_2026.png" alt="ASFI Logo" loading="lazy" decoding="async" class="h-36 w-36 sm:h-48 sm:w-48 md:h-56 md:w-56 mx-auto object-contain">
                 </div>
-                <h3 class="text-[11px] sm:text-sm md:text-base font-black tracking-widest text-darkText uppercase pt-1">
-                    <span class="text-[#16A34A] font-black">AMIS</span> SADAQAH FAMILY INCORPORATED
+                <h3 class="text-sm sm:text-lg md:text-xl font-black tracking-widest text-darkText uppercase pt-2">
+                    <span class="text-[#16A34A] font-black">AMIS</span> SADAQAH FAMILY INCORPORATION
                 </h3>
             </div>
 
@@ -181,7 +181,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
 
         <!-- Footer inside Coming Soon -->
         <footer class="max-w-6xl mx-auto w-full text-center text-[10px] sm:text-[11px] text-slate-500 py-2 border-t border-slate-200 font-medium relative z-10">
-            <p>© 2026 AMIS Sadaqah Family Incorporated (ASFI). All Rights Reserved.</p>
+            <p>© 2026 AMIS Sadaqah Family Incorporation (ASFI). All Rights Reserved.</p>
         </footer>
     </div>
 
@@ -276,7 +276,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                         </h1>
 
                         <p class="text-sm sm:text-lg text-slate-600 font-medium leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                            AMIS Sadaqah Family Incorporated (ASFI) is a modern humanitarian foundation dedicated to uplifting underprivileged families through Education Grants, Emergency Medical Relief, Orphan Care, and Disaster Assistance.
+                            AMIS Sadaqah Family Incorporation (ASFI) is a modern humanitarian foundation dedicated to uplifting underprivileged families through Education Grants, Emergency Medical Relief, Orphan Care, and Disaster Assistance.
                         </p>
 
                         <div class="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-4">
@@ -356,7 +356,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                     </span>
                     <h2 class="text-2xl sm:text-4xl font-black text-darkText">About ASFI Foundation</h2>
                     <p class="text-xs sm:text-base text-slate-600 font-medium">
-                        AMIS Sadaqah Family Incorporated (ASFI) was established to serve as a beacon of mutual assistance (Takaful), ensuring no family struggles alone during hardship.
+                        AMIS Sadaqah Family Incorporation (ASFI) was established to serve as a beacon of mutual assistance (Takaful), ensuring no family struggles alone during hardship.
                     </p>
                 </div>
 
@@ -875,7 +875,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                         <img src="asfi_logo_2026.png" alt="ASFI Logo" loading="lazy" decoding="async" class="h-10 w-10 object-contain">
                         <div>
                             <span class="block text-xs sm:text-sm font-black text-white uppercase">ASFI 2026</span>
-                            <span class="text-[10px] text-[#FBBF24] font-bold"><span class="text-primary font-black">AMIS</span> SADAQAH FAMILY INCORPORATED</span>
+                            <span class="text-[10px] text-[#FBBF24] font-bold"><span class="text-[#16A34A] font-black">AMIS</span> SADAQAH FAMILY INCORPORATION</span>
                         </div>
                     </div>
                     <div class="flex flex-wrap justify-center items-center gap-4 sm:gap-6 font-bold text-slate-300 text-xs">
@@ -888,7 +888,7 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                 </div>
                 
                 <div class="border-t border-slate-800 pt-6 flex flex-col sm:flex-row items-center justify-between text-[10px] sm:text-[11px] text-slate-400 gap-3 text-center sm:text-left">
-                    <p>© 2026 AMIS Sadaqah Family Incorporated (ASFI). All Rights Reserved.</p>
+                    <p>© 2026 AMIS Sadaqah Family Incorporation (ASFI). All Rights Reserved.</p>
                     <p class="text-[#2563EB] font-bold">Takaful & Mutual Support</p>
                 </div>
             </div>
@@ -990,10 +990,11 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
         </div>
     </div>
 
+
     <!-- =================================================================== -->
-    <!-- FLOATING QUICK CONTACT WIDGET (BOTTOM-RIGHT CORNER) -->
+    <!-- FLOATING QUICK CONTACT WIDGET (MOBILE RESPONSIVE OPTIMIZED) -->
     <!-- =================================================================== -->
-    <div x-data="{ openQuickContact: false }" class="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-2.5">
+    <div x-data="{ openQuickContact: false }" class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end gap-2 shrink-0">
         
         <!-- Expanded Contact Buttons -->
         <div x-show="openQuickContact"
@@ -1004,34 +1005,34 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
              x-transition:leave="transition ease-in duration-200 transform"
              x-transition:leave-start="opacity-100 translate-y-0 scale-100"
              x-transition:leave-end="opacity-0 translate-y-4 scale-95"
-             class="flex flex-col gap-2.5 items-end">
+             class="flex flex-col gap-2 items-end">
             
             <!-- Facebook Link -->
-            <a href="https://www.facebook.com/almunawwaraislamicschool" target="_blank" rel="noopener noreferrer" title="Official Facebook Page" class="flex items-center gap-2 rounded-full bg-[#1877F2] hover:bg-blue-600 text-white px-4 py-2.5 text-xs font-black shadow-xl transition hover:scale-105 active:scale-95">
+            <a href="https://www.facebook.com/almunawwaraislamicschool" target="_blank" rel="noopener noreferrer" title="Official Facebook Page" class="flex items-center gap-2 rounded-full bg-[#1877F2] hover:bg-blue-600 text-white px-3.5 sm:px-4 py-2 sm:py-2.5 text-[11px] sm:text-xs font-black shadow-xl transition hover:scale-105 active:scale-95 whitespace-nowrap">
                 <span>Facebook</span>
-                <i data-lucide="facebook" class="h-4 w-4"></i>
+                <i data-lucide="facebook" class="h-3.5 w-3.5 sm:h-4 sm:w-4"></i>
             </a>
 
             <!-- WhatsApp Link (Coming Soon) -->
-            <button @click="alert('WhatsApp Support: Coming Soon InshaAllah')" type="button" title="WhatsApp Chat (Coming Soon)" class="flex items-center gap-2 rounded-full bg-[#25D366] hover:bg-emerald-600 text-white px-4 py-2.5 text-xs font-black shadow-xl transition hover:scale-105 active:scale-95 cursor-pointer">
+            <button @click="alert('WhatsApp Support: Coming Soon InshaAllah')" type="button" title="WhatsApp Chat (Coming Soon)" class="flex items-center gap-2 rounded-full bg-[#25D366] hover:bg-emerald-600 text-white px-3.5 sm:px-4 py-2 sm:py-2.5 text-[11px] sm:text-xs font-black shadow-xl transition hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap">
                 <span>WhatsApp (Coming Soon)</span>
-                <i data-lucide="message-circle" class="h-4 w-4"></i>
+                <i data-lucide="message-circle" class="h-3.5 w-3.5 sm:h-4 sm:w-4"></i>
             </button>
 
             <!-- Gmail Link (Coming Soon) -->
-            <button @click="alert('Gmail Support: Coming Soon InshaAllah')" type="button" title="Send Gmail (Coming Soon)" class="flex items-center gap-2 rounded-full bg-[#EA4335] hover:bg-red-600 text-white px-4 py-2.5 text-xs font-black shadow-xl transition hover:scale-105 active:scale-95 cursor-pointer">
+            <button @click="alert('Gmail Support: Coming Soon InshaAllah')" type="button" title="Send Gmail (Coming Soon)" class="flex items-center gap-2 rounded-full bg-[#EA4335] hover:bg-red-600 text-white px-3.5 sm:px-4 py-2 sm:py-2.5 text-[11px] sm:text-xs font-black shadow-xl transition hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap">
                 <span>Gmail (Coming Soon)</span>
-                <i data-lucide="mail" class="h-4 w-4"></i>
+                <i data-lucide="mail" class="h-3.5 w-3.5 sm:h-4 sm:w-4"></i>
             </button>
         </div>
 
         <!-- Main Floating Toggle Button -->
         <button @click="openQuickContact = !openQuickContact; $nextTick(() => lucide.createIcons());"
                 type="button"
-                class="w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-primary hover:bg-blue-700 text-white flex items-center justify-center shadow-2xl border-2 border-white transition transform hover:scale-110 active:scale-95 cursor-pointer"
+                class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-primary hover:bg-blue-700 text-white flex items-center justify-center shadow-2xl border-2 border-white transition transform hover:scale-105 active:scale-95 cursor-pointer"
                 title="Quick Contact Us">
-            <i data-lucide="message-square" class="h-6 w-6" x-show="!openQuickContact"></i>
-            <i data-lucide="x" class="h-6 w-6" x-show="openQuickContact" x-cloak></i>
+            <i data-lucide="message-square" class="h-5 w-5 sm:h-6 sm:w-6" x-show="!openQuickContact"></i>
+            <i data-lucide="x" class="h-5 w-5 sm:h-6 sm:w-6" x-show="openQuickContact" x-cloak></i>
         </button>
     </div>
 
