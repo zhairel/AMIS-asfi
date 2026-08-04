@@ -174,12 +174,9 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
         
         <!-- Top Bar inside Coming Soon Splash -->
         <header class="max-w-6xl mx-auto w-full flex items-center justify-between py-2 relative z-10">
-            <div class="flex items-center gap-3">
-                <img src="asfi_logo_2026.png" alt="ASFI Official Logo" loading="lazy" decoding="async" class="h-12 w-12 sm:h-14 sm:w-14 object-contain drop-shadow-md">
-                <div>
-                    <h1 class="text-xs sm:text-sm font-black tracking-wider text-darkText uppercase"><span class="text-primary font-black">AMIS</span> SADAQAH FAMILY INCORPORATED</h1>
-                    <p class="text-[10px] sm:text-[11px] font-extrabold text-primary uppercase tracking-widest">2026</p>
-                </div>
+            <div>
+                <h1 class="text-xs sm:text-sm font-black tracking-wider text-darkText uppercase"><span class="text-primary font-black">AMIS</span> SADAQAH FAMILY INCORPORATED</h1>
+                <p class="text-[10px] sm:text-[11px] font-extrabold text-primary uppercase tracking-widest">2026</p>
             </div>
         </header>
 
@@ -191,11 +188,12 @@ if (!$isHttps && isset($_SERVER['HTTP_HOST'])) {
                 <p class="font-arabic text-3xl sm:text-5xl md:text-6xl text-primary font-bold tracking-wide leading-relaxed drop-shadow-xs">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
             </div>
 
-            <!-- Shiny Logo Display (Shiny Light Sweep Effect) -->
-            <div class="relative inline-block my-1">
+            <!-- Shiny Logo Display (Shiny Light Sweep Effect with AMIS SADAQAH Title) -->
+            <div class="relative inline-block my-1 space-y-1">
                 <div class="shiny-logo-container drop-shadow-2xl">
                     <img src="asfi_logo_2026.png" alt="ASFI Logo" loading="lazy" decoding="async" class="h-36 w-36 sm:h-48 sm:w-48 md:h-56 md:w-56 mx-auto object-contain">
                 </div>
+                <h3 class="text-base sm:text-xl font-black tracking-widest text-primary uppercase pt-1">AMIS SADAQAH</h3>
             </div>
 
             <!-- Headline & Tagline -->
