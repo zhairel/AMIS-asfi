@@ -7,16 +7,15 @@ interface Step {
   id: number;
   label: string;
   subLabel: string;
-  tagalog: string;
   icon: React.ElementType;
 }
 
 const steps: Step[] = [
-  { id: 1, label: 'Personal Info', subLabel: 'Applicant Data', tagalog: 'Impormasyon', icon: User },
-  { id: 2, label: 'Beneficiary', subLabel: 'Designation', tagalog: 'Benepisyaryo', icon: Users },
-  { id: 3, label: 'Documents', subLabel: 'Photo & Valid ID', tagalog: 'Dokumento', icon: FileUp },
-  { id: 4, label: 'Declaration', subLabel: 'Sadaqah & Signature', tagalog: 'Kasunduan', icon: FileSignature },
-  { id: 5, label: 'Review', subLabel: 'Confirm & Submit', tagalog: 'Pagsusuri', icon: CheckCircle2 },
+  { id: 1, label: 'Personal Info', subLabel: 'Applicant Data', icon: User },
+  { id: 2, label: 'Beneficiary', subLabel: 'Designation', icon: Users },
+  { id: 3, label: 'Documents', subLabel: 'Photo & Valid ID', icon: FileUp },
+  { id: 4, label: 'Declaration', subLabel: 'Sadaqah & Signature', icon: FileSignature },
+  { id: 5, label: 'Review', subLabel: 'Confirm & Submit', icon: CheckCircle2 },
 ];
 
 interface ProgressBarProps {
@@ -32,14 +31,14 @@ export default function ProgressBar({ currentStep, onStepClick, completedSteps }
   return (
     <div className="bg-white border-b-2 border-slate-200 shadow-sm sticky top-12 z-30">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-3.5">
-        {/* Mobile View: High readability progress bar */}
+        {/* Mobile View */}
         <div className="block sm:hidden">
           <div className="flex items-center justify-between text-xs sm:text-sm mb-2">
             <span className="font-black text-emerald-900 uppercase tracking-wide bg-emerald-100 px-2.5 py-0.5 rounded-full">
-              Hakbang {currentStep} ng {steps.length}
+              Step {currentStep} of {steps.length}
             </span>
             <span className="font-extrabold text-slate-900">
-              {currentStepData.tagalog} ({currentStepData.label})
+              {currentStepData.label} ({currentStepData.subLabel})
             </span>
           </div>
           <div className="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
@@ -50,7 +49,7 @@ export default function ProgressBar({ currentStep, onStepClick, completedSteps }
           </div>
         </div>
 
-        {/* Desktop View: Accessible Stepper */}
+        {/* Desktop View */}
         <div className="hidden sm:block">
           <div className="relative">
             {/* Background connecting track */}
@@ -103,10 +102,10 @@ export default function ProgressBar({ currentStep, onStepClick, completedSteps }
                             : 'text-slate-500'
                         }`}
                       >
-                        {step.tagalog}
+                        {step.label}
                       </p>
                       <p className="text-[11px] text-slate-600 font-semibold hidden md:block">
-                        {step.label}
+                        {step.subLabel}
                       </p>
                     </div>
                   </button>

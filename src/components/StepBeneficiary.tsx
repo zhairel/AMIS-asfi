@@ -25,12 +25,12 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
   };
 
   const relationships = [
-    { value: 'Spouse', label: 'Asawa (Spouse)' },
-    { value: 'Child / Daughter / Son', label: 'Anak (Child / Son / Daughter)' },
-    { value: 'Parent (Mother / Father)', label: 'Magulang - Nanay / Tatay (Parent)' },
-    { value: 'Sibling (Brother / Sister)', label: 'Kapatid (Brother / Sister)' },
-    { value: 'Legal Ward / Dependent', label: 'Legal na Inaalagaan (Dependent / Ward)' },
-    { value: 'Other Relative', label: 'Iba pang Kamag-anak (Other Relative)' },
+    { value: 'Spouse', label: 'Spouse' },
+    { value: 'Child / Daughter / Son', label: 'Child (Son / Daughter)' },
+    { value: 'Parent (Mother / Father)', label: 'Parent (Mother / Father)' },
+    { value: 'Sibling (Brother / Sister)', label: 'Sibling (Brother / Sister)' },
+    { value: 'Legal Ward / Dependent', label: 'Legal Ward / Dependent' },
+    { value: 'Other Relative', label: 'Other Relative' },
   ];
 
   return (
@@ -41,24 +41,24 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
           <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center flex-shrink-0">
             <Users className="w-5 h-5" />
           </div>
-          <h2>Designated Beneficiary / Impormasyon ng Benepisyaryo</h2>
+          <h2>Designated Beneficiary Information</h2>
         </div>
         <p className="text-slate-700 text-sm sm:text-base mt-1.5 font-medium leading-relaxed">
-          Ang itinalagang benepisyaryo ang siyang legal na tatanggap ng benepisyo at tulong sa ilalim ng mutual assistance ng ASFI.
+          The designated legal beneficiary shall receive the stipulated mutual assistance benefits on behalf of the member in accordance with ASFI policy.
         </p>
       </div>
 
       {/* Beneficiary Full Name */}
       <div>
         <label className="block text-sm sm:text-base font-extrabold text-slate-900 mb-2">
-          Buong Pangalan ng Benepisyaryo / Beneficiary Name <span className="text-rose-600 font-black text-lg">*</span>
+          Beneficiary Full Legal Name <span className="text-rose-600 font-black text-lg">*</span>
         </label>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3.5">
           <div>
-            <span className="block text-xs font-bold text-slate-600 mb-1">First Name (Pangalan) *</span>
+            <span className="block text-xs font-bold text-slate-600 mb-1">First Name *</span>
             <input
               type="text"
-              placeholder="Hal. Maria"
+              placeholder="e.g. Maria"
               value={data.beneficiaryFirstName}
               onChange={(e) => updateData({ beneficiaryFirstName: e.target.value })}
               className={`w-full min-h-[50px] px-4 py-3 rounded-xl border-2 ${
@@ -73,10 +73,10 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
           </div>
 
           <div>
-            <span className="block text-xs font-bold text-slate-600 mb-1">Middle Name (Gitnang Pangalan)</span>
+            <span className="block text-xs font-bold text-slate-600 mb-1">Middle Name</span>
             <input
               type="text"
-              placeholder="Hal. Santos (o N/A)"
+              placeholder="e.g. Santos (or N/A)"
               value={data.beneficiaryMiddleName}
               onChange={(e) => updateData({ beneficiaryMiddleName: e.target.value })}
               className="w-full min-h-[50px] px-4 py-3 rounded-xl border-2 border-slate-300 bg-white text-slate-900 text-base font-semibold focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none transition"
@@ -84,10 +84,10 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
           </div>
 
           <div>
-            <span className="block text-xs font-bold text-slate-600 mb-1">Last / Family Name (Apelyido) *</span>
+            <span className="block text-xs font-bold text-slate-600 mb-1">Last / Family Name *</span>
             <input
               type="text"
-              placeholder="Hal. Dela Cruz"
+              placeholder="e.g. Dela Cruz"
               value={data.beneficiaryLastName}
               onChange={(e) => updateData({ beneficiaryLastName: e.target.value })}
               className={`w-full min-h-[50px] px-4 py-3 rounded-xl border-2 ${
@@ -102,10 +102,10 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
           </div>
 
           <div>
-            <span className="block text-xs font-bold text-slate-600 mb-1">Suffix (Hal. Jr., III)</span>
+            <span className="block text-xs font-bold text-slate-600 mb-1">Suffix (e.g. Jr., III)</span>
             <input
               type="text"
-              placeholder="Hal. Jr. (kung meron)"
+              placeholder="e.g. Jr. (if applicable)"
               value={data.beneficiarySuffix}
               onChange={(e) => updateData({ beneficiarySuffix: e.target.value })}
               className="w-full min-h-[50px] px-4 py-3 rounded-xl border-2 border-slate-300 bg-white text-slate-900 text-base font-semibold focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none transition"
@@ -118,7 +118,7 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm sm:text-base font-extrabold text-slate-900 mb-1.5">
-            Relasyon sa Aplikante / Relationship <span className="text-rose-600 font-black">*</span>
+            Relationship to Applicant <span className="text-rose-600 font-black">*</span>
           </label>
           <select
             value={data.beneficiaryRelationship}
@@ -127,7 +127,7 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
               errors.beneficiaryRelationship ? 'border-rose-500 bg-rose-50/70' : 'border-slate-300'
             } text-slate-900 text-base font-semibold focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none transition bg-white`}
           >
-            <option value="">Piliin ang Relasyon</option>
+            <option value="">Select Relationship</option>
             {relationships.map((rel) => (
               <option key={rel.value} value={rel.value}>
                 {rel.label}
@@ -143,7 +143,7 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
 
         <div>
           <label className="block text-sm sm:text-base font-extrabold text-slate-900 mb-1.5">
-            Numero ng Telepono / Cellphone <span className="text-rose-600 font-black">*</span>
+            Beneficiary Contact Number <span className="text-rose-600 font-black">*</span>
           </label>
           <input
             type="tel"
@@ -166,7 +166,7 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-extrabold text-slate-900 mb-1.5">
-            Kapanganakan ng Benepisyaryo / Date of Birth
+            Beneficiary Date of Birth
           </label>
           <input
             type="date"
@@ -179,11 +179,11 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
 
         <div>
           <label className="block text-sm font-extrabold text-slate-900 mb-1.5">
-            Lugar ng Kapanganakan / Place of Birth
+            Beneficiary Place of Birth
           </label>
           <input
             type="text"
-            placeholder="Hal. Davao City"
+            placeholder="e.g. Davao City"
             value={data.beneficiaryPlaceOfBirth}
             onChange={(e) => updateData({ beneficiaryPlaceOfBirth: e.target.value })}
             className="w-full min-h-[50px] px-4 py-3 rounded-xl border-2 border-slate-300 bg-white text-slate-900 text-base font-semibold focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none transition"
@@ -195,7 +195,7 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
       <div>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
           <label className="block text-sm sm:text-base font-extrabold text-slate-900">
-            Tirahan ng Benepisyaryo / Address <span className="text-rose-600 font-black">*</span>
+            Beneficiary Present Address <span className="text-rose-600 font-black">*</span>
           </label>
           {data.presentAddress && (
             <button
@@ -206,12 +206,12 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
               {data.sameAddressAsApplicant ? (
                 <>
                   <Check className="w-4 h-4 text-emerald-800 stroke-[3]" />
-                  <span>Kapareho ng tirahan ng aplikante</span>
+                  <span>Same as applicant address</span>
                 </>
               ) : (
                 <>
                   <Copy className="w-4 h-4" />
-                  <span>Kopyahin ang tirahan ng aplikante</span>
+                  <span>Copy applicant address</span>
                 </>
               )}
             </button>
@@ -219,7 +219,7 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
         </div>
         <textarea
           rows={2}
-          placeholder="House No., Street, Barangay, City, Province"
+          placeholder="House/Building No., Street, Barangay, City/Municipality, Province"
           value={data.beneficiaryAddress}
           onChange={(e) =>
             updateData({

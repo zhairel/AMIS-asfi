@@ -2,7 +2,7 @@
 
 import React, { useRef } from 'react';
 import { FormData } from '@/types/form';
-import { FileUp, Image as ImageIcon, Camera, Trash2, CheckCircle, AlertCircle, ShieldCheck } from 'lucide-react';
+import { FileUp, Camera, Trash2, CheckCircle, AlertCircle } from 'lucide-react';
 
 interface StepDocumentsProps {
   data: FormData;
@@ -25,7 +25,7 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
-      alert('Masyadong malaki ang litrato (lumagpas sa 5MB). Mangyaring pumili ng mas maliit na file.');
+      alert('File size exceeds 5MB. Please upload an image under 5MB.');
       return;
     }
 
@@ -43,7 +43,7 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
   const idTypes = [
     'Philippine National ID (PhilSys)',
     'Senior Citizen ID',
-    'Student ID (School ID para sa Mag-aaral)',
+    'Student ID (School ID for Minors)',
     "Driver's License (LTO)",
     'Philippine Passport (DFA)',
     'SSS / GSIS / UMID Card',
@@ -53,7 +53,7 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
     'PhilHealth ID',
     'PWD ID',
     'Barangay Clearance / Certificate',
-    'Iba pang Government ID',
+    'Other Government-Issued ID',
   ];
 
   return (
@@ -64,10 +64,10 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
           <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center flex-shrink-0">
             <FileUp className="w-5 h-5" />
           </div>
-          <h2>Document Uploads / Pagpasa ng mga Katibayan</h2>
+          <h2>Membership Requirements &amp; Document Uploads</h2>
         </div>
         <p className="text-slate-700 text-sm sm:text-base mt-1.5 font-medium leading-relaxed">
-          Maaaring kumuha ng litrato gamit ang camera ng inyong cellphone o pumili mula sa gallery o computer.
+          Upload clear, legible photos or scanned copies of your requirements (JPG, PNG, or WEBP; Maximum 5MB each).
         </p>
       </div>
 
@@ -90,13 +90,13 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
               </div>
               {data.photo2x2 && (
                 <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">
-                  <CheckCircle className="w-4 h-4 text-emerald-700" /> Na-attach na
+                  <CheckCircle className="w-4 h-4 text-emerald-700" /> Attached
                 </span>
               )}
             </div>
 
             <p className="text-xs sm:text-sm text-slate-600 mb-4 font-medium leading-relaxed">
-              Litrato na kita nang malinaw ang buong mukha (pormal, walang salamin sa mata o sumbrero).
+              Clear front-facing formal headshot on plain background without eyeglasses or hats.
             </p>
 
             {data.photo2x2 ? (
@@ -112,7 +112,7 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
                   className="absolute inset-0 bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-xs font-bold gap-1"
                 >
                   <Trash2 className="w-6 h-6 text-rose-400" />
-                  Tanggalin o Palitan
+                  Remove / Replace Photo
                 </button>
               </div>
             ) : (
@@ -124,10 +124,10 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
                   <Camera className="w-7 h-7" />
                 </div>
                 <span className="text-sm sm:text-base font-extrabold text-slate-900 group-hover:text-emerald-900 text-center">
-                  Pindutin Dito para Mag-upload ng 2x2 Photo
+                  Click to Upload 2x2 ID Photo
                 </span>
                 <span className="text-xs text-slate-500 font-semibold mt-1">
-                  Camera o Gallery (JPG, PNG)
+                  Camera or Gallery (JPG, PNG)
                 </span>
               </div>
             )}
@@ -160,26 +160,26 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
                   2
                 </span>
                 <h3 className="font-extrabold text-slate-900 text-base sm:text-lg">
-                  Valid ID Card <span className="text-rose-600 font-black">*</span>
+                  Valid Identification Card <span className="text-rose-600 font-black">*</span>
                 </h3>
               </div>
               {data.applicantId && (
                 <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">
-                  <CheckCircle className="w-4 h-4 text-emerald-700" /> Na-attach na
+                  <CheckCircle className="w-4 h-4 text-emerald-700" /> Attached
                 </span>
               )}
             </div>
 
             <div className="mb-3.5">
               <label className="block text-xs sm:text-sm font-extrabold text-slate-800 mb-1">
-                Uri ng ID na Ipinasa / Select ID Type
+                Select ID Type
               </label>
               <select
                 value={data.applicantIdType || ''}
                 onChange={(e) => updateData({ applicantIdType: e.target.value })}
                 className="w-full min-h-[48px] px-3.5 py-2.5 text-sm sm:text-base font-semibold rounded-xl border-2 border-slate-300 text-slate-900 focus:border-emerald-600 outline-none bg-white"
               >
-                <option value="">Piliin ang ipapasang Valid ID...</option>
+                <option value="">Choose valid ID presented...</option>
                 {idTypes.map((t) => (
                   <option key={t} value={t}>
                     {t}
@@ -201,7 +201,7 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
                   className="absolute inset-0 bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-xs font-bold gap-1"
                 >
                   <Trash2 className="w-6 h-6 text-rose-400" />
-                  Tanggalin o Palitan ang ID
+                  Remove / Replace ID
                 </button>
               </div>
             ) : (
@@ -213,9 +213,9 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
                   <FileUp className="w-6 h-6" />
                 </div>
                 <span className="text-sm sm:text-base font-extrabold text-slate-900 group-hover:text-emerald-900 text-center">
-                  I-upload ang Harap ng Valid ID
+                  Upload Front of Valid ID
                 </span>
-                <span className="text-xs text-slate-500 font-semibold mt-0.5">Kunan ng malinaw na litrato</span>
+                <span className="text-xs text-slate-500 font-semibold mt-0.5">Government ID or Student ID</span>
               </div>
             )}
             <input
@@ -246,18 +246,18 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
                   3
                 </span>
                 <h3 className="font-extrabold text-slate-900 text-base">
-                  ID o Litrato ng Benepisyaryo
-                  <span className="text-slate-500 font-bold text-xs ml-1">(Opsyonal)</span>
+                  Beneficiary Valid ID / Photo
+                  <span className="text-slate-500 font-bold text-xs ml-1">(Optional)</span>
                 </h3>
               </div>
               {data.beneficiaryId && (
                 <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-800 bg-emerald-200 px-2.5 py-0.5 rounded-full">
-                  <CheckCircle className="w-3.5 h-3.5" /> Na-attach
+                  <CheckCircle className="w-3.5 h-3.5" /> Attached
                 </span>
               )}
             </div>
             <p className="text-xs sm:text-sm text-slate-600 mb-3 font-medium">
-              Makatutulong sa mabilis na pagkilala sa benepisyaryo sa oras ng pangangailangan.
+              Helpful for expedited identification in the mutual assistance registry.
             </p>
 
             {data.beneficiaryId ? (
@@ -273,7 +273,7 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
                   className="absolute inset-0 bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-xs font-bold gap-1"
                 >
                   <Trash2 className="w-5 h-5 text-rose-400" />
-                  Tanggalin
+                  Remove
                 </button>
               </div>
             ) : (
@@ -283,7 +283,7 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
                 className="w-full py-3.5 px-4 border-2 border-dashed border-slate-400 rounded-2xl text-sm font-bold text-slate-700 hover:text-emerald-900 hover:border-emerald-600 bg-white hover:bg-emerald-50/50 transition flex items-center justify-center gap-2"
               >
                 <FileUp className="w-5 h-5 text-slate-500" />
-                Mag-upload ng ID o Litrato ng Benepisyaryo
+                Upload Beneficiary ID or 2x2 Photo
               </button>
             )}
             <input
@@ -310,17 +310,17 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
                     !
                   </span>
                   <h3 className="font-extrabold text-amber-950 text-base">
-                    Valid ID ng Magulang / Guardian <span className="text-rose-600 font-black">*</span>
+                    Parent / Guardian Valid ID <span className="text-rose-600 font-black">*</span>
                   </h3>
                 </div>
                 {data.guardianId && (
                   <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-800 bg-emerald-200 px-2.5 py-0.5 rounded-full">
-                    <CheckCircle className="w-3.5 h-3.5" /> Na-attach
+                    <CheckCircle className="w-3.5 h-3.5" /> Attached
                   </span>
                 )}
               </div>
               <p className="text-xs sm:text-sm text-amber-900 mb-3 font-semibold">
-                Kinakailangan ang litrato ng Valid ID ng magulang o guardian na nagbibigay ng pahintulot sa menor de edad.
+                Required government-issued ID of authorizing parent or guardian for minor applicants.
               </p>
 
               {data.guardianId ? (
@@ -336,7 +336,7 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
                     className="absolute inset-0 bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-xs font-bold gap-1"
                   >
                     <Trash2 className="w-5 h-5 text-rose-400" />
-                    Tanggalin
+                    Remove
                   </button>
                 </div>
               ) : (
@@ -346,7 +346,7 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
                   className="w-full py-3.5 px-4 border-2 border-dashed border-amber-400 rounded-2xl text-sm font-bold text-amber-950 hover:border-amber-700 bg-white hover:bg-amber-100/60 transition flex items-center justify-center gap-2"
                 >
                   <FileUp className="w-5 h-5 text-amber-800" />
-                  I-upload ang Valid ID ng Magulang
+                  Upload Parent / Guardian ID
                 </button>
               )}
               <input

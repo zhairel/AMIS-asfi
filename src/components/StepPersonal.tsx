@@ -45,24 +45,24 @@ export default function StepPersonal({ data, updateData, errors }: StepPersonalP
           <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center flex-shrink-0">
             <User className="w-5 h-5" />
           </div>
-          <h2>Personal Information / Impormasyon ng Aplikante</h2>
+          <h2>Applicant Personal Information</h2>
         </div>
         <p className="text-slate-700 text-sm sm:text-base mt-1.5 font-medium leading-relaxed">
-          Pakilagay nang buo at wasto ang inyong opisyal na impormasyon ayon sa inyong valid ID o birth certificate.
+          Please complete your official personal details accurately as they appear on your government-issued ID or official records.
         </p>
       </div>
 
       {/* Full Name Fields */}
       <div>
         <label className="block text-sm sm:text-base font-extrabold text-slate-900 mb-2">
-          Buong Pangalan / Full Name <span className="text-rose-600 font-black text-lg">*</span>
+          Full Legal Name <span className="text-rose-600 font-black text-lg">*</span>
         </label>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3.5">
           <div>
-            <span className="block text-xs font-bold text-slate-600 mb-1">First Name (Pangalan) *</span>
+            <span className="block text-xs font-bold text-slate-600 mb-1">First Name *</span>
             <input
               type="text"
-              placeholder="Hal. Juan"
+              placeholder="e.g. Juan"
               value={data.firstName}
               onChange={(e) => updateData({ firstName: e.target.value })}
               className={`w-full min-h-[50px] px-4 py-3 rounded-xl border-2 ${
@@ -77,10 +77,10 @@ export default function StepPersonal({ data, updateData, errors }: StepPersonalP
           </div>
 
           <div>
-            <span className="block text-xs font-bold text-slate-600 mb-1">Middle Name (Gitnang Pangalan)</span>
+            <span className="block text-xs font-bold text-slate-600 mb-1">Middle Name</span>
             <input
               type="text"
-              placeholder="Hal. Santos (o N/A)"
+              placeholder="e.g. Santos (or N/A)"
               value={data.middleName}
               onChange={(e) => updateData({ middleName: e.target.value })}
               className="w-full min-h-[50px] px-4 py-3 rounded-xl border-2 border-slate-300 bg-white text-slate-900 text-base font-semibold focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none transition"
@@ -88,10 +88,10 @@ export default function StepPersonal({ data, updateData, errors }: StepPersonalP
           </div>
 
           <div>
-            <span className="block text-xs font-bold text-slate-600 mb-1">Last / Family Name (Apelyido) *</span>
+            <span className="block text-xs font-bold text-slate-600 mb-1">Last / Family Name *</span>
             <input
               type="text"
-              placeholder="Hal. Dela Cruz"
+              placeholder="e.g. Dela Cruz"
               value={data.lastName}
               onChange={(e) => updateData({ lastName: e.target.value })}
               className={`w-full min-h-[50px] px-4 py-3 rounded-xl border-2 ${
@@ -106,10 +106,10 @@ export default function StepPersonal({ data, updateData, errors }: StepPersonalP
           </div>
 
           <div>
-            <span className="block text-xs font-bold text-slate-600 mb-1">Suffix (Hal. Jr., Sr., III)</span>
+            <span className="block text-xs font-bold text-slate-600 mb-1">Suffix (e.g. Jr., Sr., III)</span>
             <input
               type="text"
-              placeholder="Hal. Jr. (kung meron)"
+              placeholder="e.g. Jr. (if applicable)"
               value={data.suffix}
               onChange={(e) => updateData({ suffix: e.target.value })}
               className="w-full min-h-[50px] px-4 py-3 rounded-xl border-2 border-slate-300 bg-white text-slate-900 text-base font-semibold focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none transition"
@@ -122,7 +122,7 @@ export default function StepPersonal({ data, updateData, errors }: StepPersonalP
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         <div>
           <label className="block text-sm font-extrabold text-slate-900 mb-1.5">
-            Kapanganakan / Birth Date <span className="text-rose-600 font-black">*</span>
+            Date of Birth <span className="text-rose-600 font-black">*</span>
           </label>
           <input
             type="date"
@@ -142,10 +142,10 @@ export default function StepPersonal({ data, updateData, errors }: StepPersonalP
 
         <div>
           <label className="block text-sm font-extrabold text-slate-900 mb-1.5">
-            Edad / Age
+            Calculated Age
           </label>
           <div className="min-h-[50px] px-4 py-3 rounded-xl border-2 border-slate-200 bg-slate-100 text-slate-900 text-base font-bold flex items-center justify-between">
-            <span>{data.age !== null ? `${data.age} taong gulang` : 'Pumili ng petsa'}</span>
+            <span>{data.age !== null ? `${data.age} years old` : 'Select birth date'}</span>
             {data.isUnderage && (
               <span className="text-xs px-2.5 py-1 rounded-md bg-amber-200 text-amber-950 font-black">
                 Minor (&lt;18)
@@ -156,11 +156,11 @@ export default function StepPersonal({ data, updateData, errors }: StepPersonalP
 
         <div>
           <label className="block text-sm font-extrabold text-slate-900 mb-1.5">
-            Lugar ng Kapanganakan <span className="text-rose-600 font-black">*</span>
+            Place of Birth <span className="text-rose-600 font-black">*</span>
           </label>
           <input
             type="text"
-            placeholder="Hal. Davao City"
+            placeholder="e.g. Davao City"
             value={data.placeOfBirth}
             onChange={(e) => updateData({ placeOfBirth: e.target.value })}
             className={`w-full min-h-[50px] px-4 py-3 rounded-xl border-2 ${
@@ -176,7 +176,7 @@ export default function StepPersonal({ data, updateData, errors }: StepPersonalP
 
         <div>
           <label className="block text-sm font-extrabold text-slate-900 mb-1.5">
-            Kasarian / Gender <span className="text-rose-600 font-black">*</span>
+            Gender <span className="text-rose-600 font-black">*</span>
           </label>
           <div className="grid grid-cols-2 gap-2">
             {genders.map((g) => (
@@ -190,7 +190,7 @@ export default function StepPersonal({ data, updateData, errors }: StepPersonalP
                     : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
                 }`}
               >
-                {g === 'Male' ? 'Lalaki (Male)' : 'Babae (Female)'}
+                {g}
               </button>
             ))}
           </div>
@@ -209,10 +209,10 @@ export default function StepPersonal({ data, updateData, errors }: StepPersonalP
             <ShieldAlert className="w-7 h-7 text-amber-700 flex-shrink-0 mt-0.5" />
             <div>
               <h4 className="font-extrabold text-base text-amber-950">
-                Pang-Magulang / Guardian Requirement (Aplikanteng Wala Pang 18 Anyos)
+                Parent / Legal Guardian Requirement (Minor Applicant Under 18)
               </h4>
               <p className="text-sm text-amber-900 mt-1 leading-relaxed font-medium">
-                Alinsunod sa patakaran ng ASFI, ang mga mag-aaral o kabataang wala pang 18 taong gulang ay kinakailangang may pahintulot at lagda ng magulang o legal na guardian.
+                Under ASFI policy and SEC guidelines, applicants under 18 years of age must be authorized by a parent or legal guardian who completes and signs this form on their behalf.
               </p>
             </div>
           </div>
@@ -220,11 +220,11 @@ export default function StepPersonal({ data, updateData, errors }: StepPersonalP
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-3 border-t border-amber-300">
             <div>
               <label className="block text-xs font-extrabold text-amber-950 uppercase tracking-wider mb-1.5">
-                Pangalan ng Magulang / Guardian *
+                Parent / Guardian Full Name *
               </label>
               <input
                 type="text"
-                placeholder="Buong Pangalan ng Magulang"
+                placeholder="Full Name of Guardian"
                 value={data.guardianName}
                 onChange={(e) => updateData({ guardianName: e.target.value })}
                 className="w-full min-h-[48px] px-3.5 py-2.5 bg-white rounded-xl border-2 border-amber-400 text-slate-900 text-base font-semibold outline-none focus:ring-4 focus:ring-amber-200"
@@ -236,18 +236,18 @@ export default function StepPersonal({ data, updateData, errors }: StepPersonalP
 
             <div>
               <label className="block text-xs font-extrabold text-amber-950 uppercase tracking-wider mb-1.5">
-                Relasyon / Relationship *
+                Relationship to Minor *
               </label>
               <select
                 value={data.guardianRelationship}
                 onChange={(e) => updateData({ guardianRelationship: e.target.value })}
                 className="w-full min-h-[48px] px-3.5 py-2.5 bg-white rounded-xl border-2 border-amber-400 text-slate-900 text-base font-semibold outline-none focus:ring-4 focus:ring-amber-200"
               >
-                <option value="">Piliin ang Relasyon</option>
-                <option value="Father">Ama / Tatay (Father)</option>
-                <option value="Mother">Ina / Nanay (Mother)</option>
+                <option value="">Select Relationship</option>
+                <option value="Father">Father</option>
+                <option value="Mother">Mother</option>
                 <option value="Legal Guardian">Legal Guardian</option>
-                <option value="Grandparent">Lolo / Lola (Grandparent)</option>
+                <option value="Grandparent">Grandparent</option>
               </select>
               {errors.guardianRelationship && (
                 <p className="text-rose-600 font-bold text-xs mt-1">{errors.guardianRelationship}</p>
@@ -256,7 +256,7 @@ export default function StepPersonal({ data, updateData, errors }: StepPersonalP
 
             <div>
               <label className="block text-xs font-extrabold text-amber-950 uppercase tracking-wider mb-1.5">
-                Numero ng Magulang / Guardian *
+                Guardian Contact Number *
               </label>
               <input
                 type="tel"
@@ -276,14 +276,14 @@ export default function StepPersonal({ data, updateData, errors }: StepPersonalP
       {/* Present Address */}
       <div>
         <label className="block text-sm sm:text-base font-extrabold text-slate-900 mb-1.5">
-          Kasalukuyang Tirahan / Present Address <span className="text-rose-600 font-black">*</span>
+          Present Address <span className="text-rose-600 font-black">*</span>
         </label>
         <p className="text-xs text-slate-600 mb-2 font-medium">
-          Ilagay ang House No., Kalye (Street), Barangay, Lungsod/Munisipyo, at Lalawigan (Province).
+          Specify House/Building No., Street, Barangay, City/Municipality, and Province.
         </p>
         <textarea
           rows={2}
-          placeholder="Hal. Blk 5 Lot 12, Sampaguita St., Brgy. Ma-a, Davao City, Davao del Sur"
+          placeholder="e.g. Block 5 Lot 12, Sampaguita St., Brgy. Ma-a, Davao City, Davao del Sur"
           value={data.presentAddress}
           onChange={(e) => updateData({ presentAddress: e.target.value })}
           className={`w-full min-h-[70px] px-4 py-3 rounded-xl border-2 ${
@@ -301,7 +301,7 @@ export default function StepPersonal({ data, updateData, errors }: StepPersonalP
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         <div>
           <label className="block text-sm font-extrabold text-slate-900 mb-1.5">
-            Katayuang Sibil / Status <span className="text-rose-600 font-black">*</span>
+            Civil Status <span className="text-rose-600 font-black">*</span>
           </label>
           <select
             value={data.civilStatus}
@@ -310,12 +310,12 @@ export default function StepPersonal({ data, updateData, errors }: StepPersonalP
               errors.civilStatus ? 'border-rose-500 bg-rose-50/70' : 'border-slate-300'
             } text-slate-900 text-base font-semibold focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none transition bg-white`}
           >
-            <option value="">Piliin ang Katayuan</option>
-            <option value="Single">Walang Asawa (Single)</option>
-            <option value="Married">May Asawa (Married)</option>
-            <option value="Separated">Hiwalay (Separated)</option>
-            <option value="Widowed">Biyudo / Biyuda (Widowed)</option>
-            <option value="Others">Iba pa (Others)</option>
+            <option value="">Select Civil Status</option>
+            <option value="Single">Single</option>
+            <option value="Married">Married</option>
+            <option value="Separated">Separated</option>
+            <option value="Widowed">Widowed</option>
+            <option value="Others">Others</option>
           </select>
           {errors.civilStatus && (
             <p className="text-rose-600 font-bold text-xs mt-1.5 flex items-center gap-1">
@@ -326,7 +326,7 @@ export default function StepPersonal({ data, updateData, errors }: StepPersonalP
 
         <div>
           <label className="block text-sm font-extrabold text-slate-900 mb-1.5">
-            Pagkamamamayan / Citizenship *
+            Citizenship *
           </label>
           <input
             type="text"
@@ -338,11 +338,11 @@ export default function StepPersonal({ data, updateData, errors }: StepPersonalP
 
         <div>
           <label className="block text-sm font-extrabold text-slate-900 mb-1.5">
-            Relihiyon / Religion
+            Religion
           </label>
           <input
             type="text"
-            placeholder="Hal. Islam"
+            placeholder="e.g. Islam"
             value={data.religion}
             onChange={(e) => updateData({ religion: e.target.value })}
             className="w-full min-h-[50px] px-4 py-3 rounded-xl border-2 border-slate-300 bg-white text-slate-900 text-base font-semibold focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none transition"
@@ -351,12 +351,12 @@ export default function StepPersonal({ data, updateData, errors }: StepPersonalP
 
         <div>
           <label className="block text-sm font-extrabold text-slate-900 mb-1.5">
-            Pangalan ng Asawa / Spouse
-            <span className="text-xs text-slate-500 font-normal block">(N/A kung wala)</span>
+            Spouse&apos;s Name
+            <span className="text-xs text-slate-500 font-normal block">(Write N/A if not applicable)</span>
           </label>
           <input
             type="text"
-            placeholder="Hal. Maria Dela Cruz o N/A"
+            placeholder="e.g. Maria Dela Cruz or N/A"
             value={data.spouseName}
             onChange={(e) => updateData({ spouseName: e.target.value })}
             className="w-full min-h-[50px] px-4 py-3 rounded-xl border-2 border-slate-300 bg-white text-slate-900 text-base font-semibold focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none transition"
@@ -368,7 +368,7 @@ export default function StepPersonal({ data, updateData, errors }: StepPersonalP
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
           <label className="block text-sm font-extrabold text-slate-900 mb-1.5">
-            Cellphone / Contact No. <span className="text-rose-600 font-black">*</span>
+            Mobile / Contact Number <span className="text-rose-600 font-black">*</span>
           </label>
           <input
             type="tel"
@@ -392,7 +392,7 @@ export default function StepPersonal({ data, updateData, errors }: StepPersonalP
           </label>
           <input
             type="email"
-            placeholder="pangalan@gmail.com"
+            placeholder="applicant@example.com"
             value={data.email}
             onChange={(e) => updateData({ email: e.target.value })}
             className={`w-full min-h-[50px] px-4 py-3 rounded-xl border-2 ${
@@ -408,11 +408,11 @@ export default function StepPersonal({ data, updateData, errors }: StepPersonalP
 
         <div>
           <label className="block text-sm font-extrabold text-slate-900 mb-1.5">
-            Hanapbuhay / Occupation
+            Occupation / Source of Livelihood
           </label>
           <input
             type="text"
-            placeholder="Hal. Empleyado, Negosyante, Estudyante"
+            placeholder="e.g. Self-Employed, Employee, Teacher"
             value={data.occupation}
             onChange={(e) => updateData({ occupation: e.target.value })}
             className="w-full min-h-[50px] px-4 py-3 rounded-xl border-2 border-slate-300 bg-white text-slate-900 text-base font-semibold focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none transition"
@@ -424,24 +424,24 @@ export default function StepPersonal({ data, updateData, errors }: StepPersonalP
       <div className="bg-slate-100/80 border-2 border-slate-200 rounded-2xl p-5 space-y-3">
         <div className="flex items-center gap-2 text-slate-800 font-bold text-sm">
           <Building2 className="w-5 h-5 text-emerald-700" />
-          <span>Paaralan / Kompanya / Organisasyon (Kung mayroon)</span>
+          <span>School / Company / Organization Affiliation (Optional)</span>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           <div>
-            <span className="block text-xs font-bold text-slate-600 mb-1">Pangalan ng Paaralan o Kompanya</span>
+            <span className="block text-xs font-bold text-slate-600 mb-1">Affiliation Name</span>
             <input
               type="text"
-              placeholder="Hal. University / Company / Organization"
+              placeholder="e.g. University / Company / Organization"
               value={data.companySchoolAffiliation}
               onChange={(e) => updateData({ companySchoolAffiliation: e.target.value })}
               className="w-full min-h-[48px] px-4 py-2.5 rounded-xl border-2 border-slate-300 text-slate-900 text-base font-semibold bg-white focus:border-emerald-600 outline-none"
             />
           </div>
           <div>
-            <span className="block text-xs font-bold text-slate-600 mb-1">Address ng Paaralan o Kompanya</span>
+            <span className="block text-xs font-bold text-slate-600 mb-1">Affiliation Address</span>
             <input
               type="text"
-              placeholder="Hal. Davao City"
+              placeholder="e.g. Davao City"
               value={data.affiliationAddress}
               onChange={(e) => updateData({ affiliationAddress: e.target.value })}
               className="w-full min-h-[48px] px-4 py-2.5 rounded-xl border-2 border-slate-300 text-slate-900 text-base font-semibold bg-white focus:border-emerald-600 outline-none"

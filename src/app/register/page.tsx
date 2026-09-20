@@ -338,7 +338,7 @@ export default function RegisterPage() {
                     className="w-full sm:w-auto min-h-[52px] inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl border-2 border-slate-300 text-slate-800 font-extrabold text-sm sm:text-base hover:bg-slate-100 hover:border-slate-400 transition active:scale-95 shadow-sm"
                   >
                     <ArrowLeft className="w-5 h-5" />
-                    <span>Bumalik (Previous)</span>
+                    <span>Previous</span>
                   </button>
                 ) : (
                   <span className="hidden sm:inline" />
@@ -350,7 +350,7 @@ export default function RegisterPage() {
                     onClick={handleNext}
                     className="w-full sm:w-auto min-h-[52px] inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-2xl bg-emerald-800 hover:bg-emerald-900 text-white font-black text-sm sm:text-base shadow-lg hover:shadow-xl transition active:scale-95 ml-auto"
                   >
-                    <span>Magpatuloy (Continue)</span>
+                    <span>Continue</span>
                     <ArrowRight className="w-5 h-5 stroke-[2.5]" />
                   </button>
                 ) : (
@@ -365,12 +365,12 @@ export default function RegisterPage() {
                     {isSubmitting ? (
                       <>
                         <span className="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin" />
-                        <span>Ipinapasa ang Aplikasyon...</span>
+                        <span>Submitting Application...</span>
                       </>
                     ) : (
                       <>
                         <Send className="w-5 h-5" />
-                        <span>Ipasa ang Aplikasyon (Submit Application)</span>
+                        <span>Submit Application</span>
                       </>
                     )}
                   </button>

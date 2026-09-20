@@ -104,10 +104,10 @@ export default function StepDeclarations({ data, updateData, errors }: StepDecla
           <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center flex-shrink-0">
             <FileSignature className="w-5 h-5" />
           </div>
-          <h2>Pahayag, Kasunduan sa Sadaqah at Lagda</h2>
+          <h2>Declarations, Sadaqah Acknowledgment &amp; Signature</h2>
         </div>
         <p className="text-slate-700 text-sm sm:text-base mt-1.5 font-medium leading-relaxed">
-          Pakibasa at lagyan ng tsek ang tatlong (3) mahalagang kasunduan sa ibaba, at ilagay ang inyong lagda.
+          Please review and acknowledge the three (3) declarations below and affix your digital signature.
         </p>
       </div>
 
@@ -119,10 +119,10 @@ export default function StepDeclarations({ data, updateData, errors }: StepDecla
           </div>
           <div>
             <p className="text-xs font-black uppercase tracking-wider text-amber-900">
-              Mensahe ng Propeta Muhammad (S.A.W.) Hinggil sa Pagkakawanggawa
+              Guidance of Prophet Muhammad (S.A.W.) on Charity
             </p>
             <p className="text-base sm:text-lg font-bold text-slate-900 mt-1 italic leading-relaxed font-serif">
-              “Magbigay ng kawanggawa (Sadaqah) nang walang pagkaantala, sapagkat ito ay humahadlang sa kapahamakan.”
+              “Give charity without delay, for it stands in the way of calamity.”
             </p>
             <p className="text-xs sm:text-sm text-slate-700 mt-1 font-semibold">
               — Sunan Al-Tirmidhi 589
@@ -153,14 +153,14 @@ export default function StepDeclarations({ data, updateData, errors }: StepDecla
           </div>
           <div className="text-sm sm:text-base leading-relaxed text-slate-800 select-none">
             <strong className="text-slate-950 font-extrabold block text-base sm:text-lg mb-1">
-              1. Pagpapahintulot at Katotohanan ng Datos (Consent &amp; Data Privacy) *
+              1. Consent &amp; Information Truthfulness (Data Privacy) *
             </strong>
-            Ipinagkakaloob ko ang aking buong pahintulot sa Asosasyon na gamitin ang aking mga personal na detalye para sa opisyal na rehistro at pamamahala ng mutual assistance. Pinatutunayan ko rin na ang lahat ng aking ibinigay na impormasyon ay totoo, wasto, at kumpleto ayon sa aking nalalaman.
+            I hereby give my consent to the Association to share and process my personal details for the official membership registry and mutual assistance administration, and I attest that all information I have provided is true, correct, and complete to the best of my knowledge.
           </div>
         </div>
         {errors.consentDataPrivacy && (
           <p className="text-rose-600 font-bold text-xs sm:text-sm flex items-center gap-1.5 pl-3">
-            <AlertCircle className="w-4 h-4" /> Pakitsekan at sang-ayunan ang pahayag na ito.
+            <AlertCircle className="w-4 h-4" /> Please check and agree to this declaration.
           </p>
         )}
 
@@ -184,14 +184,14 @@ export default function StepDeclarations({ data, updateData, errors }: StepDecla
           </div>
           <div className="text-sm sm:text-base leading-relaxed text-slate-800 select-none">
             <strong className="text-slate-950 font-extrabold block text-base sm:text-lg mb-1">
-              2. Kasunduan sa Buwanang Kusang-loob na Sadaqah (Voluntary Monthly Sadaqah) *
+              2. Terms, Conditions &amp; Voluntary Monthly Sadaqah Policy *
             </strong>
-            Nauunawaan ko ang mga alituntunin at kondisyon ng AMIS Sadaqah Family Incorporated, kabilang ang pagbibigay ng buwanang kusang-loob na Sadaqah sa anumang halaga ayon sa aking sariling kakayahan para sa pagtutulungan. Nauunawaan ko na ang naturang donasyon ay hindi komersyal na pamumuhunan kundi kusang-loob na tulong sa kapwa.
+            I understand the terms and conditions of AMIS Sadaqah Family Incorporated, including the requirement to make a monthly voluntary Sadaqah contribution of any amount according to my personal financial capacity for mutual assistance. I understand that such contribution does not guarantee any fixed commercial return or financial dividend, but represents sincere mutual charitable care.
           </div>
         </div>
         {errors.agreeTermsAndConditions && (
           <p className="text-rose-600 font-bold text-xs sm:text-sm flex items-center gap-1.5 pl-3">
-            <AlertCircle className="w-4 h-4" /> Pakitsekan at tanggapin ang patakaran sa Sadaqah.
+            <AlertCircle className="w-4 h-4" /> Please check and accept the voluntary Sadaqah terms.
           </p>
         )}
 
@@ -215,14 +215,14 @@ export default function StepDeclarations({ data, updateData, errors }: StepDecla
           </div>
           <div className="text-sm sm:text-base leading-relaxed text-slate-800 select-none">
             <strong className="text-slate-950 font-extrabold block text-base sm:text-lg mb-1">
-              3. Sertipikasyon ng Legal na Benepisyaryo (Designation of Beneficiary) *
+              3. Beneficiary Designation Certification *
             </strong>
-            Pinatutunayan ko na si <span className="font-black underline text-emerald-950 bg-emerald-100/80 px-1 py-0.5 rounded">{beneficiaryFullName}</span> ang aking legal na itinalagang benepisyaryo na tatanggap ng kaukulang tulong mula sa Asosasyon sakaling ako ay pumanaw.
+            I hereby certify that <span className="font-black underline text-emerald-950 bg-emerald-100/80 px-1.5 py-0.5 rounded">{beneficiaryFullName}</span> is my designated legal beneficiary in the event of my death and shall receive the stipulated mutual assistance benefits on my behalf.
           </div>
         </div>
         {errors.certifyLegalBeneficiary && (
           <p className="text-rose-600 font-bold text-xs sm:text-sm flex items-center gap-1.5 pl-3">
-            <AlertCircle className="w-4 h-4" /> Pakitsekan para kumpirmahin ang inyong benepisyaryo.
+            <AlertCircle className="w-4 h-4" /> Please check and certify your legal beneficiary.
           </p>
         )}
       </div>
@@ -232,12 +232,12 @@ export default function StepDeclarations({ data, updateData, errors }: StepDecla
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-slate-200 pb-4">
           <div>
             <h3 className="font-extrabold text-slate-900 text-base sm:text-lg">
-              Lagda ng Miyembro o Magulang / Authorized Signature <span className="text-rose-600 font-black">*</span>
+              Member&apos;s Signature Over Printed Name <span className="text-rose-600 font-black">*</span>
             </h3>
             <p className="text-xs sm:text-sm text-slate-600 font-medium mt-0.5">
               {data.isUnderage
-                ? 'Magulang o legal na guardian ang lalagda para sa menor de edad'
-                : 'Pumirma gamit ang daliri sa cellphone o mouse sa computer'}
+                ? 'Parent or legal guardian signs on behalf of minor applicant'
+                : 'Sign using touch or stylus on mobile, or mouse on desktop'}
             </p>
           </div>
 
@@ -251,7 +251,7 @@ export default function StepDeclarations({ data, updateData, errors }: StepDecla
                   : 'bg-white border-2 border-slate-300 text-slate-700 hover:bg-slate-50'
               }`}
             >
-              <PenTool className="w-4 h-4" /> Iguhit ang Lagda (Draw)
+              <PenTool className="w-4 h-4" /> Draw Signature
             </button>
             <button
               type="button"
@@ -262,7 +262,7 @@ export default function StepDeclarations({ data, updateData, errors }: StepDecla
                   : 'bg-white border-2 border-slate-300 text-slate-700 hover:bg-slate-50'
               }`}
             >
-              <Type className="w-4 h-4" /> I-type ang Lagda (Type)
+              <Type className="w-4 h-4" /> Type Signature
             </button>
           </div>
         </div>
@@ -286,7 +286,7 @@ export default function StepDeclarations({ data, updateData, errors }: StepDecla
               {!hasDrawn && !data.signatureDataUrl && (
                 <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center text-slate-400 text-sm font-bold gap-1">
                   <PenTool className="w-6 h-6 text-slate-300" />
-                  <span>Pumirma rito gamit ang inyong daliri o stylus</span>
+                  <span>Draw your digital signature here</span>
                 </div>
               )}
             </div>
@@ -297,22 +297,22 @@ export default function StepDeclarations({ data, updateData, errors }: StepDecla
                 onClick={clearCanvas}
                 className="inline-flex items-center gap-1.5 text-xs sm:text-sm text-slate-700 hover:text-rose-700 font-extrabold py-2 px-3 rounded-xl bg-white border border-slate-300 shadow-sm transition active:scale-95"
               >
-                <RotateCcw className="w-4 h-4 text-rose-500" /> Burahin at Ulitin ang Lagda
+                <RotateCcw className="w-4 h-4 text-rose-500" /> Clear Signature
               </button>
-              <span className="text-xs text-slate-500 font-semibold">Touchscreen at mouse suportado</span>
+              <span className="text-xs text-slate-500 font-semibold">Touchscreen and mouse supported</span>
             </div>
           </div>
         ) : (
           <div>
             <input
               type="text"
-              placeholder="I-type ang iyong buong legal na pangalan bilang lagda..."
+              placeholder="Type your full legal name as digital signature..."
               value={data.signatureTypedName}
               onChange={(e) => updateData({ signatureTypedName: e.target.value })}
               className="w-full min-h-[54px] px-5 py-3 border-2 border-slate-300 rounded-2xl text-xl font-serif italic text-emerald-950 bg-white focus:border-emerald-600 outline-none shadow-sm"
             />
             <p className="text-xs text-slate-600 font-medium mt-1.5">
-              Ang pag-type ng inyong buong pangalan ay nagsisilbing opisyal na electronic signature.
+              Typing your full legal name acts as your official electronic signature.
             </p>
           </div>
         )}
@@ -327,7 +327,7 @@ export default function StepDeclarations({ data, updateData, errors }: StepDecla
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t-2 border-slate-200">
           <div>
             <label className="block text-xs sm:text-sm font-extrabold text-slate-900 uppercase tracking-wider mb-1.5">
-              Pangalan ng Lumagda / Printed Name *
+              Member / Guardian Printed Name *
             </label>
             <input
               type="text"
@@ -339,7 +339,7 @@ export default function StepDeclarations({ data, updateData, errors }: StepDecla
 
           <div>
             <label className="block text-xs sm:text-sm font-extrabold text-slate-900 uppercase tracking-wider mb-1.5">
-              Petsa ng Pagsumite / Date Applied
+              Date Applied
             </label>
             <input
               type="text"
