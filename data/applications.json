@@ -1,0 +1,29 @@
+[
+  {
+    "referenceNumber": "ASFI-2026-BST7K",
+    "submittedAt": "2026-09-20T08:13:19.363Z",
+    "status": "pending_verification",
+    "data": {
+      "firstName": "Ahmad",
+      "lastName": "Macacua",
+      "birthDate": "1995-05-15",
+      "placeOfBirth": "Davao City",
+      "gender": "Male",
+      "civilStatus": "Married",
+      "presentAddress": "Ma-a Road, Davao City",
+      "beneficiaryFirstName": "Fatima",
+      "beneficiaryLastName": "Macacua",
+      "beneficiaryRelationship": "Spouse",
+      "beneficiaryContact": "09123456789",
+      "beneficiaryAddress": "Ma-a Road, Davao City",
+      "consentDataPrivacy": true,
+      "agreeTermsAndConditions": true,
+      "certifyLegalBeneficiary": true,
+      "printedName": "AHMAD MACACUA",
+      "photo2x2": null,
+      "applicantId": null,
+      "beneficiaryId": null,
+      "guardianId": null
+    }
+  }
+]

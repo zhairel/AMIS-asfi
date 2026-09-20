@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 15, 23, 42;
+  --background-start-rgb: 248, 250, 252;
+  --background-end-rgb: 241, 245, 249;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      rgb(var(--background-start-rgb)),
+      rgb(var(--background-end-rgb))
+    );
+  min-height: 100vh;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+/* Islamic geometric background pattern subtle overlay */
+.islamic-pattern {
+  background-color: #032b21;
+  background-image: radial-gradient(rgba(217, 119, 6, 0.15) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* Uppercase name and address inputs per official Philippine record standards */
+.uppercase-inputs input[type="text"]:not(.keep-case),
+.uppercase-inputs textarea:not(.keep-case) {
+  text-transform: uppercase;
+}
+
+.uppercase-inputs input[type="text"]::placeholder,
+.uppercase-inputs textarea::placeholder {
+  text-transform: none;
+}
+
+/* Print optimizations for Application Summary Receipt */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .print-card {
+    box-shadow: none !important;
+    border: 1px solid #cbd5e1 !important;
+    page-break-inside: avoid;
+  }
+}
