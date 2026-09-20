@@ -366,7 +366,7 @@ export default function AdminDashboardPage() {
         <div className="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-xs space-y-3.5">
           <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
             {/* Status Filter Segmented Control */}
-            <div className="flex items-center p-1 bg-slate-100/90 rounded-xl border border-slate-200/80 overflow-x-auto">
+            <div className="flex flex-wrap items-center p-1 bg-slate-100/90 rounded-xl border border-slate-200/80">
               <button
                 onClick={() => setStatusFilter('all')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap ${
@@ -469,14 +469,12 @@ export default function AdminDashboardPage() {
               </p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
+            <div className="w-full">
               <table className="w-full text-left text-sm border-collapse">
                 <thead>
                   <tr className="bg-slate-50/90 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
                     <th className="py-3.5 px-4">Applicant</th>
-                    <th className="py-3.5 px-4">Reference No.</th>
                     <th className="py-3.5 px-4">Demographics</th>
-                    <th className="py-3.5 px-4">Contact &amp; City</th>
                     <th className="py-3.5 px-4">Beneficiary</th>
                     <th className="py-3.5 px-4">Date</th>
                     <th className="py-3.5 px-4">Status</th>
@@ -529,46 +527,12 @@ export default function AdminDashboardPage() {
                           </div>
                         </td>
 
-                        {/* Reference Number */}
-                        <td className="py-3.5 px-4 whitespace-nowrap">
-                          <div className="inline-flex items-center gap-1.5">
-                            <span className="font-mono text-xs font-bold text-slate-800 bg-slate-100 px-2.5 py-1 rounded-md border border-slate-200/80">
-                              {app.reference_number}
-                            </span>
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                copyToClipboard(app.reference_number);
-                              }}
-                              className="text-slate-400 hover:text-slate-700 p-1 transition"
-                              title="Copy Reference Code"
-                            >
-                              {copiedRef === app.reference_number ? (
-                                <Check className="w-3.5 h-3.5 text-emerald-600" />
-                              ) : (
-                                <Copy className="w-3.5 h-3.5" />
-                              )}
-                            </button>
-                          </div>
-                        </td>
-
                         {/* Demographics */}
                         <td className="py-3.5 px-4 whitespace-nowrap text-xs text-slate-600">
-                          <div>
+                          <div className="font-semibold text-slate-800">
                             {app.age !== null ? `${app.age} yrs` : 'N/A'} • {app.gender}
                           </div>
                           <span className="text-[11px] text-slate-400 capitalize">{app.civil_status}</span>
-                        </td>
-
-                        {/* Contact & City */}
-                        <td className="py-3.5 px-4 text-xs text-slate-600 max-w-[200px]">
-                          <div className="truncate font-medium text-slate-800" title={app.present_address}>
-                            {app.present_address}
-                          </div>
-                          <span className="text-[11px] text-slate-400 block truncate">
-                            {app.occupation || 'Self-employed'}
-                          </span>
                         </td>
 
                         {/* Beneficiary */}
