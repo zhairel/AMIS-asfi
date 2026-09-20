@@ -288,9 +288,14 @@ export default function HomePage() {
           </div>
           <div className="text-xs text-slate-400 space-y-1 text-center sm:text-right">
             <p>Don Julian Rodriguez Sr., Avenue, Ma-A Road, Davao City, Philippines</p>
-            <a href="mailto:amissadaqahfamilyincorporarted@gmail.com" className="text-amber-400 hover:underline font-medium">
-              amissadaqahfamilyincorporarted@gmail.com
-            </a>
+            <div className="flex flex-col sm:items-end gap-0.5">
+              <a href="mailto:amissadaqahfamilyincorporarted@gmail.com" className="text-amber-400 hover:underline font-medium">
+                amissadaqahfamilyincorporarted@gmail.com
+              </a>
+              <Link href="/admin/login" className="text-[11px] text-slate-500 hover:text-amber-400 transition font-semibold mt-1">
+                Admin Registry Access →
+              </Link>
+            </div>
           </div>
         </div>
       </footer>

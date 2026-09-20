@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { FormData } from '@/types/form';
-import { Users, Calendar, MapPin, Phone, AlertCircle, Copy, Check } from 'lucide-react';
+import { Users, AlertCircle, Copy, Check } from 'lucide-react';
 
 interface StepBeneficiaryProps {
   data: FormData;
@@ -35,7 +35,7 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
 
   return (
     <div className="space-y-8 uppercase-inputs">
-      {/* Section Title */}
+      {/* Section Header */}
       <div className="border-b-2 border-emerald-800/20 pb-4">
         <div className="flex items-center gap-2.5 text-emerald-900 font-extrabold text-xl sm:text-2xl">
           <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center flex-shrink-0">
@@ -48,14 +48,17 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
         </p>
       </div>
 
-      {/* Beneficiary Full Name */}
-      <div>
-        <label className="block text-sm sm:text-base font-extrabold text-slate-900 mb-2">
+      {/* 1. Beneficiary Full Legal Name (Clean 2-Column Rows) */}
+      <div className="space-y-4">
+        <label className="block text-sm sm:text-base font-extrabold text-slate-900">
           Beneficiary Full Legal Name <span className="text-rose-600 font-black text-lg">*</span>
         </label>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3.5">
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
           <div>
-            <span className="block text-xs font-bold text-slate-600 mb-1">First Name *</span>
+            <span className="block text-xs sm:text-sm font-extrabold text-slate-800 mb-1.5">
+              First Name <span className="text-rose-600 font-black">*</span>
+            </span>
             <input
               type="text"
               placeholder="e.g. Maria"
@@ -73,7 +76,9 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
           </div>
 
           <div>
-            <span className="block text-xs font-bold text-slate-600 mb-1">Middle Name</span>
+            <span className="block text-xs sm:text-sm font-extrabold text-slate-800 mb-1.5">
+              Middle Name <span className="text-slate-400 font-normal text-xs">(or N/A)</span>
+            </span>
             <input
               type="text"
               placeholder="e.g. Santos (or N/A)"
@@ -84,7 +89,9 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
           </div>
 
           <div>
-            <span className="block text-xs font-bold text-slate-600 mb-1">Last / Family Name *</span>
+            <span className="block text-xs sm:text-sm font-extrabold text-slate-800 mb-1.5">
+              Last / Family Name <span className="text-rose-600 font-black">*</span>
+            </span>
             <input
               type="text"
               placeholder="e.g. Dela Cruz"
@@ -102,10 +109,12 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
           </div>
 
           <div>
-            <span className="block text-xs font-bold text-slate-600 mb-1">Suffix (e.g. Jr., III)</span>
+            <span className="block text-xs sm:text-sm font-extrabold text-slate-800 mb-1.5">
+              Suffix <span className="text-slate-400 font-normal text-xs">(e.g. Jr., III - if applicable)</span>
+            </span>
             <input
               type="text"
-              placeholder="e.g. Jr. (if applicable)"
+              placeholder="e.g. Jr. (or leave blank)"
               value={data.beneficiarySuffix}
               onChange={(e) => updateData({ beneficiarySuffix: e.target.value })}
               className="w-full min-h-[50px] px-4 py-3 rounded-xl border-2 border-slate-300 bg-white text-slate-900 text-base font-semibold focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none transition"
@@ -114,8 +123,8 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
         </div>
       </div>
 
-      {/* Relationship & Contact */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {/* 2. Relationship & Contact (Clean 2-Column Row) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
         <div>
           <label className="block text-sm sm:text-base font-extrabold text-slate-900 mb-1.5">
             Relationship to Applicant <span className="text-rose-600 font-black">*</span>
@@ -162,8 +171,8 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
         </div>
       </div>
 
-      {/* Date of Birth & Place of Birth */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {/* 3. Date & Place of Birth (Clean 2-Column Row) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
         <div>
           <label className="block text-sm font-extrabold text-slate-900 mb-1.5">
             Beneficiary Date of Birth
@@ -183,7 +192,7 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
           </label>
           <input
             type="text"
-            placeholder="e.g. Davao City"
+            placeholder="e.g. Davao City, Davao del Sur"
             value={data.beneficiaryPlaceOfBirth}
             onChange={(e) => updateData({ beneficiaryPlaceOfBirth: e.target.value })}
             className="w-full min-h-[50px] px-4 py-3 rounded-xl border-2 border-slate-300 bg-white text-slate-900 text-base font-semibold focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none transition"
@@ -191,17 +200,17 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
         </div>
       </div>
 
-      {/* Present Address with Copy Action */}
+      {/* 4. Present Address with Copy Button (Full Width) */}
       <div>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
           <label className="block text-sm sm:text-base font-extrabold text-slate-900">
-            Beneficiary Present Address <span className="text-rose-600 font-black">*</span>
+            Beneficiary Present Residential Address <span className="text-rose-600 font-black">*</span>
           </label>
           {data.presentAddress && (
             <button
               type="button"
               onClick={handleCopyAddress}
-              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-emerald-800 bg-emerald-100 hover:bg-emerald-200 px-3.5 py-2 rounded-xl transition border border-emerald-300 active:scale-95"
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-emerald-800 bg-emerald-100 hover:bg-emerald-200 px-3.5 py-2 rounded-xl transition border border-emerald-300 active:scale-95 self-start sm:self-auto"
             >
               {data.sameAddressAsApplicant ? (
                 <>
@@ -227,7 +236,7 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
               sameAddressAsApplicant: e.target.value === data.presentAddress,
             })
           }
-          className={`w-full min-h-[70px] px-4 py-3 rounded-xl border-2 ${
+          className={`w-full min-h-[76px] px-4 py-3 rounded-xl border-2 ${
             errors.beneficiaryAddress ? 'border-rose-500 bg-rose-50/70' : 'border-slate-300 bg-white'
           } text-slate-900 text-base font-semibold focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none transition`}
         />
