@@ -67,14 +67,34 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    // Compute stats
-    const allRecords = memoryApplications || [];
+    // Compute accurate stats across all records
+    let allRecordsForStats: DatabaseApplication[] = [];
+    if (isSupabaseConfigured) {
+      const supabaseAdmin = getSupabaseAdmin();
+      if (supabaseAdmin) {
+        try {
+          const { data: allSupabaseRecords } = await supabaseAdmin
+            .from('applications')
+            .select('id, status, is_underage');
+          if (allSupabaseRecords && allSupabaseRecords.length > 0) {
+            allRecordsForStats = allSupabaseRecords as any;
+          }
+        } catch (statsErr: any) {
+          console.error('Error querying stats from Supabase:', statsErr.message);
+        }
+      }
+    }
+
+    if (allRecordsForStats.length === 0 && memoryApplications) {
+      allRecordsForStats = memoryApplications;
+    }
+
     const stats = {
-      total: allRecords.length,
-      pending: allRecords.filter((a) => a.status === 'Pending').length,
-      approved: allRecords.filter((a) => a.status === 'Approved').length,
-      rejected: allRecords.filter((a) => a.status === 'Rejected').length,
-      minors: allRecords.filter((a) => a.is_underage).length,
+      total: allRecordsForStats.length,
+      pending: allRecordsForStats.filter((a) => a.status === 'Pending').length,
+      approved: allRecordsForStats.filter((a) => a.status === 'Approved').length,
+      rejected: allRecordsForStats.filter((a) => a.status === 'Rejected').length,
+      minors: allRecordsForStats.filter((a) => a.is_underage).length,
       isSupabaseActive: isSupabaseConfigured,
     };
 
