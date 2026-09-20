@@ -550,9 +550,11 @@ export default function ApplicationDetailPage() {
                     No 2×2 photo attached
                   </div>
                 )}
-                <span className="text-[11px] text-slate-400 block truncate">
-                  {application.photo_2x2_name || '2x2_photo.jpg'}
-                </span>
+                {application.photo_2x2_url && (
+                  <span className="text-[11px] text-slate-400 block truncate">
+                    {application.photo_2x2_name || '2x2_photo.jpg'}
+                  </span>
+                )}
               </div>
 
               {/* 2. Valid Government ID Preview */}
@@ -603,9 +605,11 @@ export default function ApplicationDetailPage() {
                     No ID document attached
                   </div>
                 )}
-                <span className="text-[11px] text-slate-400 block truncate">
-                  {application.applicant_id_name || 'valid_id.jpg'}
-                </span>
+                {application.applicant_id_url && (
+                  <span className="text-[11px] text-slate-400 block truncate">
+                    {application.applicant_id_name || 'valid_id.jpg'}
+                  </span>
+                )}
               </div>
 
               {/* 3. Beneficiary ID (if attached) */}

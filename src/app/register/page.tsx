@@ -156,11 +156,7 @@ export default function RegisterPage() {
       if (!formData.beneficiaryContact.trim()) errs.beneficiaryContact = 'Beneficiary contact number is required';
       if (!formData.beneficiaryAddress.trim()) errs.beneficiaryAddress = 'Beneficiary address is required';
     } else if (stepNumber === 3) {
-      if (!formData.photo2x2) errs.photo2x2 = 'Recent 2x2 ID photo is required';
-      if (!formData.applicantId) errs.applicantId = 'Valid Government or Student ID is required';
-      if (formData.isUnderage && !formData.guardianId) {
-        errs.guardianId = 'Parent/Guardian valid ID is required for minor applicants';
-      }
+      // Document attachments are optional — applicants may upload now or submit later to the ASFI office
     } else if (stepNumber === 4) {
       if (!formData.consentDataPrivacy) errs.consentDataPrivacy = 'Consent is required';
       if (!formData.agreeTermsAndConditions) errs.agreeTermsAndConditions = 'Agreement to Sadaqah policy is required';

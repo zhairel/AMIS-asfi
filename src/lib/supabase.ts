@@ -8,7 +8,11 @@ export const isSupabaseConfigured = Boolean(supabaseUrl && (supabaseAnonKey || s
 
 // Public client for browser / client components
 export const supabase: SupabaseClient | null = isSupabaseConfigured
-  ? createClient(supabaseUrl, supabaseAnonKey || supabaseServiceRoleKey)
+  ? createClient(supabaseUrl, supabaseAnonKey || supabaseServiceRoleKey, {
+      global: {
+        fetch: (url, options = {}) => fetch(url, { ...options, cache: 'no-store' }),
+      },
+    })
   : null;
 
 // Server client with Service Role Key for backend administrative operations
@@ -23,6 +27,9 @@ export const getSupabaseAdmin = (): SupabaseClient | null => {
     auth: {
       persistSession: false,
       autoRefreshToken: false,
+    },
+    global: {
+      fetch: (url, options = {}) => fetch(url, { ...options, cache: 'no-store' }),
     },
   });
 };
