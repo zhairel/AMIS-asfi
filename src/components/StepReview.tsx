@@ -242,16 +242,16 @@ export default function StepReview({ data, goToStep }: StepReviewProps) {
             </button>
           </div>
 
-          <div className="p-6 grid grid-cols-2 sm:grid-cols-4 gap-5">
+          <div className="p-6 flex flex-wrap gap-6 items-start">
             {/* 2x2 Photo */}
             <div className="text-center">
-              <span className="block text-xs font-black text-slate-800 mb-2">2x2 ID Photo</span>
+              <span className="block text-xs font-black text-slate-800 mb-2">2×2 ID Photo</span>
               {data.photo2x2 ? (
-                <div className="w-28 h-28 mx-auto rounded-2xl overflow-hidden border-4 border-emerald-600 shadow-md">
-                  <img src={data.photo2x2} alt="2x2 preview" className="w-full h-full object-cover" />
+                <div className="w-32 h-32 mx-auto rounded-2xl overflow-hidden border-2 border-emerald-600 bg-slate-50 shadow-sm p-1 flex items-center justify-center">
+                  <img src={data.photo2x2} alt="2x2 preview" className="w-full h-full object-contain rounded-xl" />
                 </div>
               ) : (
-                <div className="w-28 h-28 mx-auto rounded-2xl border-2 border-dashed border-rose-400 bg-rose-50 flex items-center justify-center text-rose-600 text-xs font-bold">
+                <div className="w-32 h-32 mx-auto rounded-2xl border-2 border-dashed border-rose-400 bg-rose-50 flex items-center justify-center text-rose-600 text-xs font-bold">
                   Missing
                 </div>
               )}
@@ -263,11 +263,11 @@ export default function StepReview({ data, goToStep }: StepReviewProps) {
                 Valid ID ({data.applicantIdType?.split(' ')[0] || 'ID'})
               </span>
               {data.applicantId ? (
-                <div className="w-28 h-28 mx-auto rounded-2xl overflow-hidden border-4 border-emerald-600 shadow-md">
-                  <img src={data.applicantId} alt="ID preview" className="w-full h-full object-cover" />
+                <div className="w-44 h-32 mx-auto rounded-2xl overflow-hidden border-2 border-emerald-600 bg-slate-50 shadow-sm p-1 flex items-center justify-center">
+                  <img src={data.applicantId} alt="ID preview" className="w-full h-full object-contain rounded-xl" />
                 </div>
               ) : (
-                <div className="w-28 h-28 mx-auto rounded-2xl border-2 border-dashed border-rose-400 bg-rose-50 flex items-center justify-center text-rose-600 text-xs font-bold">
+                <div className="w-44 h-32 mx-auto rounded-2xl border-2 border-dashed border-rose-400 bg-rose-50 flex items-center justify-center text-rose-600 text-xs font-bold">
                   Missing
                 </div>
               )}
@@ -277,8 +277,8 @@ export default function StepReview({ data, goToStep }: StepReviewProps) {
             {data.beneficiaryId && (
               <div className="text-center">
                 <span className="block text-xs font-black text-slate-800 mb-2">Beneficiary ID</span>
-                <div className="w-28 h-28 mx-auto rounded-2xl overflow-hidden border-2 border-slate-400 shadow-sm">
-                  <img src={data.beneficiaryId} alt="Beneficiary ID" className="w-full h-full object-cover" />
+                <div className="w-44 h-32 mx-auto rounded-2xl overflow-hidden border-2 border-slate-300 bg-slate-50 shadow-sm p-1 flex items-center justify-center">
+                  <img src={data.beneficiaryId} alt="Beneficiary ID" className="w-full h-full object-contain rounded-xl" />
                 </div>
               </div>
             )}
@@ -287,8 +287,8 @@ export default function StepReview({ data, goToStep }: StepReviewProps) {
             {data.isUnderage && data.guardianId && (
               <div className="text-center">
                 <span className="block text-xs font-black text-amber-950 mb-2">Guardian ID</span>
-                <div className="w-28 h-28 mx-auto rounded-2xl overflow-hidden border-4 border-amber-500 shadow-md">
-                  <img src={data.guardianId} alt="Guardian ID" className="w-full h-full object-cover" />
+                <div className="w-44 h-32 mx-auto rounded-2xl overflow-hidden border-2 border-amber-500 bg-slate-50 shadow-sm p-1 flex items-center justify-center">
+                  <img src={data.guardianId} alt="Guardian ID" className="w-full h-full object-contain rounded-xl" />
                 </div>
               </div>
             )}
