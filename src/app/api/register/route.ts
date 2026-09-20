@@ -37,7 +37,6 @@ export async function POST(req: NextRequest) {
     const now = new Date().toISOString();
 
     const applicationRecord: DatabaseApplication = {
-      id: `app_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
       reference_number: referenceNumber,
       status: 'Pending',
       first_name: body.firstName.trim().toUpperCase(),
@@ -94,19 +93,25 @@ export async function POST(req: NextRequest) {
       const supabaseAdmin = getSupabaseAdmin();
       if (supabaseAdmin) {
         try {
-          const { error: dbError } = await supabaseAdmin
+          const { data: insertedData, error: dbError } = await supabaseAdmin
             .from('applications')
-            .insert([applicationRecord]);
+            .insert([applicationRecord])
+            .select();
 
           if (dbError) {
             console.error('Supabase insert error (falling back to memory):', dbError.message);
-          } else {
-            console.log('Successfully saved application to Supabase:', referenceNumber);
+          } else if (insertedData && insertedData[0]) {
+            applicationRecord.id = insertedData[0].id;
+            console.log('Successfully saved application to Supabase with ID:', insertedData[0].id);
           }
         } catch (supabaseErr: any) {
           console.error('Supabase connection error:', supabaseErr.message);
         }
       }
+    }
+
+    if (!applicationRecord.id) {
+      applicationRecord.id = `app_${Date.now()}`;
     }
 
     // 2. Always persist in memoryApplications so admin dashboard can immediately read it

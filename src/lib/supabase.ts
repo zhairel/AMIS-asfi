@@ -28,7 +28,7 @@ export const getSupabaseAdmin = (): SupabaseClient | null => {
 };
 
 export interface DatabaseApplication {
-  id: string;
+  id?: string;
   reference_number: string;
   status: 'Pending' | 'Approved' | 'Under Review' | 'Rejected';
   first_name: string;

@@ -534,7 +534,7 @@ export default function AdminDashboardPage() {
                 <div className="flex items-center gap-2">
                   <button
                     disabled={actionLoading || selectedApp.status === 'Approved'}
-                    onClick={() => handleUpdateStatus(selectedApp.id, 'Approved')}
+                    onClick={() => handleUpdateStatus(selectedApp.id || selectedApp.reference_number, 'Approved')}
                     className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-800 hover:bg-emerald-700 disabled:opacity-50 text-white font-extrabold text-xs shadow-sm transition active:scale-95"
                   >
                     <CheckCircle2 className="w-4 h-4" /> Approve Application
@@ -542,7 +542,7 @@ export default function AdminDashboardPage() {
 
                   <button
                     disabled={actionLoading || selectedApp.status === 'Rejected'}
-                    onClick={() => handleUpdateStatus(selectedApp.id, 'Rejected')}
+                    onClick={() => handleUpdateStatus(selectedApp.id || selectedApp.reference_number, 'Rejected')}
                     className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300 disabled:opacity-50 font-bold text-xs transition active:scale-95"
                   >
                     <XCircle className="w-4 h-4" /> Reject
@@ -550,7 +550,7 @@ export default function AdminDashboardPage() {
 
                   <button
                     disabled={actionLoading || selectedApp.status === 'Pending'}
-                    onClick={() => handleUpdateStatus(selectedApp.id, 'Pending')}
+                    onClick={() => handleUpdateStatus(selectedApp.id || selectedApp.reference_number, 'Pending')}
                     className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 disabled:opacity-50 font-bold text-xs transition"
                   >
                     Reset to Pending
