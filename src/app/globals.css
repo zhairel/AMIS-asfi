@@ -65,24 +65,66 @@ textarea {
   background: #64748b;
 }
 
-/* Print optimizations for Application Summary Receipt */
+/* Print optimizations & Official 2-Page ASFI Membership Form Template */
 @media print {
-  body {
-    background: white !important;
-    color: black !important;
+  @page {
+    size: A4 portrait;
+    margin: 0;
   }
 
-  .no-print {
+  html, body {
+    background: white !important;
+    color: #0f172a !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .no-print,
+  header,
+  footer,
+  nav,
+  button,
+  .admin-web-ui {
     display: none !important;
   }
 
-  .print-only {
+  main {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .print-only,
+  .official-print-document {
     display: block !important;
   }
 
-  .print-card {
-    box-shadow: none !important;
-    border: 1px solid #cbd5e1 !important;
-    page-break-inside: avoid;
+  .official-page {
+    width: 210mm !important;
+    min-height: 297mm !important;
+    height: 297mm !important;
+    max-height: 297mm !important;
+    padding: 12mm 14mm 10mm 14mm !important;
+    margin: 0 auto !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+    background: white !important;
+    overflow: hidden !important;
+  }
+
+  .official-page:last-child {
+    page-break-after: auto !important;
+    break-after: auto !important;
+  }
+}
+
+@media screen {
+  .official-print-document {
+    display: none;
   }
 }

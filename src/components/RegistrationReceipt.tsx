@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { FormData } from '@/types/form';
+import OfficialMembershipPrintForm from '@/components/OfficialMembershipPrintForm';
 import QRCode from 'qrcode';
 import confetti from 'canvas-confetti';
 import {
@@ -110,8 +111,8 @@ export default function RegistrationReceipt({ referenceNumber, data, onReset }: 
         </div>
       </div>
 
-      {/* Official Printable Application Summary Card */}
-      <div className="print-card bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden p-6 sm:p-8 space-y-6">
+      {/* Official Printable Application Summary Card (Screen display only) */}
+      <div className="no-print admin-web-ui bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden p-6 sm:p-8 space-y-6">
         {/* Document Seal Header */}
         <div className="border-b-2 border-emerald-800 pb-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
           <div className="flex items-center gap-4">
@@ -380,6 +381,43 @@ export default function RegistrationReceipt({ referenceNumber, data, onReset }: 
           <span>Please keep a copy of this slip or take a screenshot for your records.</span>
         </div>
       </div>
+
+      {/* Official 2-Page Printed Form Document (Rendered only on Print) */}
+      <OfficialMembershipPrintForm
+        data={{
+          reference_number: referenceNumber,
+          first_name: data.firstName,
+          middle_name: data.middleName,
+          last_name: data.lastName,
+          suffix: data.suffix,
+          birth_date: data.birthDate,
+          place_of_birth: data.placeOfBirth,
+          gender: data.gender,
+          civil_status: data.civilStatus,
+          citizenship: data.citizenship,
+          religion: data.religion,
+          spouse_name: data.spouseName,
+          contact_number: data.contactNumber,
+          email: data.email,
+          present_address: data.presentAddress,
+          occupation: data.occupation,
+          affiliation_name: data.companySchoolAffiliation,
+          affiliation_address: data.affiliationAddress,
+          photo_2x2_url: data.photo2x2,
+          date_applied: data.dateApplied,
+          beneficiary_first_name: data.beneficiaryFirstName,
+          beneficiary_middle_name: data.beneficiaryMiddleName,
+          beneficiary_last_name: data.beneficiaryLastName,
+          beneficiary_suffix: data.beneficiarySuffix,
+          beneficiary_relationship: data.beneficiaryRelationship,
+          beneficiary_birth_date: data.beneficiaryBirthDate,
+          beneficiary_place_of_birth: data.beneficiaryPlaceOfBirth,
+          beneficiary_address: data.beneficiaryAddress,
+          beneficiary_contact: data.beneficiaryContact,
+          beneficiary_id_url: data.beneficiaryId,
+          printed_name: data.printedName,
+        }}
+      />
     </div>
   );
 }
