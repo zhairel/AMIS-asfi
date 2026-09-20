@@ -49,9 +49,9 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-8 sm:p-10 border-4 border-emerald-800">
         {/* Logo & Seal */}
         <div className="flex flex-col items-center text-center mb-8">
-          <div className="relative w-24 h-24 mb-3 rounded-full overflow-hidden border-4 border-emerald-800 shadow-md">
+          <div className="relative w-24 h-24 mb-3 rounded-full overflow-hidden ring-4 ring-amber-400 bg-white shadow-md">
             <Image
-              src="/logo.png"
+              src="/asfi-logo.png"
               alt="ASFI Seal"
               fill
               className="object-contain p-1"
@@ -93,9 +93,6 @@ export default function AdminLoginPage() {
                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
             </div>
-            <p className="text-[11px] text-slate-500 mt-1.5 font-medium">
-              Default system passcode: <span className="font-mono font-bold text-emerald-800">asfi2026</span>
-            </p>
           </div>
 
           {error && (
