@@ -122,20 +122,20 @@ export default function HomePage() {
             {/* Primary Register Button */}
             <Link
               href="/register"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-emerald-950 font-black text-base shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200 ring-4 ring-amber-400/30 group"
+              className="w-full sm:w-auto min-h-[56px] inline-flex items-center justify-center gap-3 px-8 sm:px-10 py-4 rounded-2xl bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-emerald-950 font-black text-base sm:text-lg shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200 ring-4 ring-amber-400/40 group"
             >
-              <FileCheck className="w-5 h-5 text-emerald-950 group-hover:rotate-6 transition-transform" />
-              <span>Register as Member Now</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <FileCheck className="w-6 h-6 text-emerald-950 group-hover:rotate-6 transition-transform flex-shrink-0" />
+              <span>Mag-rehistro bilang Miyembro (Register Now)</span>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform flex-shrink-0 stroke-[3]" />
             </Link>
 
             {/* Track Application Button */}
             <a
               href="#track-status"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-emerald-900/80 hover:bg-emerald-800 text-emerald-100 font-bold text-sm border border-emerald-600/50 shadow-md transition active:scale-95"
+              className="w-full sm:w-auto min-h-[56px] inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-2xl bg-emerald-900/90 hover:bg-emerald-800 text-emerald-100 font-extrabold text-sm sm:text-base border-2 border-emerald-600/60 shadow-lg transition active:scale-95"
             >
-              <Search className="w-4 h-4 text-amber-300" />
-              <span>Track Existing Application</span>
+              <Search className="w-5 h-5 text-amber-300" />
+              <span>Subaybayan ang Aplikasyon (Track Status)</span>
             </a>
           </div>
 

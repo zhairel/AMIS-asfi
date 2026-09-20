@@ -25,84 +25,90 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
   };
 
   const relationships = [
-    'Spouse',
-    'Child / Daughter / Son',
-    'Parent (Mother / Father)',
-    'Sibling (Brother / Sister)',
-    'Legal Ward / Dependent',
-    'Other Relative',
+    { value: 'Spouse', label: 'Asawa (Spouse)' },
+    { value: 'Child / Daughter / Son', label: 'Anak (Child / Son / Daughter)' },
+    { value: 'Parent (Mother / Father)', label: 'Magulang - Nanay / Tatay (Parent)' },
+    { value: 'Sibling (Brother / Sister)', label: 'Kapatid (Brother / Sister)' },
+    { value: 'Legal Ward / Dependent', label: 'Legal na Inaalagaan (Dependent / Ward)' },
+    { value: 'Other Relative', label: 'Iba pang Kamag-anak (Other Relative)' },
   ];
 
   return (
     <div className="space-y-8 uppercase-inputs">
       {/* Section Title */}
-      <div className="border-b border-slate-200 pb-4">
-        <div className="flex items-center gap-2 text-emerald-800 font-bold text-lg">
-          <Users className="w-5 h-5 text-emerald-700" />
-          <h2>Designated Beneficiary Information</h2>
+      <div className="border-b-2 border-emerald-800/20 pb-4">
+        <div className="flex items-center gap-2.5 text-emerald-900 font-extrabold text-xl sm:text-2xl">
+          <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center flex-shrink-0">
+            <Users className="w-5 h-5" />
+          </div>
+          <h2>Designated Beneficiary / Impormasyon ng Benepisyaryo</h2>
         </div>
-        <p className="text-slate-500 text-sm mt-1">
-          In accordance with the ASFI Mutual Assistance Policy, please nominate your legal beneficiary who shall receive stipulated mutual assistance benefits on your behalf.
+        <p className="text-slate-700 text-sm sm:text-base mt-1.5 font-medium leading-relaxed">
+          Ang itinalagang benepisyaryo ang siyang legal na tatanggap ng benepisyo at tulong sa ilalim ng mutual assistance ng ASFI.
         </p>
       </div>
 
       {/* Beneficiary Full Name */}
       <div>
-        <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-          Beneficiary Full Name <span className="text-rose-500">*</span>
+        <label className="block text-sm sm:text-base font-extrabold text-slate-900 mb-2">
+          Buong Pangalan ng Benepisyaryo / Beneficiary Name <span className="text-rose-600 font-black text-lg">*</span>
         </label>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3.5">
           <div>
+            <span className="block text-xs font-bold text-slate-600 mb-1">First Name (Pangalan) *</span>
             <input
               type="text"
-              placeholder="First Name *"
+              placeholder="Hal. Maria"
               value={data.beneficiaryFirstName}
               onChange={(e) => updateData({ beneficiaryFirstName: e.target.value })}
-              className={`w-full px-3.5 py-2.5 rounded-lg border ${
-                errors.beneficiaryFirstName ? 'border-rose-500 bg-rose-50/50' : 'border-slate-300'
-              } text-slate-800 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-600 outline-none transition`}
+              className={`w-full min-h-[50px] px-4 py-3 rounded-xl border-2 ${
+                errors.beneficiaryFirstName ? 'border-rose-500 bg-rose-50/70' : 'border-slate-300 bg-white'
+              } text-slate-900 text-base font-semibold focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none transition`}
             />
             {errors.beneficiaryFirstName && (
-              <p className="text-rose-500 text-xs mt-1 flex items-center gap-1">
-                <AlertCircle className="w-3 h-3" /> {errors.beneficiaryFirstName}
+              <p className="text-rose-600 font-bold text-xs mt-1.5 flex items-center gap-1">
+                <AlertCircle className="w-3.5 h-3.5" /> {errors.beneficiaryFirstName}
               </p>
             )}
           </div>
 
           <div>
+            <span className="block text-xs font-bold text-slate-600 mb-1">Middle Name (Gitnang Pangalan)</span>
             <input
               type="text"
-              placeholder="Middle Name (or N/A)"
+              placeholder="Hal. Santos (o N/A)"
               value={data.beneficiaryMiddleName}
               onChange={(e) => updateData({ beneficiaryMiddleName: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-slate-800 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-600 outline-none transition"
+              className="w-full min-h-[50px] px-4 py-3 rounded-xl border-2 border-slate-300 bg-white text-slate-900 text-base font-semibold focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none transition"
             />
           </div>
 
           <div>
+            <span className="block text-xs font-bold text-slate-600 mb-1">Last / Family Name (Apelyido) *</span>
             <input
               type="text"
-              placeholder="Family / Last Name *"
+              placeholder="Hal. Dela Cruz"
               value={data.beneficiaryLastName}
               onChange={(e) => updateData({ beneficiaryLastName: e.target.value })}
-              className={`w-full px-3.5 py-2.5 rounded-lg border ${
-                errors.beneficiaryLastName ? 'border-rose-500 bg-rose-50/50' : 'border-slate-300'
-              } text-slate-800 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-600 outline-none transition`}
+              className={`w-full min-h-[50px] px-4 py-3 rounded-xl border-2 ${
+                errors.beneficiaryLastName ? 'border-rose-500 bg-rose-50/70' : 'border-slate-300 bg-white'
+              } text-slate-900 text-base font-semibold focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none transition`}
             />
             {errors.beneficiaryLastName && (
-              <p className="text-rose-500 text-xs mt-1 flex items-center gap-1">
-                <AlertCircle className="w-3 h-3" /> {errors.beneficiaryLastName}
+              <p className="text-rose-600 font-bold text-xs mt-1.5 flex items-center gap-1">
+                <AlertCircle className="w-3.5 h-3.5" /> {errors.beneficiaryLastName}
               </p>
             )}
           </div>
 
           <div>
+            <span className="block text-xs font-bold text-slate-600 mb-1">Suffix (Hal. Jr., III)</span>
             <input
               type="text"
-              placeholder="Suffix (e.g. Jr., III)"
+              placeholder="Hal. Jr. (kung meron)"
               value={data.beneficiarySuffix}
               onChange={(e) => updateData({ beneficiarySuffix: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-slate-800 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-600 outline-none transition"
+              className="w-full min-h-[50px] px-4 py-3 rounded-xl border-2 border-slate-300 bg-white text-slate-900 text-base font-semibold focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none transition"
             />
           </div>
         </div>
@@ -111,46 +117,46 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
       {/* Relationship & Contact */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-            Relationship to Applicant <span className="text-rose-500">*</span>
+          <label className="block text-sm sm:text-base font-extrabold text-slate-900 mb-1.5">
+            Relasyon sa Aplikante / Relationship <span className="text-rose-600 font-black">*</span>
           </label>
           <select
             value={data.beneficiaryRelationship}
             onChange={(e) => updateData({ beneficiaryRelationship: e.target.value })}
-            className={`w-full px-3.5 py-2.5 rounded-lg border ${
-              errors.beneficiaryRelationship ? 'border-rose-500 bg-rose-50/50' : 'border-slate-300'
-            } text-slate-800 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-600 outline-none transition bg-white`}
+            className={`w-full min-h-[50px] px-4 py-3 rounded-xl border-2 ${
+              errors.beneficiaryRelationship ? 'border-rose-500 bg-rose-50/70' : 'border-slate-300'
+            } text-slate-900 text-base font-semibold focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none transition bg-white`}
           >
-            <option value="">Select Relationship</option>
+            <option value="">Piliin ang Relasyon</option>
             {relationships.map((rel) => (
-              <option key={rel} value={rel}>
-                {rel}
+              <option key={rel.value} value={rel.value}>
+                {rel.label}
               </option>
             ))}
           </select>
           {errors.beneficiaryRelationship && (
-            <p className="text-rose-500 text-xs mt-1 flex items-center gap-1">
-              <AlertCircle className="w-3 h-3" /> {errors.beneficiaryRelationship}
+            <p className="text-rose-600 font-bold text-xs mt-1.5 flex items-center gap-1">
+              <AlertCircle className="w-3.5 h-3.5" /> {errors.beneficiaryRelationship}
             </p>
           )}
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-            Beneficiary Contact Number <span className="text-rose-500">*</span>
+          <label className="block text-sm sm:text-base font-extrabold text-slate-900 mb-1.5">
+            Numero ng Telepono / Cellphone <span className="text-rose-600 font-black">*</span>
           </label>
           <input
             type="tel"
             placeholder="09XX XXX XXXX"
             value={data.beneficiaryContact}
             onChange={(e) => updateData({ beneficiaryContact: e.target.value })}
-            className={`w-full px-3.5 py-2.5 rounded-lg border ${
-              errors.beneficiaryContact ? 'border-rose-500 bg-rose-50/50' : 'border-slate-300'
-            } text-slate-800 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-600 outline-none transition keep-case`}
+            className={`w-full min-h-[50px] px-4 py-3 rounded-xl border-2 ${
+              errors.beneficiaryContact ? 'border-rose-500 bg-rose-50/70' : 'border-slate-300'
+            } text-slate-900 text-base font-semibold focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none transition keep-case`}
           />
           {errors.beneficiaryContact && (
-            <p className="text-rose-500 text-xs mt-1 flex items-center gap-1">
-              <AlertCircle className="w-3 h-3" /> {errors.beneficiaryContact}
+            <p className="text-rose-600 font-bold text-xs mt-1.5 flex items-center gap-1">
+              <AlertCircle className="w-3.5 h-3.5" /> {errors.beneficiaryContact}
             </p>
           )}
         </div>
@@ -159,53 +165,53 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
       {/* Date of Birth & Place of Birth */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-            Date of Birth
+          <label className="block text-sm font-extrabold text-slate-900 mb-1.5">
+            Kapanganakan ng Benepisyaryo / Date of Birth
           </label>
           <input
             type="date"
             value={data.beneficiaryBirthDate}
             onChange={(e) => updateData({ beneficiaryBirthDate: e.target.value })}
             max={new Date().toISOString().split('T')[0]}
-            className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-slate-800 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-600 outline-none transition"
+            className="w-full min-h-[50px] px-4 py-3 rounded-xl border-2 border-slate-300 bg-white text-slate-900 text-base font-semibold focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none transition"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-            Place of Birth
+          <label className="block text-sm font-extrabold text-slate-900 mb-1.5">
+            Lugar ng Kapanganakan / Place of Birth
           </label>
           <input
             type="text"
-            placeholder="e.g. Davao City"
+            placeholder="Hal. Davao City"
             value={data.beneficiaryPlaceOfBirth}
             onChange={(e) => updateData({ beneficiaryPlaceOfBirth: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-slate-800 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-600 outline-none transition"
+            className="w-full min-h-[50px] px-4 py-3 rounded-xl border-2 border-slate-300 bg-white text-slate-900 text-base font-semibold focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none transition"
           />
         </div>
       </div>
 
       {/* Present Address with Copy Action */}
       <div>
-        <div className="flex items-center justify-between mb-2">
-          <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-            Beneficiary Present Address <span className="text-rose-500">*</span>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+          <label className="block text-sm sm:text-base font-extrabold text-slate-900">
+            Tirahan ng Benepisyaryo / Address <span className="text-rose-600 font-black">*</span>
           </label>
           {data.presentAddress && (
             <button
               type="button"
               onClick={handleCopyAddress}
-              className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 hover:text-emerald-900 bg-emerald-50 hover:bg-emerald-100 px-2.5 py-1 rounded-md transition"
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-emerald-800 bg-emerald-100 hover:bg-emerald-200 px-3.5 py-2 rounded-xl transition border border-emerald-300 active:scale-95"
             >
               {data.sameAddressAsApplicant ? (
                 <>
-                  <Check className="w-3.5 h-3.5 text-emerald-700" />
-                  <span>Same as applicant</span>
+                  <Check className="w-4 h-4 text-emerald-800 stroke-[3]" />
+                  <span>Kapareho ng tirahan ng aplikante</span>
                 </>
               ) : (
                 <>
-                  <Copy className="w-3.5 h-3.5" />
-                  <span>Same as applicant address</span>
+                  <Copy className="w-4 h-4" />
+                  <span>Kopyahin ang tirahan ng aplikante</span>
                 </>
               )}
             </button>
@@ -213,7 +219,7 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
         </div>
         <textarea
           rows={2}
-          placeholder="House/Building No., Street, Barangay, City/Municipality, Province"
+          placeholder="House No., Street, Barangay, City, Province"
           value={data.beneficiaryAddress}
           onChange={(e) =>
             updateData({
@@ -221,13 +227,13 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
               sameAddressAsApplicant: e.target.value === data.presentAddress,
             })
           }
-          className={`w-full px-3.5 py-2.5 rounded-lg border ${
-            errors.beneficiaryAddress ? 'border-rose-500 bg-rose-50/50' : 'border-slate-300'
-          } text-slate-800 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-600 outline-none transition`}
+          className={`w-full min-h-[70px] px-4 py-3 rounded-xl border-2 ${
+            errors.beneficiaryAddress ? 'border-rose-500 bg-rose-50/70' : 'border-slate-300 bg-white'
+          } text-slate-900 text-base font-semibold focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none transition`}
         />
         {errors.beneficiaryAddress && (
-          <p className="text-rose-500 text-xs mt-1 flex items-center gap-1">
-            <AlertCircle className="w-3 h-3" /> {errors.beneficiaryAddress}
+          <p className="text-rose-600 font-bold text-xs mt-1.5 flex items-center gap-1">
+            <AlertCircle className="w-3.5 h-3.5" /> {errors.beneficiaryAddress}
           </p>
         )}
       </div>

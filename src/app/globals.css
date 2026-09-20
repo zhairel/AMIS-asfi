@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Amiri:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,6 +11,7 @@
 }
 
 body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
       to bottom,
@@ -17,13 +20,23 @@ body {
     );
   min-height: 100vh;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Islamic geometric background pattern subtle overlay */
-.islamic-pattern {
-  background-color: #032b21;
-  background-image: radial-gradient(rgba(217, 119, 6, 0.15) 1px, transparent 0);
-  background-size: 24px 24px;
+/* Accessibility: Ensure minimum comfortable touch targets and legible inputs for seniors and students */
+input, select, textarea, button {
+  font-family: inherit;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+select,
+textarea {
+  font-size: 16px !important; /* Prevents auto-zoom on iOS and provides large, clear text for elderly */
+  line-height: 1.5 !important;
 }
 
 /* Uppercase name and address inputs per official Philippine record standards */
@@ -35,6 +48,23 @@ body {
 .uppercase-inputs input[type="text"]::placeholder,
 .uppercase-inputs textarea::placeholder {
   text-transform: none;
+  color: #64748b !important; /* High contrast placeholder */
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
 }
 
 /* Print optimizations for Application Summary Receipt */
