@@ -16,10 +16,16 @@ export default function Header() {
         <div className="flex flex-col sm:flex-row items-center gap-5 sm:gap-6 text-center sm:text-left">
           {/* Logo */}
           <div className="relative flex-shrink-0 group">
-            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-white/95 p-2 shadow-2xl ring-4 ring-amber-400/40 flex items-center justify-center transition-transform group-hover:scale-105 duration-300">
+            <div
+              className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-white/95 p-2 shadow-2xl ring-4 ring-amber-400/40 flex items-center justify-center transition-transform group-hover:scale-105 duration-300"
+              style={{ width: '96px', height: '96px' }}
+            >
               <img
                 src="/asfi-logo.png"
                 alt="AMIS Sadaqah Family Incorporated Logo"
+                width={96}
+                height={96}
+                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                 className="w-full h-full object-contain"
               />
             </div>

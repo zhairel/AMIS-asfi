@@ -77,10 +77,16 @@ export default function HomePage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 relative z-10 text-center flex flex-col items-center">
           {/* ASFI Seal */}
           <div className="relative group mb-6">
-            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl bg-white p-3 shadow-2xl ring-4 ring-amber-400/40 flex items-center justify-center transition-transform group-hover:scale-105 duration-300">
+            <div
+              className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl bg-white p-3 shadow-2xl ring-4 ring-amber-400/40 flex items-center justify-center transition-transform group-hover:scale-105 duration-300"
+              style={{ width: '128px', height: '128px' }}
+            >
               <img
                 src="/asfi-logo.png"
                 alt="AMIS Sadaqah Family Incorporated Logo"
+                width={128}
+                height={128}
+                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                 className="w-full h-full object-contain"
               />
             </div>
