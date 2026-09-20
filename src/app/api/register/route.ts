@@ -4,6 +4,50 @@ import { memoryApplications } from '@/lib/storage';
 
 export const dynamic = 'force-dynamic';
 
+async function uploadDocToStorage(
+  supabaseAdmin: any,
+  dataUrl: string | null | undefined,
+  ref: string,
+  docType: string
+): Promise<string | null> {
+  if (!dataUrl || !dataUrl.startsWith('data:')) return dataUrl || null;
+
+  try {
+    const matches = dataUrl.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+    if (!matches) return dataUrl;
+
+    const mimeType = matches[1];
+    let extension = 'jpg';
+    if (mimeType.includes('png')) extension = 'png';
+    else if (mimeType.includes('webp')) extension = 'webp';
+    else if (mimeType.includes('pdf')) extension = 'pdf';
+
+    const buffer = Buffer.from(matches[2], 'base64');
+    const storagePath = `applications/${ref}/${docType}.${extension}`;
+
+    const { error: uploadError } = await supabaseAdmin.storage
+      .from('asfi-documents')
+      .upload(storagePath, buffer, {
+        contentType: mimeType,
+        upsert: true,
+      });
+
+    if (uploadError) {
+      console.warn(`Supabase Storage upload error for ${docType}:`, uploadError.message);
+      return dataUrl;
+    }
+
+    const { data: publicUrlData } = supabaseAdmin.storage
+      .from('asfi-documents')
+      .getPublicUrl(storagePath);
+
+    return publicUrlData.publicUrl;
+  } catch (e: any) {
+    console.warn(`Supabase Storage upload exception for ${docType}:`, e.message);
+    return dataUrl;
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -93,6 +137,40 @@ export async function POST(req: NextRequest) {
       const supabaseAdmin = getSupabaseAdmin();
       if (supabaseAdmin) {
         try {
+          // Upload documents to Supabase Storage bucket 'asfi-documents' to keep DB rows lightweight
+          if (applicationRecord.photo_2x2_url?.startsWith('data:')) {
+            applicationRecord.photo_2x2_url = await uploadDocToStorage(
+              supabaseAdmin,
+              applicationRecord.photo_2x2_url,
+              referenceNumber,
+              'photo_2x2'
+            );
+          }
+          if (applicationRecord.applicant_id_url?.startsWith('data:')) {
+            applicationRecord.applicant_id_url = await uploadDocToStorage(
+              supabaseAdmin,
+              applicationRecord.applicant_id_url,
+              referenceNumber,
+              'applicant_id'
+            );
+          }
+          if (applicationRecord.beneficiary_id_url?.startsWith('data:')) {
+            applicationRecord.beneficiary_id_url = await uploadDocToStorage(
+              supabaseAdmin,
+              applicationRecord.beneficiary_id_url,
+              referenceNumber,
+              'beneficiary_id'
+            );
+          }
+          if (applicationRecord.guardian_id_url?.startsWith('data:')) {
+            applicationRecord.guardian_id_url = await uploadDocToStorage(
+              supabaseAdmin,
+              applicationRecord.guardian_id_url,
+              referenceNumber,
+              'guardian_id'
+            );
+          }
+
           const { data: insertedData, error: dbError } = await supabaseAdmin
             .from('applications')
             .insert([applicationRecord])

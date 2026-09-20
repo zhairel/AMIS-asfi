@@ -4,6 +4,8 @@ import React, { useRef } from 'react';
 import { FormData } from '@/types/form';
 import { FileUp, Camera, Trash2, CheckCircle, AlertCircle } from 'lucide-react';
 
+import { compressImageFile } from '@/lib/imageCompressor';
+
 interface StepDocumentsProps {
   data: FormData;
   updateData: (fields: Partial<FormData>) => void;
@@ -16,7 +18,7 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
   const beneficiaryIdInputRef = useRef<HTMLInputElement>(null);
   const guardianIdInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileUpload = (
+  const handleFileUpload = async (
     e: React.ChangeEvent<HTMLInputElement>,
     fieldKey: keyof FormData,
     nameKey: keyof FormData
@@ -24,20 +26,30 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 5 * 1024 * 1024) {
-      alert('File size exceeds 5MB. Please upload an image under 5MB.');
+    if (file.size > 15 * 1024 * 1024) {
+      alert('File size exceeds 15MB. Please upload a file under 15MB.');
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = (uploadEvent) => {
-      const result = uploadEvent.target?.result as string;
+    try {
+      // Automatically compress images in browser to ~150KB for fast Vercel upload
+      const compressedDataUrl = await compressImageFile(file);
       updateData({
-        [fieldKey]: result,
+        [fieldKey]: compressedDataUrl,
         [nameKey]: file.name,
       });
-    };
-    reader.readAsDataURL(file);
+    } catch (err) {
+      console.error('Image compression failed, using standard reader:', err);
+      const reader = new FileReader();
+      reader.onload = (uploadEvent) => {
+        const result = uploadEvent.target?.result as string;
+        updateData({
+          [fieldKey]: result,
+          [nameKey]: file.name,
+        });
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const idTypes = [
