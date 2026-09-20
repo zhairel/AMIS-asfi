@@ -107,7 +107,7 @@ textarea {
     min-height: 297mm !important;
     height: 297mm !important;
     max-height: 297mm !important;
-    padding: 12mm 14mm 10mm 14mm !important;
+    padding: 0 !important;
     margin: 0 auto !important;
     page-break-after: always !important;
     break-after: page !important;

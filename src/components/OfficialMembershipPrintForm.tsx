@@ -40,13 +40,13 @@ export interface OfficialFormProps {
     // Signature
     printed_name?: string | null;
   };
+  isScreenPreview?: boolean;
 }
 
-export default function OfficialMembershipPrintForm({ data }: OfficialFormProps) {
+export default function OfficialMembershipPrintForm({ data, isScreenPreview = false }: OfficialFormProps) {
   const parseDateDigits = (dateStr?: string | null) => {
     if (!dateStr) return { d1: '', d2: '', m1: '', m2: '', y1: '', y2: '' };
     try {
-      // YYYY-MM-DD
       const parts = dateStr.split('-');
       if (parts.length === 3) {
         const y = parts[0].slice(-2);
@@ -99,566 +99,568 @@ export default function OfficialMembershipPrintForm({ data }: OfficialFormProps)
   };
 
   return (
-    <div className="official-print-document font-sans text-slate-900 leading-tight">
+    <div
+      className={`${
+        isScreenPreview ? 'screen-preview-container flex flex-col items-center gap-8 py-6' : 'official-print-document'
+      } font-sans text-slate-900 leading-tight select-none`}
+    >
       {/* ========================================================
           PAGE 1: PERSONAL INFORMATION
           ======================================================== */}
-      <div className="official-page flex flex-col justify-between">
-        <div>
-          {/* Top Header Grid */}
-          <div className="flex items-start justify-between gap-3 mb-2">
-            {/* Seal Logo */}
-            <div className="w-[85px] h-[85px] flex-shrink-0 flex items-center justify-center">
-              <img
-                src="/asfi-logo.png"
-                alt="ASFI Seal"
-                className="w-full h-full object-contain"
-              />
-            </div>
+      <div
+        className="official-page relative bg-white"
+        style={{
+          width: '210mm',
+          height: '297mm',
+          position: 'relative',
+          overflow: 'hidden',
+          padding: 0,
+          margin: '0 auto',
+          boxShadow: isScreenPreview ? '0 10px 25px -5px rgba(0, 0, 0, 0.3)' : 'none',
+        }}
+      >
+        {/* High-Resolution 300DPI Official Template Image Background */}
+        <img
+          src="/asfi-template-page-1.png"
+          alt="ASFI Membership Form Page 1"
+          className="absolute inset-0 w-full h-full object-fill pointer-events-none"
+          style={{ width: '100%', height: '100%', zIndex: 1 }}
+        />
 
-            {/* Institution Title & Islamic Header */}
-            <div className="flex-1 text-center px-1">
-              <h1 className="text-[17px] font-black uppercase text-slate-900 tracking-tight">
-                AMIS SADAQAH FAMILY INCORPORATED
-              </h1>
-              <p className="text-[11px] font-semibold text-slate-800 mt-0.5">
-                SEC Registration No.: 2026070258874-03
-              </p>
-
-              {/* Quranic Ayah */}
-              <p
-                className="font-arabic text-[14px] text-slate-900 font-bold mt-1 leading-snug"
-                dir="rtl"
-              >
-                وَلْتَكُن مِّنكُمْ أُمَّةٌ يَدْعُونَ إِلَى الْخَيْرِ وَيَأْمُرُونَ بِالْمَعْرُوفِ وَيَنْهَوْنَ عَنِ الْمُنكَرِ ۚ وَأُولَٰئِكَ هُمُ الْمُفْلِحُونَ
-              </p>
-              <p className="text-[9.5px] italic text-slate-700 mt-0.5 leading-tight">
-                “Let there be a group among you who call others to goodness, encourage what is good, and forbid what is evil—it is they who will be successful.” -Surah Āl ʿImrān :104
-              </p>
-            </div>
-
-            {/* 2x2 Photo Box Frame */}
-            <div className="w-[105px] h-[115px] border-[2.5px] border-slate-900 flex-shrink-0 bg-white flex items-center justify-center overflow-hidden">
-              {data.photo_2x2_url ? (
-                <img
-                  src={data.photo_2x2_url}
-                  alt="2x2 Photo"
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="text-center p-2">
-                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wide block">
-                    2×2
-                  </span>
-                  <span className="text-[9px] text-slate-400 block mt-0.5">
-                    ID Photo
-                  </span>
-                </div>
-              )}
-            </div>
+        {/* 2x2 Photo Frame */}
+        {data.photo_2x2_url ? (
+          <div
+            className="absolute overflow-hidden flex items-center justify-center bg-white"
+            style={{
+              top: '14.36%',
+              left: '78.16%',
+              width: '15.07%',
+              height: '10.68%',
+              zIndex: 5,
+            }}
+          >
+            <img
+              src={data.photo_2x2_url}
+              alt="Applicant 2x2"
+              className="w-full h-full object-cover"
+            />
           </div>
-
-          {/* MEMBERSHIP FORM Heading */}
-          <div className="text-center my-1.5">
-            <h2 className="text-[26px] font-black tracking-wider uppercase text-slate-900">
-              MEMBERSHIP FORM
-            </h2>
+        ) : (
+          <div
+            className="absolute flex flex-col items-center justify-center text-slate-400"
+            style={{
+              top: '14.36%',
+              left: '78.16%',
+              width: '15.07%',
+              height: '10.68%',
+              zIndex: 5,
+            }}
+          >
+            <span className="text-[10pt] font-black tracking-widest text-slate-300">2 × 2</span>
+            <span className="text-[8pt] font-bold text-slate-300">PHOTO</span>
           </div>
+        )}
 
-          {/* Date Applied Row */}
-          <div className="flex items-center gap-2 mb-2 text-[12px] font-bold">
-            <span className="text-slate-900 font-extrabold">Date Applied:</span>
-            <span className="min-w-[140px] px-3 py-0.5 border-b border-slate-800 text-slate-900 font-bold">
-              {data.date_applied || new Date().toISOString().split('T')[0]}
-            </span>
-          </div>
-
-          {/* Ribbon Header: PERSONAL INFORMATION */}
-          <div className="bg-[#153e75] text-white py-1.5 px-4 rounded-none mb-3">
-            <h3 className="text-center text-[12px] font-black tracking-[0.25em] uppercase">
-              P E R S O N A L &nbsp; I N F O R M A T I O N
-            </h3>
-          </div>
-
-          {/* Field Grid */}
-          <div className="space-y-2 text-[11px]">
-            {/* Row 1: Name */}
-            <div className="flex items-center gap-2">
-              <span className="w-[110px] font-bold text-slate-900 flex-shrink-0">
-                Name :
-              </span>
-              <div className="flex-1 grid grid-cols-3 gap-2">
-                <div className="flex flex-col">
-                  <div className="bg-[#e1effa] border border-[#b4d4ee] rounded px-2.5 py-1 font-bold text-slate-900 uppercase min-h-[26px] flex items-center">
-                    {data.first_name || ''}
-                  </div>
-                  <span className="text-[9px] text-slate-500 text-center mt-0.5">
-                    First Name
-                  </span>
-                </div>
-                <div className="flex flex-col">
-                  <div className="bg-[#e1effa] border border-[#b4d4ee] rounded px-2.5 py-1 font-bold text-slate-900 uppercase min-h-[26px] flex items-center">
-                    {data.middle_name || ''}
-                  </div>
-                  <span className="text-[9px] text-slate-500 text-center mt-0.5">
-                    Middle Name
-                  </span>
-                </div>
-                <div className="flex flex-col">
-                  <div className="bg-[#e1effa] border border-[#b4d4ee] rounded px-2.5 py-1 font-bold text-slate-900 uppercase min-h-[26px] flex items-center">
-                    {[data.last_name, data.suffix].filter(Boolean).join(' ') || ''}
-                  </div>
-                  <span className="text-[9px] text-slate-500 text-center mt-0.5">
-                    Family Name
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Row 2: Place of Birth & Date of Birth */}
-            <div className="flex items-center gap-2">
-              <div className="flex-1 flex items-center gap-2">
-                <span className="w-[110px] font-bold text-slate-900 flex-shrink-0">
-                  Place Of Birth :
-                </span>
-                <div className="flex-1 bg-[#e1effa] border border-[#b4d4ee] rounded px-2.5 py-1 font-bold text-slate-900 uppercase min-h-[26px] flex items-center">
-                  {data.place_of_birth || ''}
-                </div>
-              </div>
-
-              {/* Date of Birth with DD MM YY boxes */}
-              <div className="flex items-center gap-2 flex-shrink-0">
-                <span className="font-bold text-slate-900">Date Of Birth :</span>
-                <div className="flex items-center gap-1">
-                  <div className="flex flex-col items-center">
-                    <div className="flex gap-0.5">
-                      <span className="w-5 h-6 bg-[#e1effa] border border-[#b4d4ee] rounded-xs font-bold text-center flex items-center justify-center text-xs">
-                        {applicantDob.d1}
-                      </span>
-                      <span className="w-5 h-6 bg-[#e1effa] border border-[#b4d4ee] rounded-xs font-bold text-center flex items-center justify-center text-xs">
-                        {applicantDob.d2}
-                      </span>
-                    </div>
-                    <span className="text-[8px] font-bold text-slate-600 mt-0.5">D &nbsp; D</span>
-                  </div>
-
-                  <div className="flex flex-col items-center ml-1">
-                    <div className="flex gap-0.5">
-                      <span className="w-5 h-6 bg-[#e1effa] border border-[#b4d4ee] rounded-xs font-bold text-center flex items-center justify-center text-xs">
-                        {applicantDob.m1}
-                      </span>
-                      <span className="w-5 h-6 bg-[#e1effa] border border-[#b4d4ee] rounded-xs font-bold text-center flex items-center justify-center text-xs">
-                        {applicantDob.m2}
-                      </span>
-                    </div>
-                    <span className="text-[8px] font-bold text-slate-600 mt-0.5">M &nbsp; M</span>
-                  </div>
-
-                  <div className="flex flex-col items-center ml-1">
-                    <div className="flex gap-0.5">
-                      <span className="w-5 h-6 bg-[#e1effa] border border-[#b4d4ee] rounded-xs font-bold text-center flex items-center justify-center text-xs">
-                        {applicantDob.y1}
-                      </span>
-                      <span className="w-5 h-6 bg-[#e1effa] border border-[#b4d4ee] rounded-xs font-bold text-center flex items-center justify-center text-xs">
-                        {applicantDob.y2}
-                      </span>
-                    </div>
-                    <span className="text-[8px] font-bold text-slate-600 mt-0.5">Y &nbsp; Y</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Row 3: Present Address */}
-            <div className="flex items-center gap-2">
-              <span className="w-[110px] font-bold text-slate-900 flex-shrink-0">
-                Present Address :
-              </span>
-              <div className="flex-1 bg-[#e1effa] border border-[#b4d4ee] rounded px-2.5 py-1 font-bold text-slate-900 uppercase min-h-[26px] flex items-center">
-                {data.present_address || ''}
-              </div>
-            </div>
-
-            {/* Row 4: Civil Status */}
-            <div className="flex items-center gap-2">
-              <span className="w-[110px] font-bold text-slate-900 flex-shrink-0">
-                Civil Status :
-              </span>
-              <div className="flex-1 flex items-center gap-4 py-0.5">
-                {['Single', 'Married', 'Separated', 'Others'].map((status) => {
-                  const checked = isCivilStatus(status);
-                  return (
-                    <div
-                      key={status}
-                      className={`flex items-center gap-1.5 px-3 py-1 rounded border ${
-                        checked
-                          ? 'bg-[#b8ddf8] border-[#153e75] font-black text-[#153e75]'
-                          : 'bg-[#e1effa] border-[#b4d4ee] text-slate-800'
-                      }`}
-                    >
-                      <span className="w-3.5 h-3.5 border border-slate-700 rounded-xs flex items-center justify-center text-[10px] bg-white">
-                        {checked ? '✓' : ''}
-                      </span>
-                      <span className="text-[11px] font-bold">{status}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Row 5: Citizenship & Occupation */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="flex items-center gap-2">
-                <span className="w-[110px] font-bold text-slate-900 flex-shrink-0">
-                  Citizenship :
-                </span>
-                <div className="flex-1 bg-[#e1effa] border border-[#b4d4ee] rounded px-2.5 py-1 font-bold text-slate-900 uppercase min-h-[26px] flex items-center">
-                  {data.citizenship || 'FILIPINO'}
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-slate-900 flex-shrink-0">
-                  Occupation :
-                </span>
-                <div className="flex-1 bg-[#e1effa] border border-[#b4d4ee] rounded px-2.5 py-1 font-bold text-slate-900 uppercase min-h-[26px] flex items-center">
-                  {data.occupation || 'N/A'}
-                </div>
-              </div>
-            </div>
-
-            {/* Row 6: Religion & Spouse's Name */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="flex items-center gap-2">
-                <span className="w-[110px] font-bold text-slate-900 flex-shrink-0">
-                  Religion :
-                </span>
-                <div className="flex-1 bg-[#e1effa] border border-[#b4d4ee] rounded px-2.5 py-1 font-bold text-slate-900 uppercase min-h-[26px] flex items-center">
-                  {data.religion || 'ISLAM'}
-                </div>
-              </div>
-              <div className="flex flex-col">
-                <div className="flex items-center gap-2">
-                  <span className="font-bold text-slate-900 flex-shrink-0">
-                    Spouse&apos;s Name::
-                  </span>
-                  <div className="flex-1 bg-[#e1effa] border border-[#b4d4ee] rounded px-2.5 py-1 font-bold text-slate-900 uppercase min-h-[26px] flex items-center">
-                    {data.spouse_name || 'N/A'}
-                  </div>
-                </div>
-                <span className="text-[8.5px] text-slate-500 text-right pr-1 mt-0.5">
-                  Write N/A if Not Applicable
-                </span>
-              </div>
-            </div>
-
-            {/* Row 7: E-Mail */}
-            <div className="flex items-center gap-2">
-              <span className="w-[110px] font-bold text-slate-900 flex-shrink-0">
-                E-Mail :
-              </span>
-              <div className="flex-1 bg-[#e1effa] border border-[#b4d4ee] rounded px-2.5 py-1 font-bold text-slate-900 min-h-[26px] flex items-center">
-                {data.email || ''}
-              </div>
-            </div>
-
-            {/* Row 8: Contact Number & Gender */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="flex items-center gap-2">
-                <span className="w-[110px] font-bold text-slate-900 flex-shrink-0">
-                  Contact Number :
-                </span>
-                <div className="flex-1 bg-[#e1effa] border border-[#b4d4ee] rounded px-2.5 py-1 font-bold text-slate-900 min-h-[26px] flex items-center">
-                  {data.contact_number || ''}
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="font-bold text-slate-900 flex-shrink-0">
-                  Gender :
-                </span>
-                <div className="flex items-center gap-3">
-                  {['Male', 'Female'].map((g) => {
-                    const checked = isGender(g);
-                    return (
-                      <div
-                        key={g}
-                        className={`flex items-center gap-1.5 px-3 py-1 rounded border ${
-                          checked
-                            ? 'bg-[#b8ddf8] border-[#153e75] font-black text-[#153e75]'
-                            : 'bg-[#e1effa] border-[#b4d4ee] text-slate-800'
-                        }`}
-                      >
-                        <span className="w-3.5 h-3.5 border border-slate-700 rounded-xs flex items-center justify-center text-[10px] bg-white">
-                          {checked ? '✓' : ''}
-                        </span>
-                        <span className="text-[11px] font-bold">{g}</span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-
-            {/* Row 9: Company/School/Organization Affiliation */}
-            <div className="space-y-1 pt-1">
-              <span className="font-bold text-slate-900 block text-[11px]">
-                Company Name/School/Organization Affiliation:
-              </span>
-              <div className="w-full bg-[#e1effa] border border-[#b4d4ee] rounded px-2.5 py-1 font-bold text-slate-900 uppercase min-h-[26px] flex items-center">
-                {data.affiliation_name || 'N/A'}
-              </div>
-            </div>
-
-            {/* Row 10: Address */}
-            <div className="space-y-1">
-              <span className="font-bold text-slate-900 block text-[11px]">
-                Address:
-              </span>
-              <div className="w-full bg-[#e1effa] border border-[#b4d4ee] rounded px-2.5 py-1 font-bold text-slate-900 uppercase min-h-[26px] flex items-center">
-                {data.affiliation_address || 'N/A'}
-              </div>
-            </div>
-          </div>
+        {/* Date Applied */}
+        <div
+          className="absolute flex items-center px-3 font-bold text-slate-900 text-[10.5pt]"
+          style={{
+            top: '23.82%',
+            left: '18.33%',
+            width: '29.57%',
+            height: '1.74%',
+            zIndex: 5,
+          }}
+        >
+          {data.date_applied || new Date().toISOString().split('T')[0]}
         </div>
 
-        {/* Requirements & Qualifications Footer */}
-        <div className="mt-4 pt-3 border-t border-slate-300 text-[10px] text-slate-800 space-y-2">
-          <div>
-            <p className="font-bold text-slate-900">
-              Submit this membership form with the following requirements:
-            </p>
-            <ol className="list-none pl-3 space-y-0.5 mt-0.5 font-medium text-slate-700">
-              <li>1. Any government-issued ID or Student ID (for underage applicants)</li>
-              <li>2. 2x2 photo</li>
-            </ol>
-          </div>
+        {/* Name: First Name */}
+        <div
+          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[11pt] truncate"
+          style={{
+            top: '32.76%',
+            left: '22.44%',
+            width: '23.49%',
+            height: '2.02%',
+            zIndex: 5,
+          }}
+        >
+          {data.first_name}
+        </div>
 
-          <div>
-            <p className="font-bold text-slate-900">Qualifications:</p>
-            <ol className="list-none pl-3 space-y-0.5 mt-0.5 font-medium text-slate-700">
-              <li>
-                1. Applicant must be Filipino. If underage, a parent or guardian must complete and sign the form on their behalf.
-              </li>
-            </ol>
-          </div>
+        {/* Name: Middle Name */}
+        <div
+          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[11pt] truncate"
+          style={{
+            top: '32.76%',
+            left: '46.33%',
+            width: '23.77%',
+            height: '2.02%',
+            zIndex: 5,
+          }}
+        >
+          {data.middle_name || ''}
+        </div>
 
-          {/* Bottom decorative bar */}
-          <div className="w-full h-3 bg-[#bde0fa] rounded-xs mt-3" />
+        {/* Name: Family Name */}
+        <div
+          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[11pt] truncate"
+          style={{
+            top: '32.76%',
+            left: '70.51%',
+            width: '23.37%',
+            height: '2.02%',
+            zIndex: 5,
+          }}
+        >
+          {[data.last_name, data.suffix].filter(Boolean).join(' ')}
+        </div>
+
+        {/* Place of Birth */}
+        <div
+          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[10pt] truncate"
+          style={{
+            top: '36.13%',
+            left: '22.44%',
+            width: '29.49%',
+            height: '1.99%',
+            zIndex: 5,
+          }}
+        >
+          {data.place_of_birth || ''}
+        </div>
+
+        {/* Date of Birth: D1, D2, M1, M2, Y1, Y2 */}
+        <div
+          className="absolute flex items-center justify-center font-black text-slate-900 text-[13pt]"
+          style={{ top: '36.04%', left: '70.95%', width: '3.10%', height: '2.17%', zIndex: 5 }}
+        >
+          {applicantDob.d1}
+        </div>
+        <div
+          className="absolute flex items-center justify-center font-black text-slate-900 text-[13pt]"
+          style={{ top: '36.04%', left: '74.50%', width: '3.10%', height: '2.17%', zIndex: 5 }}
+        >
+          {applicantDob.d2}
+        </div>
+        <div
+          className="absolute flex items-center justify-center font-black text-slate-900 text-[13pt]"
+          style={{ top: '36.04%', left: '79.09%', width: '3.10%', height: '2.17%', zIndex: 5 }}
+        >
+          {applicantDob.m1}
+        </div>
+        <div
+          className="absolute flex items-center justify-center font-black text-slate-900 text-[13pt]"
+          style={{ top: '36.04%', left: '82.63%', width: '3.06%', height: '2.17%', zIndex: 5 }}
+        >
+          {applicantDob.m2}
+        </div>
+        <div
+          className="absolute flex items-center justify-center font-black text-slate-900 text-[13pt]"
+          style={{ top: '36.04%', left: '87.11%', width: '3.10%', height: '2.17%', zIndex: 5 }}
+        >
+          {applicantDob.y1}
+        </div>
+        <div
+          className="absolute flex items-center justify-center font-black text-slate-900 text-[13pt]"
+          style={{ top: '36.04%', left: '90.77%', width: '3.10%', height: '2.17%', zIndex: 5 }}
+        >
+          {applicantDob.y2}
+        </div>
+
+        {/* Present Address */}
+        <div
+          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[9pt] leading-tight overflow-hidden"
+          style={{
+            top: '40.94%',
+            left: '22.44%',
+            width: '71.43%',
+            height: '1.99%',
+            zIndex: 5,
+          }}
+        >
+          {data.present_address || ''}
+        </div>
+
+        {/* Civil Status Checkboxes */}
+        {isCivilStatus('Single') && (
+          <div
+            className="absolute flex items-center justify-center font-black text-slate-900 text-[15pt]"
+            style={{ top: '44.59%', left: '22.44%', width: '3.10%', height: '2.14%', zIndex: 5 }}
+          >
+            ✓
+          </div>
+        )}
+        {isCivilStatus('Married') && (
+          <div
+            className="absolute flex items-center justify-center font-black text-slate-900 text-[15pt]"
+            style={{ top: '44.59%', left: '33.72%', width: '3.10%', height: '2.14%', zIndex: 5 }}
+          >
+            ✓
+          </div>
+        )}
+        {isCivilStatus('Separated') && (
+          <div
+            className="absolute flex items-center justify-center font-black text-slate-900 text-[15pt]"
+            style={{ top: '44.59%', left: '46.13%', width: '3.10%', height: '2.14%', zIndex: 5 }}
+          >
+            ✓
+          </div>
+        )}
+        {(isCivilStatus('Others') || isCivilStatus('Widowed')) && (
+          <>
+            <div
+              className="absolute flex items-center justify-center font-black text-slate-900 text-[15pt]"
+              style={{ top: '44.59%', left: '59.23%', width: '3.10%', height: '2.14%', zIndex: 5 }}
+            >
+              ✓
+            </div>
+            <div
+              className="absolute flex items-center px-2 font-bold text-slate-900 uppercase text-[9pt]"
+              style={{ top: '44.59%', left: '71.07%', width: '22.76%', height: '2.14%', zIndex: 5 }}
+            >
+              {data.civil_status}
+            </div>
+          </>
+        )}
+
+        {/* Citizenship */}
+        <div
+          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[10pt] truncate"
+          style={{
+            top: '47.98%',
+            left: '22.44%',
+            width: '29.61%',
+            height: '2.14%',
+            zIndex: 5,
+          }}
+        >
+          {data.citizenship || 'FILIPINO'}
+        </div>
+
+        {/* Occupation */}
+        <div
+          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[10pt] truncate"
+          style={{
+            top: '47.98%',
+            left: '71.07%',
+            width: '22.76%',
+            height: '2.14%',
+            zIndex: 5,
+          }}
+        >
+          {data.occupation || 'N/A'}
+        </div>
+
+        {/* Religion */}
+        <div
+          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[10pt] truncate"
+          style={{
+            top: '51.37%',
+            left: '22.44%',
+            width: '29.61%',
+            height: '2.14%',
+            zIndex: 5,
+          }}
+        >
+          {data.religion || 'ISLAM'}
+        </div>
+
+        {/* Spouse's Name */}
+        <div
+          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[10pt] truncate"
+          style={{
+            top: '51.37%',
+            left: '71.07%',
+            width: '22.76%',
+            height: '2.14%',
+            zIndex: 5,
+          }}
+        >
+          {data.spouse_name || 'N/A'}
+        </div>
+
+        {/* E-Mail */}
+        <div
+          className="absolute flex items-center px-3 font-bold text-slate-900 text-[10pt] truncate"
+          style={{
+            top: '54.79%',
+            left: '22.44%',
+            width: '71.27%',
+            height: '2.14%',
+            zIndex: 5,
+          }}
+        >
+          {data.email || ''}
+        </div>
+
+        {/* Contact Number */}
+        <div
+          className="absolute flex items-center px-3 font-bold text-slate-900 text-[10pt] truncate"
+          style={{
+            top: '57.81%',
+            left: '22.68%',
+            width: '29.57%',
+            height: '2.14%',
+            zIndex: 5,
+          }}
+        >
+          {data.contact_number || ''}
+        </div>
+
+        {/* Gender: Male / Female */}
+        {isGender('Male') && (
+          <div
+            className="absolute flex items-center justify-center font-black text-slate-900 text-[15pt]"
+            style={{ top: '58.01%', left: '66.60%', width: '3.10%', height: '2.14%', zIndex: 5 }}
+          >
+            ✓
+          </div>
+        )}
+        {isGender('Female') && (
+          <div
+            className="absolute flex items-center justify-center font-black text-slate-900 text-[15pt]"
+            style={{ top: '58.01%', left: '76.79%', width: '3.10%', height: '2.14%', zIndex: 5 }}
+          >
+            ✓
+          </div>
+        )}
+
+        {/* Affiliation Name */}
+        <div
+          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[10pt] truncate"
+          style={{
+            top: '61.68%',
+            left: '47.18%',
+            width: '43.55%',
+            height: '1.74%',
+            zIndex: 5,
+          }}
+        >
+          {data.affiliation_name || 'N/A'}
+        </div>
+
+        {/* Affiliation Address */}
+        <div
+          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[9.5pt] truncate"
+          style={{
+            top: '64.27%',
+            left: '14.95%',
+            width: '71.27%',
+            height: '2.14%',
+            zIndex: 5,
+          }}
+        >
+          {data.affiliation_address || 'N/A'}
         </div>
       </div>
 
       {/* ========================================================
           PAGE 2: DECLARATION & BENEFICIARY INFORMATION
           ======================================================== */}
-      <div className="official-page flex flex-col justify-between">
-        <div>
-          {/* Top Section: Declaration & Right ID Box */}
-          <div className="flex items-start justify-between gap-4 mb-4">
-            {/* Left Declaration Clauses */}
-            <div className="flex-1 space-y-2.5 text-[10px] leading-relaxed text-slate-800">
-              <h2 className="text-[13px] font-black uppercase text-slate-900 tracking-wider">
-                DECLARATION
-              </h2>
+      <div
+        className="official-page relative bg-white"
+        style={{
+          width: '210mm',
+          height: '297mm',
+          position: 'relative',
+          overflow: 'hidden',
+          padding: 0,
+          margin: '0 auto',
+          boxShadow: isScreenPreview ? '0 10px 25px -5px rgba(0, 0, 0, 0.3)' : 'none',
+        }}
+      >
+        {/* High-Resolution 300DPI Official Template Image Background */}
+        <img
+          src="/asfi-template-page-2.png"
+          alt="ASFI Membership Form Page 2"
+          className="absolute inset-0 w-full h-full object-fill pointer-events-none"
+          style={{ width: '100%', height: '100%', zIndex: 1 }}
+        />
 
-              <p className="italic text-justify">
-                I hereby give my consent to the Association to share my personal details, and I attest that all the information I have provided is true and correct to the best of my knowledge.
-              </p>
-
-              <p className="italic text-justify">
-                I understand the terms and conditions of AMIS Sadaqah Family Incorporated, including the requirement to make a monthly Sadaqah contribution of any amount for mutual assistance. I understand that such contribution does not guarantee any return or benefit to the member.
-              </p>
-
-              <p className="italic text-justify">
-                I hereby certify that{' '}
-                <span className="font-bold not-italic border-b border-slate-900 px-2 uppercase text-slate-900">
-                  {beneficiaryFullName || '________________________________________________'}
-                </span>{' '}
-                is my legal beneficiary in the event of my death and shall receive the benefits stipulated on my behalf. I am attaching his/her personal information, photograph, and valid identification card for future use and reference.
-              </p>
-            </div>
-
-            {/* Right Photo Box Frame */}
-            <div className="w-[115px] h-[130px] border-[2.5px] border-slate-900 flex-shrink-0 bg-white flex items-center justify-center overflow-hidden">
-              {data.beneficiary_id_url ? (
-                <img
-                  src={data.beneficiary_id_url}
-                  alt="Beneficiary Attachment"
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="text-center p-2">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide block">
-                    Beneficiary
-                  </span>
-                  <span className="text-[8.5px] text-slate-400 block mt-0.5">
-                    ID / Photo
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Ribbon Header: BENEFICIARY PERSONAL INFORMATION */}
-          <div className="bg-[#153e75] text-white py-1.5 px-4 rounded-none mb-3">
-            <h3 className="text-center text-[12px] font-black tracking-[0.25em] uppercase">
-              B E N E F I C I A R Y &nbsp; P E R S O N A L &nbsp; I N F O R M A T I O N
-            </h3>
-          </div>
-
-          {/* Beneficiary Field Grid */}
-          <div className="space-y-2.5 text-[11px]">
-            {/* Row 1: Name */}
-            <div className="flex items-center gap-2">
-              <span className="w-[110px] font-bold text-slate-900 flex-shrink-0">
-                Name :
-              </span>
-              <div className="flex-1 grid grid-cols-3 gap-2">
-                <div className="flex flex-col">
-                  <div className="bg-[#e1effa] border border-[#b4d4ee] rounded px-2.5 py-1 font-bold text-slate-900 uppercase min-h-[26px] flex items-center">
-                    {data.beneficiary_first_name || ''}
-                  </div>
-                  <span className="text-[9px] text-slate-500 text-center mt-0.5">
-                    First Name
-                  </span>
-                </div>
-                <div className="flex flex-col">
-                  <div className="bg-[#e1effa] border border-[#b4d4ee] rounded px-2.5 py-1 font-bold text-slate-900 uppercase min-h-[26px] flex items-center">
-                    {data.beneficiary_middle_name || ''}
-                  </div>
-                  <span className="text-[9px] text-slate-500 text-center mt-0.5">
-                    Middle Name
-                  </span>
-                </div>
-                <div className="flex flex-col">
-                  <div className="bg-[#e1effa] border border-[#b4d4ee] rounded px-2.5 py-1 font-bold text-slate-900 uppercase min-h-[26px] flex items-center">
-                    {[data.beneficiary_last_name, data.beneficiary_suffix].filter(Boolean).join(' ') || ''}
-                  </div>
-                  <span className="text-[9px] text-slate-500 text-center mt-0.5">
-                    Family Name
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Row 2: Place of Birth & Date of Birth */}
-            <div className="flex items-center gap-2">
-              <div className="flex-1 flex items-center gap-2">
-                <span className="w-[110px] font-bold text-slate-900 flex-shrink-0">
-                  Place Of Birth :
-                </span>
-                <div className="flex-1 bg-[#e1effa] border border-[#b4d4ee] rounded px-2.5 py-1 font-bold text-slate-900 uppercase min-h-[26px] flex items-center">
-                  {data.beneficiary_place_of_birth || ''}
-                </div>
-              </div>
-
-              {/* Date of Birth with DD MM YY boxes */}
-              <div className="flex items-center gap-2 flex-shrink-0">
-                <span className="font-bold text-slate-900">Date Of Birth :</span>
-                <div className="flex items-center gap-1">
-                  <div className="flex flex-col items-center">
-                    <div className="flex gap-0.5">
-                      <span className="w-5 h-6 bg-[#e1effa] border border-[#b4d4ee] rounded-xs font-bold text-center flex items-center justify-center text-xs">
-                        {beneficiaryDob.d1}
-                      </span>
-                      <span className="w-5 h-6 bg-[#e1effa] border border-[#b4d4ee] rounded-xs font-bold text-center flex items-center justify-center text-xs">
-                        {beneficiaryDob.d2}
-                      </span>
-                    </div>
-                    <span className="text-[8px] font-bold text-slate-600 mt-0.5">D &nbsp; D</span>
-                  </div>
-
-                  <div className="flex flex-col items-center ml-1">
-                    <div className="flex gap-0.5">
-                      <span className="w-5 h-6 bg-[#e1effa] border border-[#b4d4ee] rounded-xs font-bold text-center flex items-center justify-center text-xs">
-                        {beneficiaryDob.m1}
-                      </span>
-                      <span className="w-5 h-6 bg-[#e1effa] border border-[#b4d4ee] rounded-xs font-bold text-center flex items-center justify-center text-xs">
-                        {beneficiaryDob.m2}
-                      </span>
-                    </div>
-                    <span className="text-[8px] font-bold text-slate-600 mt-0.5">M &nbsp; M</span>
-                  </div>
-
-                  <div className="flex flex-col items-center ml-1">
-                    <div className="flex gap-0.5">
-                      <span className="w-5 h-6 bg-[#e1effa] border border-[#b4d4ee] rounded-xs font-bold text-center flex items-center justify-center text-xs">
-                        {beneficiaryDob.y1}
-                      </span>
-                      <span className="w-5 h-6 bg-[#e1effa] border border-[#b4d4ee] rounded-xs font-bold text-center flex items-center justify-center text-xs">
-                        {beneficiaryDob.y2}
-                      </span>
-                    </div>
-                    <span className="text-[8px] font-bold text-slate-600 mt-0.5">Y &nbsp; Y</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Row 3: Present Address */}
-            <div className="flex items-center gap-2">
-              <span className="w-[110px] font-bold text-slate-900 flex-shrink-0">
-                Present Address :
-              </span>
-              <div className="flex-1 bg-[#e1effa] border border-[#b4d4ee] rounded px-2.5 py-1 font-bold text-slate-900 uppercase min-h-[26px] flex items-center">
-                {data.beneficiary_address || ''}
-              </div>
-            </div>
-
-            {/* Row 4: Contact # */}
-            <div className="flex items-center gap-2">
-              <span className="w-[110px] font-bold text-slate-900 flex-shrink-0">
-                Contact # :
-              </span>
-              <div className="w-[280px] bg-[#e1effa] border border-[#b4d4ee] rounded px-2.5 py-1 font-bold text-slate-900 min-h-[26px] flex items-center">
-                {data.beneficiary_contact || ''}
-              </div>
-            </div>
-          </div>
+        {/* Beneficiary Name Underline in Declaration */}
+        <div
+          className="absolute flex items-center justify-center font-black text-slate-900 uppercase text-[10.5pt] border-b-2 border-slate-900 px-1"
+          style={{
+            top: '19.94%',
+            left: '24.17%',
+            width: '32.23%',
+            height: '1.31%',
+            zIndex: 5,
+          }}
+        >
+          {beneficiaryFullName}
         </div>
 
-        {/* Bottom Section: Signature & Hadith & Footer */}
-        <div className="space-y-5 pt-4">
-          {/* Member's Signature Overprinted Name */}
-          <div className="flex justify-end pr-4">
-            <div className="w-[300px] text-center">
-              <div className="font-extrabold text-sm text-slate-900 uppercase tracking-wide min-h-[22px] flex items-end justify-center pb-0.5">
-                {data.printed_name || applicantFullName}
-              </div>
-              <div className="border-b-[1.5px] border-slate-900 w-full mb-1" />
-              <p className="text-[9.5px] font-black uppercase tracking-wider text-slate-800">
-                MEMBER&apos;S SIGNATURE OVERPRINTED NAME
-              </p>
-            </div>
+        {/* Right Beneficiary ID / Photo Frame */}
+        {data.beneficiary_id_url ? (
+          <div
+            className="absolute overflow-hidden flex items-center justify-center bg-white"
+            style={{
+              top: '28.01%',
+              left: '74.13%',
+              width: '15.31%',
+              height: '10.74%',
+              zIndex: 5,
+            }}
+          >
+            <img
+              src={data.beneficiary_id_url}
+              alt="Beneficiary Attachment"
+              className="w-full h-full object-cover"
+            />
           </div>
+        ) : (
+          <div
+            className="absolute flex flex-col items-center justify-center text-slate-400"
+            style={{
+              top: '28.01%',
+              left: '74.13%',
+              width: '15.31%',
+              height: '10.74%',
+              zIndex: 5,
+            }}
+          >
+            <span className="text-[9pt] font-black text-slate-300">BENEFICIARY</span>
+            <span className="text-[7.5pt] font-bold text-slate-300">ID / PHOTO</span>
+          </div>
+        )}
 
-          {/* Hadith Quote */}
-          <div className="text-center pt-3 border-t border-slate-200">
-            <p className="text-[10px] text-slate-700 font-medium leading-relaxed">
-              ASFI encourages its members to embody the Sunnah of Prophet Muhammad S.A.W, who said:
-            </p>
-            <p className="text-[11px] font-bold italic text-slate-900 mt-0.5">
-              &ldquo;Give charity without delay, for it stands in the way of calamity.&rdquo;
-            </p>
-            <span className="text-[9px] text-slate-500 font-semibold block mt-0.5">
-              — (Sunan Al-Tirmidhi, 589)
-            </span>
-          </div>
+        {/* Beneficiary Name: First Name */}
+        <div
+          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[11pt] truncate"
+          style={{
+            top: '46.72%',
+            left: '23.13%',
+            width: '23.61%',
+            height: '2.02%',
+            zIndex: 5,
+          }}
+        >
+          {data.beneficiary_first_name || ''}
+        </div>
 
-          {/* Contact & Address Footer */}
-          <div className="pt-2 border-t border-slate-300 flex items-center justify-between text-[9.5px] text-slate-600 font-medium px-2">
-            <div className="flex items-center gap-1.5">
-              <span>📍</span>
-              <span>Don Julian Rodriguez Sr., Avenue, Ma-A Road, Davao City</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <span>✉️</span>
-              <a
-                href="mailto:amissadaqahfamilyincorporarted@gmail.com"
-                className="text-slate-700 hover:underline"
-              >
-                amissadaqahfamilyincorporarted@gmail.com
-              </a>
-            </div>
-          </div>
+        {/* Beneficiary Name: Middle Name */}
+        <div
+          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[11pt] truncate"
+          style={{
+            top: '46.72%',
+            left: '47.14%',
+            width: '23.77%',
+            height: '2.02%',
+            zIndex: 5,
+          }}
+        >
+          {data.beneficiary_middle_name || ''}
+        </div>
+
+        {/* Beneficiary Name: Family Name */}
+        <div
+          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[11pt] truncate"
+          style={{
+            top: '46.72%',
+            left: '71.31%',
+            width: '23.21%',
+            height: '2.02%',
+            zIndex: 5,
+          }}
+        >
+          {[data.beneficiary_last_name, data.beneficiary_suffix].filter(Boolean).join(' ')}
+        </div>
+
+        {/* Beneficiary Place of Birth */}
+        <div
+          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[10pt] truncate"
+          style={{
+            top: '50.06%',
+            left: '23.13%',
+            width: '29.49%',
+            height: '2.02%',
+            zIndex: 5,
+          }}
+        >
+          {data.beneficiary_place_of_birth || ''}
+        </div>
+
+        {/* Beneficiary Date of Birth: D1, D2, M1, M2, Y1, Y2 */}
+        <div
+          className="absolute flex items-center justify-center font-black text-slate-900 text-[13pt]"
+          style={{ top: '50.00%', left: '71.64%', width: '3.10%', height: '2.14%', zIndex: 5 }}
+        >
+          {beneficiaryDob.d1}
+        </div>
+        <div
+          className="absolute flex items-center justify-center font-black text-slate-900 text-[13pt]"
+          style={{ top: '50.00%', left: '75.18%', width: '3.10%', height: '2.14%', zIndex: 5 }}
+        >
+          {beneficiaryDob.d2}
+        </div>
+        <div
+          className="absolute flex items-center justify-center font-black text-slate-900 text-[13pt]"
+          style={{ top: '50.00%', left: '79.77%', width: '3.10%', height: '2.14%', zIndex: 5 }}
+        >
+          {beneficiaryDob.m1}
+        </div>
+        <div
+          className="absolute flex items-center justify-center font-black text-slate-900 text-[13pt]"
+          style={{ top: '50.00%', left: '83.28%', width: '3.10%', height: '2.14%', zIndex: 5 }}
+        >
+          {beneficiaryDob.m2}
+        </div>
+        <div
+          className="absolute flex items-center justify-center font-black text-slate-900 text-[13pt]"
+          style={{ top: '50.00%', left: '87.79%', width: '3.10%', height: '2.14%', zIndex: 5 }}
+        >
+          {beneficiaryDob.y1}
+        </div>
+        <div
+          className="absolute flex items-center justify-center font-black text-slate-900 text-[13pt]"
+          style={{ top: '50.00%', left: '91.42%', width: '3.10%', height: '2.14%', zIndex: 5 }}
+        >
+          {beneficiaryDob.y2}
+        </div>
+
+        {/* Beneficiary Present Address */}
+        <div
+          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[9.5pt] truncate"
+          style={{
+            top: '54.56%',
+            left: '23.17%',
+            width: '71.43%',
+            height: '2.02%',
+            zIndex: 5,
+          }}
+        >
+          {data.beneficiary_address || ''}
+        </div>
+
+        {/* Beneficiary Contact # */}
+        <div
+          className="absolute flex items-center px-3 font-bold text-slate-900 text-[10pt] truncate"
+          style={{
+            top: '58.21%',
+            left: '23.01%',
+            width: '29.61%',
+            height: '2.14%',
+            zIndex: 5,
+          }}
+        >
+          {data.beneficiary_contact || ''}
+        </div>
+
+        {/* Member's Signature Overprinted Name */}
+        <div
+          className="absolute flex items-center justify-center font-black text-slate-900 uppercase text-[12pt] tracking-wide"
+          style={{
+            top: '66.10%',
+            left: '54.79%',
+            width: '39.48%',
+            height: '1.71%',
+            zIndex: 5,
+          }}
+        >
+          {data.printed_name || applicantFullName}
         </div>
       </div>
     </div>
