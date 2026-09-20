@@ -10,7 +10,8 @@ import StepDeclarations from '@/components/StepDeclarations';
 import StepReview from '@/components/StepReview';
 import RegistrationReceipt from '@/components/RegistrationReceipt';
 import { FormData } from '@/types/form';
-import { ArrowLeft, ArrowRight, Send, Save, AlertCircle } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Send, Save, AlertCircle, RotateCcw, Sparkles, X } from 'lucide-react';
+import { saveDraftState, loadDraftState, clearDraftState } from '@/lib/draftStorage';
 
 const initialFormData: FormData = {
   // Step 1: Personal Information
@@ -80,37 +81,57 @@ export default function RegisterPage() {
   const [submittedRef, setSubmittedRef] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [autosaveNotice, setAutosaveNotice] = useState<boolean>(false);
+  const [lastSavedTime, setLastSavedTime] = useState<string | null>(null);
+  const [isInAppBrowser, setIsInAppBrowser] = useState<boolean>(false);
+  const [draftPrompt, setDraftPrompt] = useState<{
+    show: boolean;
+    data: Partial<FormData>;
+    step: number;
+    completedSteps: number[];
+    savedAt: string | null;
+  } | null>(null);
 
-  // Load saved draft from localStorage on mount
+  // Check for saved draft and detect in-app browser on mount
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('asfi_membership_draft');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        setFormData((prev) => ({ ...prev, ...parsed }));
-        setAutosaveNotice(true);
-        setTimeout(() => setAutosaveNotice(false), 3500);
-      }
+      const ua = typeof navigator !== 'undefined' ? (navigator.userAgent || '') : '';
+      const isFB = /FBAN|FBAV|Instagram|Messenger/i.test(ua);
+      setIsInAppBrowser(isFB);
+
+      loadDraftState().then((draft) => {
+        if (draft.hasDraft) {
+          // Pre-populate background state
+          setFormData((prev) => ({ ...prev, ...draft.formData }));
+          setCompletedSteps(draft.completedSteps || []);
+
+          if (draft.savedAt) {
+            const date = new Date(draft.savedAt);
+            setLastSavedTime(
+              date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            );
+          }
+
+          // Show prompt so applicant can resume where they left off or start fresh
+          setDraftPrompt({
+            show: true,
+            data: draft.formData,
+            step: draft.step || 1,
+            completedSteps: draft.completedSteps || [],
+            savedAt: draft.savedAt,
+          });
+        }
+      });
     } catch {
-      // Ignore localStorage errors
+      // Ignore storage errors
     }
   }, []);
 
-  // Autosave draft to localStorage
+  // Autosave draft to localStorage and IndexedDB
   const updateData = (fields: Partial<FormData>) => {
     setFormData((prev) => {
       const updated = { ...prev, ...fields };
-      try {
-        const forStorage = { ...updated };
-        delete (forStorage as any).photo2x2;
-        delete (forStorage as any).applicantId;
-        delete (forStorage as any).beneficiaryId;
-        delete (forStorage as any).guardianId;
-        delete (forStorage as any).signatureDataUrl;
-        localStorage.setItem('asfi_membership_draft', JSON.stringify(forStorage));
-      } catch {
-        // storage quota exceeded
-      }
+      saveDraftState(updated, step, completedSteps);
+      setLastSavedTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
       return updated;
     });
 
@@ -179,22 +200,27 @@ export default function RegisterPage() {
 
   const handleNext = () => {
     if (validateStep(step)) {
-      if (!completedSteps.includes(step)) {
-        setCompletedSteps([...completedSteps, step]);
-      }
-      setStep((prev) => Math.min(prev + 1, 5));
+      const nextCompleted = completedSteps.includes(step) ? completedSteps : [...completedSteps, step];
+      const nextStep = Math.min(step + 1, 5);
+      setCompletedSteps(nextCompleted);
+      setStep(nextStep);
+      saveDraftState(formData, nextStep, nextCompleted);
+      setLastSavedTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
       window.scrollTo({ top: 40, behavior: 'smooth' });
     }
   };
 
   const handlePrev = () => {
-    setStep((prev) => Math.max(prev - 1, 1));
+    const prevStep = Math.max(step - 1, 1);
+    setStep(prevStep);
+    saveDraftState(formData, prevStep, completedSteps);
     window.scrollTo({ top: 40, behavior: 'smooth' });
   };
 
   const handleStepClick = (targetStep: number) => {
     if (targetStep < step || validateStep(step)) {
       setStep(targetStep);
+      saveDraftState(formData, targetStep, completedSteps);
       window.scrollTo({ top: 40, behavior: 'smooth' });
     }
   };
@@ -218,7 +244,7 @@ export default function RegisterPage() {
       const json = await res.json();
       if (json.success) {
         setSubmittedRef(json.referenceNumber);
-        localStorage.removeItem('asfi_membership_draft');
+        await clearDraftState();
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         alert(json.message || 'Failed to submit application.');
@@ -231,18 +257,37 @@ export default function RegisterPage() {
     }
   };
 
-  const handleReset = () => {
+  const handleReset = async () => {
     setFormData(initialFormData);
     setCompletedSteps([]);
     setStep(1);
     setSubmittedRef(null);
-    localStorage.removeItem('asfi_membership_draft');
+    await clearDraftState();
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
       {/* Compact Top Navigation */}
       <RegisterNavbar />
+
+      {/* In-App Browser (Messenger / FB) Advisory Banner */}
+      {isInAppBrowser && (
+        <div className="bg-amber-100 border-b border-amber-300 text-amber-950 px-4 py-2 text-xs font-semibold flex items-center justify-between gap-3 shadow-inner">
+          <div className="flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 text-amber-800 flex-shrink-0" />
+            <span>
+              Opening inside Facebook/Messenger? Tap <strong>⋮</strong> and select <strong>&quot;Open in Chrome / Safari&quot;</strong> to guarantee your draft never resets if the chat minimizes.
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setIsInAppBrowser(false)}
+            className="text-amber-800 hover:text-amber-950 p-1"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
 
       {/* Floating Toast Notification */}
       {toastMessage && (
@@ -252,11 +297,88 @@ export default function RegisterPage() {
         </div>
       )}
 
-      {/* Draft Restored Banner */}
+      {/* Draft Restored Temporary Banner */}
       {autosaveNotice && (
         <div className="bg-emerald-800 text-emerald-100 text-xs py-1.5 px-4 text-center flex items-center justify-center gap-2 font-medium">
           <Save className="w-3.5 h-3.5 text-amber-300" />
-          <span>Restored your saved application draft.</span>
+          <span>Application draft restored successfully.</span>
+        </div>
+      )}
+
+      {/* Unfinished Draft Resume Modal */}
+      {draftPrompt?.show && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border-2 border-emerald-600/30 animate-in fade-in zoom-in-95 duration-200">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center mb-4 shadow-inner">
+              <Sparkles className="w-6 h-6" />
+            </div>
+            <h3 className="text-xl font-black text-slate-900 mb-1">
+              Resume Your Application?
+            </h3>
+            <p className="text-sm text-slate-600 font-medium mb-4 leading-relaxed">
+              We detected an unfinished membership application draft on this browser.
+            </p>
+
+            <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200 space-y-2.5 mb-6">
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-slate-500 font-medium">Applicant:</span>
+                <span className="font-extrabold text-slate-900 uppercase">
+                  {[draftPrompt.data.firstName, draftPrompt.data.lastName].filter(Boolean).join(' ') || 'Saved Application'}
+                </span>
+              </div>
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-slate-500 font-medium">Last Saved Step:</span>
+                <span className="font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">
+                  Step {draftPrompt.step} of 5 ({['Personal Info', 'Beneficiary', 'Documents', 'Declarations', 'Review'][draftPrompt.step - 1] || 'Step ' + draftPrompt.step})
+                </span>
+              </div>
+              {draftPrompt.savedAt && (
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-slate-500 font-medium">Saved:</span>
+                  <span className="text-slate-700 font-semibold">
+                    {new Date(draftPrompt.savedAt).toLocaleString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                      hour: 'numeric',
+                      minute: '2-digit',
+                      hour12: true,
+                    })}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setFormData((prev) => ({ ...prev, ...draftPrompt.data }));
+                  setStep(draftPrompt.step || 1);
+                  setCompletedSteps(draftPrompt.completedSteps || []);
+                  setDraftPrompt(null);
+                  setAutosaveNotice(true);
+                  setTimeout(() => setAutosaveNotice(false), 3000);
+                }}
+                className="flex-1 min-h-[48px] inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white font-extrabold text-sm shadow-md transition active:scale-95"
+              >
+                <RotateCcw className="w-4 h-4" />
+                Resume Application (Step {draftPrompt.step})
+              </button>
+              <button
+                type="button"
+                onClick={async () => {
+                  await clearDraftState();
+                  setFormData(initialFormData);
+                  setStep(1);
+                  setCompletedSteps([]);
+                  setDraftPrompt(null);
+                }}
+                className="min-h-[48px] inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-sm transition active:scale-95"
+              >
+                Start Fresh
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -278,7 +400,24 @@ export default function RegisterPage() {
             completedSteps={completedSteps}
           />
 
-          <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
+          <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-4 sm:py-6">
+            {/* Live Autosave Status Strip */}
+            <div className="mb-3 flex items-center justify-between text-xs px-1">
+              <span className="text-slate-600 font-semibold hidden sm:inline">
+                Registration Progress: Step {step} of 5
+              </span>
+              {lastSavedTime ? (
+                <span className="inline-flex items-center gap-1.5 text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full font-bold ml-auto shadow-xs">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  Auto-saved at {lastSavedTime}
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1.5 text-slate-400 font-medium ml-auto">
+                  <Save className="w-3.5 h-3.5" /> Auto-save enabled
+                </span>
+              )}
+            </div>
+
             <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-lg sm:shadow-xl p-5 sm:p-10 transition-all">
               {step === 1 && (
                 <StepPersonal
