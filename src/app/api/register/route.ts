@@ -84,3 +84,46 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+export async function GET(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const ref = searchParams.get('ref')?.trim().toUpperCase();
+
+    if (!ref) {
+      return NextResponse.json(
+        { success: false, message: 'Reference number is required.' },
+        { status: 400 }
+      );
+    }
+
+    const filePath = path.join(process.cwd(), 'data', 'applications.json');
+    if (!fs.existsSync(filePath)) {
+      return NextResponse.json(
+        { success: false, message: 'Application not found.' },
+        { status: 404 }
+      );
+    }
+
+    const fileContent = fs.readFileSync(filePath, 'utf-8');
+    const applications = JSON.parse(fileContent);
+    const found = applications.find((a: any) => a.referenceNumber.toUpperCase() === ref);
+
+    if (!found) {
+      return NextResponse.json(
+        { success: false, message: 'No application matching this reference number was found.' },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      application: found,
+    });
+  } catch (error: any) {
+    return NextResponse.json(
+      { success: false, message: 'Failed to look up application.' },
+      { status: 500 }
+    );
+  }
+}
