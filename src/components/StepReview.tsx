@@ -295,12 +295,12 @@ export default function StepReview({ data, goToStep }: StepReviewProps) {
           </div>
         </div>
 
-        {/* Section 4: Declarations & Signature Card */}
+        {/* Section 4: Declarations & Attestation Card */}
         <div className="bg-white rounded-3xl border-2 border-slate-300 shadow-sm overflow-hidden">
           <div className="bg-slate-100/90 px-6 py-4 border-b-2 border-slate-200 flex items-center justify-between">
             <div className="flex items-center gap-2.5 font-extrabold text-slate-900 text-base">
               <FileSignature className="w-5 h-5 text-emerald-700" />
-              <span>Declarations &amp; Digital Signature</span>
+              <span>Official Declarations &amp; Attestation</span>
             </div>
             <button
               type="button"
@@ -311,7 +311,7 @@ export default function StepReview({ data, goToStep }: StepReviewProps) {
             </button>
           </div>
 
-          <div className="p-6 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div className="space-y-2.5 text-sm text-slate-900 font-semibold">
               <div className="flex items-center gap-2.5 text-emerald-900">
                 <ShieldCheck className="w-5 h-5 text-emerald-700 stroke-[2.5]" />
@@ -327,25 +327,21 @@ export default function StepReview({ data, goToStep }: StepReviewProps) {
               </div>
             </div>
 
-            {/* Signature Preview */}
-            <div className="text-center border-t-2 md:border-t-0 md:border-l-2 border-slate-200 pt-4 md:pt-0 md:pl-8">
-              <span className="text-xs text-slate-500 font-black uppercase tracking-wider block mb-1">
-                Digital Signature
+            {/* Attestation & Printed Name Box */}
+            <div className="w-full md:w-auto text-left md:text-right border-t-2 md:border-t-0 md:border-l-2 border-slate-200 pt-4 md:pt-0 md:pl-8 space-y-1">
+              <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 bg-emerald-100 border border-emerald-300 px-3 py-1 rounded-full mb-1">
+                <ShieldCheck className="w-4 h-4 text-emerald-700" /> Confirmed &amp; Attested
               </span>
-              {data.signatureType === 'draw' && data.signatureDataUrl ? (
-                <div className="w-48 h-20 border-2 border-slate-300 rounded-xl p-1 bg-slate-50 flex items-center justify-center shadow-inner">
-                  <img src={data.signatureDataUrl} alt="Signature" className="max-h-full object-contain" />
-                </div>
-              ) : (
-                <div className="w-48 h-20 border-2 border-slate-300 rounded-xl p-2 bg-slate-50 flex items-center justify-center font-serif italic text-base text-emerald-950">
-                  {data.signatureTypedName || data.printedName}
-                </div>
-              )}
-              <span className="font-extrabold text-slate-950 text-sm uppercase block mt-1.5">
-                {data.printedName}
-              </span>
-              <span className="text-xs text-slate-500 font-semibold">
-                Date Applied: {data.dateApplied || new Date().toLocaleDateString()}
+              <div>
+                <span className="text-xs text-slate-500 font-extrabold uppercase tracking-wider block">
+                  Attested By Member / Guardian:
+                </span>
+                <span className="font-black text-slate-950 text-base uppercase block">
+                  {data.printedName}
+                </span>
+              </div>
+              <span className="text-xs text-slate-500 font-semibold block">
+                Date: {data.dateApplied || new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
               </span>
             </div>
           </div>

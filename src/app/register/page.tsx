@@ -62,13 +62,11 @@ const initialFormData: FormData = {
   guardianId: null,
   guardianIdName: '',
 
-  // Step 4: Declarations & Signature
+  // Step 4: Declarations & Attestation
   consentDataPrivacy: false,
   agreeTermsAndConditions: false,
   certifyLegalBeneficiary: false,
-  signatureType: 'draw',
-  signatureDataUrl: null,
-  signatureTypedName: '',
+  confirmAttestation: false,
   printedName: '',
   dateApplied: '',
 };
@@ -167,12 +165,8 @@ export default function RegisterPage() {
       if (!formData.consentDataPrivacy) errs.consentDataPrivacy = 'Consent is required';
       if (!formData.agreeTermsAndConditions) errs.agreeTermsAndConditions = 'Agreement to Sadaqah policy is required';
       if (!formData.certifyLegalBeneficiary) errs.certifyLegalBeneficiary = 'Beneficiary certification is required';
-
-      if (formData.signatureType === 'draw' && !formData.signatureDataUrl) {
-        errs.signature = 'Please draw your digital signature above';
-      } else if (formData.signatureType === 'type' && !formData.signatureTypedName.trim()) {
-        errs.signature = 'Please type your name as a digital signature';
-      }
+      if (!formData.confirmAttestation) errs.confirmAttestation = 'Confirmation attestation is required';
+      if (!formData.printedName.trim()) errs.printedName = 'Printed name is required';
     }
 
     setErrors(errs);

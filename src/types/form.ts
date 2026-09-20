@@ -51,15 +51,16 @@ export interface FormData {
   guardianId: string | null; // Data URL (Required if underage)
   guardianIdName?: string;
 
-  // Step 4: Declarations & Digital Signature
+  // Step 4: Declarations & Attestation
   consentDataPrivacy: boolean;
   agreeTermsAndConditions: boolean;
   certifyLegalBeneficiary: boolean;
-  signatureType: 'draw' | 'type';
-  signatureDataUrl: string | null;
-  signatureTypedName: string;
+  confirmAttestation: boolean;
   printedName: string;
   dateApplied: string;
+  signatureType?: 'draw' | 'type';
+  signatureDataUrl?: string | null;
+  signatureTypedName?: string;
 }
 
 export interface ApplicationSubmissionResponse {

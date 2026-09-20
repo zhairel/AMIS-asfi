@@ -324,19 +324,11 @@ export default function RegistrationReceipt({ referenceNumber, data, onReset }: 
 
             <div className="w-full border-t border-slate-200 pt-3">
               <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider block mb-1">
-                Authorized Signature
+                Official Attestation
               </span>
-              {data.signatureDataUrl ? (
-                <img
-                  src={data.signatureDataUrl}
-                  alt="Member Signature"
-                  className="h-10 mx-auto object-contain"
-                />
-              ) : (
-                <div className="font-serif italic text-sm text-emerald-900 py-1">
-                  {data.signatureTypedName || data.printedName}
-                </div>
-              )}
+              <div className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full mb-1">
+                Verified Electronic Submission
+              </div>
               <div className="border-t border-slate-400 mt-1 pt-1">
                 <span className="text-xs font-bold text-slate-900 uppercase block leading-tight">
                   {data.printedName}

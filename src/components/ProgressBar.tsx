@@ -14,7 +14,7 @@ const steps: Step[] = [
   { id: 1, label: 'Personal Info', subLabel: 'Applicant Data', icon: User },
   { id: 2, label: 'Beneficiary', subLabel: 'Designation', icon: Users },
   { id: 3, label: 'Documents', subLabel: 'Photo & Valid ID', icon: FileUp },
-  { id: 4, label: 'Declaration', subLabel: 'Sadaqah & Signature', icon: FileSignature },
+  { id: 4, label: 'Declaration', subLabel: 'Sadaqah & Attestation', icon: FileSignature },
   { id: 5, label: 'Review', subLabel: 'Confirm & Submit', icon: CheckCircle2 },
 ];
 

@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { FormData } from '@/types/form';
-import { FileSignature, CheckSquare, Square, RotateCcw, AlertCircle, Quote, PenTool, Type } from 'lucide-react';
+import { FileCheck, CheckSquare, Square, AlertCircle, Quote, UserCheck } from 'lucide-react';
 
 interface StepDeclarationsProps {
   data: FormData;
@@ -11,10 +11,6 @@ interface StepDeclarationsProps {
 }
 
 export default function StepDeclarations({ data, updateData, errors }: StepDeclarationsProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [hasDrawn, setHasDrawn] = useState(false);
-
   useEffect(() => {
     if (!data.printedName) {
       const applicantFullName = [data.firstName, data.middleName, data.lastName, data.suffix]
@@ -30,61 +26,7 @@ export default function StepDeclarations({ data, updateData, errors }: StepDecla
         updateData({ printedName: nameToPrint.toUpperCase() });
       }
     }
-  }, [data.firstName, data.lastName, data.isUnderage, data.guardianName]);
-
-  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    setIsDrawing(true);
-    const rect = canvas.getBoundingClientRect();
-    const x = 'touches' in e ? e.touches[0].clientX - rect.left : e.clientX - rect.left;
-    const y = 'touches' in e ? e.touches[0].clientY - rect.top : e.clientY - rect.top;
-
-    ctx.lineWidth = 3.5;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.strokeStyle = '#044e3d';
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-  };
-
-  const draw = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
-    if (!isDrawing) return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const rect = canvas.getBoundingClientRect();
-    const x = 'touches' in e ? e.touches[0].clientX - rect.left : e.clientX - rect.left;
-    const y = 'touches' in e ? e.touches[0].clientY - rect.top : e.clientY - rect.top;
-
-    ctx.lineTo(x, y);
-    ctx.stroke();
-    setHasDrawn(true);
-  };
-
-  const stopDrawing = () => {
-    if (!isDrawing) return;
-    setIsDrawing(false);
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const dataUrl = canvas.toDataURL('image/png');
-    updateData({ signatureDataUrl: dataUrl });
-  };
-
-  const clearCanvas = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    setHasDrawn(false);
-    updateData({ signatureDataUrl: null });
-  };
+  }, [data.firstName, data.middleName, data.lastName, data.suffix, data.isUnderage, data.guardianName]);
 
   const beneficiaryFullName = [
     data.beneficiaryFirstName,
@@ -94,24 +36,24 @@ export default function StepDeclarations({ data, updateData, errors }: StepDecla
   ]
     .filter(Boolean)
     .join(' ')
-    .trim() || '________________________';
+    .trim() || '______________________________';
 
   return (
     <div className="space-y-8">
-      {/* Header */}
+      {/* Section Header */}
       <div className="border-b-2 border-emerald-800/20 pb-4">
         <div className="flex items-center gap-2.5 text-emerald-900 font-extrabold text-xl sm:text-2xl">
           <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center flex-shrink-0">
-            <FileSignature className="w-5 h-5" />
+            <FileCheck className="w-5 h-5" />
           </div>
-          <h2>Declarations, Sadaqah Acknowledgment &amp; Signature</h2>
+          <h2>Official Declaration &amp; Member Attestation</h2>
         </div>
         <p className="text-slate-700 text-sm sm:text-base mt-1.5 font-medium leading-relaxed">
-          Please review and acknowledge the three (3) declarations below and affix your digital signature.
+          Please review the three (3) official declarations mandated by AMIS Sadaqah Family Incorporated (ASFI) and confirm your attestation below.
         </p>
       </div>
 
-      {/* Hadith banner */}
+      {/* Prophetic Hadith Banner */}
       <div className="bg-gradient-to-r from-amber-50 to-emerald-50 border-2 border-amber-300 rounded-3xl p-5 sm:p-6 shadow-sm">
         <div className="flex items-start gap-3.5">
           <div className="w-11 h-11 rounded-2xl bg-amber-400/30 text-amber-900 flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -131,14 +73,23 @@ export default function StepDeclarations({ data, updateData, errors }: StepDecla
         </div>
       </div>
 
-      {/* Three Declarations Checkboxes */}
+      {/* Official 3 Declarations from the Physical ASFI Form */}
       <div className="space-y-4">
-        {/* Declaration 1 */}
+        <div className="flex items-center justify-between">
+          <span className="text-xs sm:text-sm font-black text-slate-700 uppercase tracking-wider">
+            Mandatory Declarations (Check all to agree)
+          </span>
+          <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">
+            All 3 Required *
+          </span>
+        </div>
+
+        {/* Declaration 1: Data Sharing & Truthfulness */}
         <div
           onClick={() => updateData({ consentDataPrivacy: !data.consentDataPrivacy })}
-          className={`p-5 rounded-2xl border-2 transition-all cursor-pointer flex items-start gap-4 ${
+          className={`p-5 sm:p-6 rounded-3xl border-2 transition-all cursor-pointer flex items-start gap-4 ${
             data.consentDataPrivacy
-              ? 'border-emerald-700 bg-emerald-50 text-slate-900 shadow-sm'
+              ? 'border-emerald-700 bg-emerald-50/80 text-slate-900 shadow-sm'
               : errors.consentDataPrivacy
               ? 'border-rose-500 bg-rose-50/40'
               : 'border-slate-300 hover:border-emerald-400 bg-white'
@@ -152,10 +103,12 @@ export default function StepDeclarations({ data, updateData, errors }: StepDecla
             )}
           </div>
           <div className="text-sm sm:text-base leading-relaxed text-slate-800 select-none">
-            <strong className="text-slate-950 font-extrabold block text-base sm:text-lg mb-1">
-              1. Consent &amp; Information Truthfulness (Data Privacy) *
+            <strong className="text-slate-950 font-extrabold block text-base sm:text-lg mb-1.5">
+              1. Consent to Process Details &amp; Truthfulness of Information *
             </strong>
-            I hereby give my consent to the Association to share and process my personal details for the official membership registry and mutual assistance administration, and I attest that all information I have provided is true, correct, and complete to the best of my knowledge.
+            <p className="italic text-slate-700">
+              &ldquo;I hereby give my consent to the Association to share my personal details, and I attest that all the information I have provided is true and correct to the best of my knowledge.&rdquo;
+            </p>
           </div>
         </div>
         {errors.consentDataPrivacy && (
@@ -164,12 +117,12 @@ export default function StepDeclarations({ data, updateData, errors }: StepDecla
           </p>
         )}
 
-        {/* Declaration 2 */}
+        {/* Declaration 2: Terms & Voluntary Sadaqah */}
         <div
           onClick={() => updateData({ agreeTermsAndConditions: !data.agreeTermsAndConditions })}
-          className={`p-5 rounded-2xl border-2 transition-all cursor-pointer flex items-start gap-4 ${
+          className={`p-5 sm:p-6 rounded-3xl border-2 transition-all cursor-pointer flex items-start gap-4 ${
             data.agreeTermsAndConditions
-              ? 'border-emerald-700 bg-emerald-50 text-slate-900 shadow-sm'
+              ? 'border-emerald-700 bg-emerald-50/80 text-slate-900 shadow-sm'
               : errors.agreeTermsAndConditions
               ? 'border-rose-500 bg-rose-50/40'
               : 'border-slate-300 hover:border-emerald-400 bg-white'
@@ -183,10 +136,12 @@ export default function StepDeclarations({ data, updateData, errors }: StepDecla
             )}
           </div>
           <div className="text-sm sm:text-base leading-relaxed text-slate-800 select-none">
-            <strong className="text-slate-950 font-extrabold block text-base sm:text-lg mb-1">
-              2. Terms, Conditions &amp; Voluntary Monthly Sadaqah Policy *
+            <strong className="text-slate-950 font-extrabold block text-base sm:text-lg mb-1.5">
+              2. Terms, Conditions &amp; Voluntary Monthly Sadaqah *
             </strong>
-            I understand the terms and conditions of AMIS Sadaqah Family Incorporated, including the requirement to make a monthly voluntary Sadaqah contribution of any amount according to my personal financial capacity for mutual assistance. I understand that such contribution does not guarantee any fixed commercial return or financial dividend, but represents sincere mutual charitable care.
+            <p className="italic text-slate-700">
+              &ldquo;I understand the terms and conditions of AMIS Sadaqah Family Incorporated, including the requirement to make a monthly Sadaqah contribution of any amount for mutual assistance. I understand that such contribution does not guarantee any return or benefit to the member.&rdquo;
+            </p>
           </div>
         </div>
         {errors.agreeTermsAndConditions && (
@@ -195,12 +150,12 @@ export default function StepDeclarations({ data, updateData, errors }: StepDecla
           </p>
         )}
 
-        {/* Declaration 3 */}
+        {/* Declaration 3: Legal Beneficiary Certification */}
         <div
           onClick={() => updateData({ certifyLegalBeneficiary: !data.certifyLegalBeneficiary })}
-          className={`p-5 rounded-2xl border-2 transition-all cursor-pointer flex items-start gap-4 ${
+          className={`p-5 sm:p-6 rounded-3xl border-2 transition-all cursor-pointer flex items-start gap-4 ${
             data.certifyLegalBeneficiary
-              ? 'border-emerald-700 bg-emerald-50 text-slate-900 shadow-sm'
+              ? 'border-emerald-700 bg-emerald-50/80 text-slate-900 shadow-sm'
               : errors.certifyLegalBeneficiary
               ? 'border-rose-500 bg-rose-50/40'
               : 'border-slate-300 hover:border-emerald-400 bg-white'
@@ -214,10 +169,12 @@ export default function StepDeclarations({ data, updateData, errors }: StepDecla
             )}
           </div>
           <div className="text-sm sm:text-base leading-relaxed text-slate-800 select-none">
-            <strong className="text-slate-950 font-extrabold block text-base sm:text-lg mb-1">
+            <strong className="text-slate-950 font-extrabold block text-base sm:text-lg mb-1.5">
               3. Beneficiary Designation Certification *
             </strong>
-            I hereby certify that <span className="font-black underline text-emerald-950 bg-emerald-100/80 px-1.5 py-0.5 rounded">{beneficiaryFullName}</span> is my designated legal beneficiary in the event of my death and shall receive the stipulated mutual assistance benefits on my behalf.
+            <p className="italic text-slate-700">
+              &ldquo;I hereby certify that <span className="font-black not-italic underline text-emerald-950 bg-emerald-100/90 px-2 py-0.5 rounded">{beneficiaryFullName}</span> is my legal beneficiary in the event of my death and shall receive the benefits stipulated on my behalf. I am attaching his/her personal information, photograph, and valid identification card for future use and reference.&rdquo;
+            </p>
           </div>
         </div>
         {errors.certifyLegalBeneficiary && (
@@ -227,114 +184,72 @@ export default function StepDeclarations({ data, updateData, errors }: StepDecla
         )}
       </div>
 
-      {/* Signature Section */}
-      <div className="bg-slate-100 border-2 border-slate-300 rounded-3xl p-6 sm:p-7 space-y-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-slate-200 pb-4">
+      {/* Member Attestation & Confirmation (Clean Electronic Attestation — No Signature Canvas) */}
+      <div className="bg-slate-50 border-2 border-slate-300 rounded-3xl p-6 sm:p-7 space-y-6 shadow-sm">
+        <div className="flex items-center gap-3 border-b-2 border-slate-200 pb-4">
+          <div className="w-10 h-10 rounded-xl bg-emerald-800 text-white flex items-center justify-center flex-shrink-0 shadow-sm">
+            <UserCheck className="w-5 h-5" />
+          </div>
           <div>
             <h3 className="font-extrabold text-slate-900 text-base sm:text-lg">
-              Member&apos;s Signature Over Printed Name <span className="text-rose-600 font-black">*</span>
+              Member Attestation &amp; Printed Name <span className="text-rose-600 font-black">*</span>
             </h3>
-            <p className="text-xs sm:text-sm text-slate-600 font-medium mt-0.5">
+            <p className="text-xs sm:text-sm text-slate-600 font-medium">
               {data.isUnderage
-                ? 'Parent or legal guardian signs on behalf of minor applicant'
-                : 'Sign using touch or stylus on mobile, or mouse on desktop'}
+                ? 'Authorized parent or legal guardian attests on behalf of the minor applicant'
+                : 'Confirm that you are the applicant submitting this official registration'}
             </p>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => updateData({ signatureType: 'draw' })}
-              className={`min-h-[44px] px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 transition ${
-                data.signatureType === 'draw'
-                  ? 'bg-emerald-800 text-white shadow-md'
-                  : 'bg-white border-2 border-slate-300 text-slate-700 hover:bg-slate-50'
-              }`}
-            >
-              <PenTool className="w-4 h-4" /> Draw Signature
-            </button>
-            <button
-              type="button"
-              onClick={() => updateData({ signatureType: 'type' })}
-              className={`min-h-[44px] px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 transition ${
-                data.signatureType === 'type'
-                  ? 'bg-emerald-800 text-white shadow-md'
-                  : 'bg-white border-2 border-slate-300 text-slate-700 hover:bg-slate-50'
-              }`}
-            >
-              <Type className="w-4 h-4" /> Type Signature
-            </button>
           </div>
         </div>
 
-        {data.signatureType === 'draw' ? (
-          <div>
-            <div className="relative border-2 border-dashed border-slate-400 hover:border-emerald-600 rounded-2xl bg-white overflow-hidden shadow-inner touch-none">
-              <canvas
-                ref={canvasRef}
-                width={560}
-                height={180}
-                onMouseDown={startDrawing}
-                onMouseMove={draw}
-                onMouseUp={stopDrawing}
-                onMouseLeave={stopDrawing}
-                onTouchStart={startDrawing}
-                onTouchMove={draw}
-                onTouchEnd={stopDrawing}
-                className="w-full h-44 cursor-crosshair block"
-              />
-              {!hasDrawn && !data.signatureDataUrl && (
-                <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center text-slate-400 text-sm font-bold gap-1">
-                  <PenTool className="w-6 h-6 text-slate-300" />
-                  <span>Draw your digital signature here</span>
-                </div>
-              )}
-            </div>
-
-            <div className="flex items-center justify-between mt-3">
-              <button
-                type="button"
-                onClick={clearCanvas}
-                className="inline-flex items-center gap-1.5 text-xs sm:text-sm text-slate-700 hover:text-rose-700 font-extrabold py-2 px-3 rounded-xl bg-white border border-slate-300 shadow-sm transition active:scale-95"
-              >
-                <RotateCcw className="w-4 h-4 text-rose-500" /> Clear Signature
-              </button>
-              <span className="text-xs text-slate-500 font-semibold">Touchscreen and mouse supported</span>
-            </div>
+        {/* Attestation Confirmation Checkbox */}
+        <div
+          onClick={() => updateData({ confirmAttestation: !data.confirmAttestation })}
+          className={`p-4 sm:p-5 rounded-2xl border-2 transition-all cursor-pointer flex items-start gap-3.5 bg-white ${
+            data.confirmAttestation
+              ? 'border-emerald-700 bg-emerald-50/50 shadow-sm'
+              : errors.confirmAttestation
+              ? 'border-rose-500 bg-rose-50/40'
+              : 'border-slate-300 hover:border-emerald-500'
+          }`}
+        >
+          <div className="mt-0.5 text-emerald-700 flex-shrink-0">
+            {data.confirmAttestation ? (
+              <CheckSquare className="w-6 h-6 fill-emerald-700 text-white" />
+            ) : (
+              <Square className="w-6 h-6 text-slate-400" />
+            )}
           </div>
-        ) : (
-          <div>
-            <input
-              type="text"
-              placeholder="Type your full legal name as digital signature..."
-              value={data.signatureTypedName}
-              onChange={(e) => updateData({ signatureTypedName: e.target.value })}
-              className="w-full min-h-[54px] px-5 py-3 border-2 border-slate-300 rounded-2xl text-xl font-serif italic text-emerald-950 bg-white focus:border-emerald-600 outline-none shadow-sm"
-            />
-            <p className="text-xs text-slate-600 font-medium mt-1.5">
-              Typing your full legal name acts as your official electronic signature.
-            </p>
+          <div className="text-sm sm:text-base font-bold text-slate-900 select-none">
+            I hereby confirm and certify under penalty of law that I am the applicant (or legal guardian) named below, and that all information submitted is accurate and binding.
           </div>
-        )}
-
-        {errors.signature && (
-          <p className="text-rose-600 text-xs sm:text-sm flex items-center gap-1.5 font-bold">
-            <AlertCircle className="w-4 h-4" /> {errors.signature}
+        </div>
+        {errors.confirmAttestation && (
+          <p className="text-rose-600 font-bold text-xs sm:text-sm flex items-center gap-1.5 pl-3">
+            <AlertCircle className="w-4 h-4" /> Please check to confirm your attestation.
           </p>
         )}
 
-        {/* Printed Name & Date Applied */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t-2 border-slate-200">
+        {/* Member / Guardian Printed Name & Date */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
           <div>
             <label className="block text-xs sm:text-sm font-extrabold text-slate-900 uppercase tracking-wider mb-1.5">
-              Member / Guardian Printed Name *
+              Member / Guardian Printed Full Name <span className="text-rose-600 font-black">*</span>
             </label>
             <input
               type="text"
               value={data.printedName}
               onChange={(e) => updateData({ printedName: e.target.value.toUpperCase() })}
-              className="w-full min-h-[50px] px-4 py-3 rounded-xl border-2 border-slate-300 text-slate-950 text-base font-extrabold bg-white uppercase"
+              placeholder="e.g. JUAN SANTOS DELA CRUZ"
+              className={`w-full min-h-[50px] px-4 py-3 rounded-xl border-2 ${
+                errors.printedName ? 'border-rose-500 bg-rose-50' : 'border-slate-300 bg-white'
+              } text-slate-950 text-base font-extrabold uppercase focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none`}
             />
+            {errors.printedName && (
+              <p className="text-rose-600 font-bold text-xs mt-1.5 flex items-center gap-1">
+                <AlertCircle className="w-3.5 h-3.5" /> {errors.printedName}
+              </p>
+            )}
           </div>
 
           <div>
@@ -344,7 +259,10 @@ export default function StepDeclarations({ data, updateData, errors }: StepDecla
             <input
               type="text"
               readOnly
-              value={data.dateApplied || new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+              value={
+                data.dateApplied ||
+                new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+              }
               className="w-full min-h-[50px] px-4 py-3 rounded-xl border-2 border-slate-300 text-slate-700 text-base font-bold bg-slate-200/80 cursor-not-allowed"
             />
           </div>

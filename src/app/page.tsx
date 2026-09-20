@@ -213,7 +213,7 @@ export default function HomePage() {
               <span className="font-mono text-xs font-black text-emerald-700 block mb-1">STEP 02</span>
               <h4 className="font-extrabold text-slate-900 text-base mb-1">Document Upload</h4>
               <p className="text-xs sm:text-sm text-slate-600 font-medium">
-                Attach your recent 2x2 ID photo, valid ID, and digital signature.
+                Attach your recent 2x2 ID photo and valid government or student ID.
               </p>
             </div>
 
