@@ -381,6 +381,7 @@
         padding: 0 !important;
         width: 100% !important;
         height: auto !important;
+        overflow: visible !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }
@@ -393,6 +394,8 @@
         gap: 0 !important;
         display: block !important;
         width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
       }
       .page-sheet {
         box-shadow: none !important;
@@ -410,13 +413,12 @@
         page-break-after: always !important;
         break-after: page !important;
       }
-      .page-sheet:last-of-type,
-      .page-sheet:only-of-type {
+      .page-sheet.hidden-sheet {
+        display: none !important;
+      }
+      .page-sheet:last-of-type {
         page-break-after: auto !important;
         break-after: auto !important;
-      }
-      .hidden-sheet {
-        display: none !important;
       }
     }
   </style>
@@ -16525,7 +16527,6 @@
       if (activeBtn) activeBtn.classList.add('active');
 
       const select = document.getElementById('teacher-select');
-      let firstVisible = -1;
 
       document.querySelectorAll('.page-sheet').forEach(sh => {
         const cat = sh.getAttribute('data-cat');
@@ -16542,17 +16543,10 @@
         if (opt) {
           opt.style.display = match ? '' : 'none';
         }
-
-        if (match && firstVisible === -1) {
-          firstVisible = idx;
-        }
       });
 
-      if (select && select.value === 'all') {
-        showTeacher('all');
-      } else if (firstVisible !== -1) {
-        showTeacher(firstVisible);
-      }
+      // Show all teachers in this department!
+      showTeacher('all');
     }
 
     function printActiveTeacher() {
@@ -16564,26 +16558,25 @@
       }
       setTimeout(() => {
         window.print();
-      }, 150);
+      }, 200);
     }
 
     function printAllTeachers() {
-      // 1. Force ALL FILTER before print all
+      // 1. Force ALL Faculty filter
       filterDept('all');
 
-      // 2. Unhide all 47 sheets
+      // 2. Ensure ALL 47 sheets are visible
       document.querySelectorAll('.page-sheet').forEach(sh => {
         sh.classList.remove('hidden-sheet');
       });
 
-      // 3. Mark select dropdown as all
       const select = document.getElementById('teacher-select');
       if (select) select.value = 'all';
 
-      // 4. Trigger print dialog after DOM layout settles
+      // 3. Trigger print with ample delay for DOM to layout
       setTimeout(() => {
         window.print();
-      }, 150);
+      }, 300);
     }
 
     window.addEventListener('afterprint', () => {
@@ -16605,7 +16598,7 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       populateLogos();
-      showTeacher(0);
+      filterDept('all');
     });
   </script>
 </body>
