@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Daily Teaching Load Monitoring Form - Face to Face (F2F)</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 8mm 10mm;
+    }
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      color: #1e293b;
+      background-color: #f1f5f9;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .no-print-bar {
+      background: #0f172a;
+      color: #fff;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    }
+    .no-print-bar button {
+      background: #059669;
+      color: white;
+      border: none;
+      padding: 8px 18px;
+      font-size: 13px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .no-print-bar button:hover {
+      background: #047857;
+    }
+    .page-sheet {
+      width: 210mm;
+      min-height: 297mm;
+      padding: 10mm 12mm;
+      margin: 15px auto;
+      background: #ffffff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      page-break-after: always;
+      position: relative;
+    }
+    @media print {
+      body {
+        background: #ffffff;
+      }
+      .no-print-bar {
+        display: none !important;
+      }
+      .page-sheet {
+        margin: 0;
+        box-shadow: none;
+        width: 100%;
+        min-height: 297mm;
+        padding: 6mm 8mm;
+      }
+    }
+    .header-block {
+      border-bottom: 2px solid #0f172a;
+      padding-bottom: 6px;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    .institution-name {
+      font-size: 13pt;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #0f172a;
+    }
+    .doc-title {
+      font-size: 11pt;
+      font-weight: 700;
+      color: #334155;
+      margin-top: 2px;
+      text-transform: uppercase;
+    }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      font-size: 8.5pt;
+      margin-bottom: 10px;
+      gap: 4px 16px;
+      background: #f8fafc;
+      padding: 6px 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+    }
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .meta-label {
+      font-weight: 700;
+      color: #475569;
+    }
+    .meta-line {
+      flex: 1;
+      border-bottom: 1px dotted #64748b;
+      min-height: 14px;
+      font-weight: 600;
+      color: #0f172a;
+    }
+    table.monitoring-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 7.8pt;
+      line-height: 1.15;
+    }
+    table.monitoring-table th, 
+    table.monitoring-table td {
+      border: 1px solid #94a3b8;
+      padding: 4px 4px;
+      vertical-align: middle;
+    }
+    table.monitoring-table th {
+      background: #f1f5f9;
+      color: #0f172a;
+      font-weight: 700;
+      text-align: center;
+      font-size: 7.5pt;
+      text-transform: uppercase;
+    }
+    .col-num { width: 4%; text-align: center; font-weight: bold; }
+    .col-time { width: 13%; text-align: center; font-weight: 600; }
+    .col-actual { width: 8.5%; text-align: center; }
+    .col-teacher { width: 17%; font-weight: 700; }
+    .col-subject { width: 16%; }
+    .col-grade { width: 12%; text-align: center; font-weight: 600; }
+    .col-room { width: 7%; text-align: center; }
+    .col-status { width: 15%; font-size: 6.8pt; }
+    .col-remarks { width: 17%; }
+
+    .actual-box {
+      font-family: monospace;
+      font-size: 8pt;
+      color: #64748b;
+      border: 1px dashed #cbd5e1;
+      padding: 2px 1px;
+      border-radius: 2px;
+      display: block;
+      background: #fafafa;
+    }
+    .status-checks {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      line-height: 1.1;
+    }
+    .status-checks span {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      white-space: nowrap;
+    }
+    .break-row {
+      background: #f8fafc;
+      color: #64748b;
+      font-style: italic;
+      font-size: 7.5pt;
+      text-align: center;
+    }
+    .sign-section {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      font-size: 8pt;
+    }
+    .sign-box {
+      text-align: center;
+    }
+    .sign-line {
+      border-bottom: 1.5px solid #0f172a;
+      margin-top: 25px;
+      margin-bottom: 3px;
+    }
+    .sign-title {
+      font-weight: 700;
+      color: #334155;
+      text-transform: uppercase;
+      font-size: 7.5pt;
+    }
+    .day-badge {
+      display: inline-block;
+      background: #0f172a;
+      color: #fff;
+      padding: 1px 8px;
+      border-radius: 3px;
+      font-size: 8pt;
+      font-weight: 700;
+      margin-left: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="no-print-bar">
+    <div style="font-weight: bold; font-size: 14px;">
+      📋 F2F Daily Teaching Load Monitoring Forms (Portrait Ready)
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <button onclick="window.print()">🖨️ Print All Forms (Portrait)</button>
+    </div>
+  </div>
+
+  <!-- ==================== SUNDAY ==================== -->
+  <div class="page-sheet">
+    <div class="header-block">
+      <div class="institution-name">Daily Teaching Load Monitoring Form</div>
+      <div class="doc-title">Classroom Monitoring Sheet (Face-to-Face) <span class="day-badge">SUNDAY</span></div>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-item"><span class="meta-label">Monitor / Observer:</span><span class="meta-line"></span></div>
+      <div class="meta-item"><span class="meta-label">Date:</span><span class="meta-line"></span></div>
+      <div class="meta-item"><span class="meta-label">Term:</span><span class="meta-line">Second Term (Face-to-Face)</span></div>
+      <div class="meta-item"><span class="meta-label">Day:</span><span class="meta-line"><b>SUNDAY</b></span></div>
+    </div>
+
+    <table class="monitoring-table">
+      <thead>
+        <tr>
+          <th class="col-num">#</th>
+          <th class="col-time">Scheduled Time</th>
+          <th class="col-actual">Actual In</th>
+          <th class="col-actual">Actual Out</th>
+          <th class="col-teacher">Teacher's Name</th>
+          <th class="col-subject">Subject / Course</th>
+          <th class="col-grade">Grade / Section</th>
+          <th class="col-room">Room</th>
+          <th class="col-status">Teaching Status</th>
+          <th class="col-remarks">Observation / Remarks</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="break-row">
+          <td>—</td>
+          <td>7:30 – 7:40 AM</td>
+          <td colspan="2"><span class="actual-box">[ : ]</span></td>
+          <td>Class Advisers</td>
+          <td>General Assembly</td>
+          <td>G11 & G12</td>
+          <td>Hall</td>
+          <td>▢ Conducted ▢ None</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">1</td>
+          <td class="col-time">7:40 – 8:25 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Rowena</td>
+          <td class="col-subject">General Science</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">2</td>
+          <td class="col-time">7:40 – 8:25 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Ethel</td>
+          <td class="col-subject">UCSP</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">3</td>
+          <td class="col-time">8:25 – 9:05 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Norhaima</td>
+          <td class="col-subject">LCS</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">4</td>
+          <td class="col-time">8:25 – 9:05 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Ethel</td>
+          <td class="col-subject">CPAR</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">5</td>
+          <td class="col-time">9:05 – 9:45 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Jhelyn</td>
+          <td class="col-subject">General Math</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">6</td>
+          <td class="col-time">9:05 – 9:45 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Nof</td>
+          <td class="col-subject">Pagsulat sa Filipino</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr class="break-row">
+          <td>—</td>
+          <td>9:45 – 10:00 AM</td>
+          <td colspan="2">—</td>
+          <td>Students / Staff</td>
+          <td>RECESS BREAK (15 min)</td>
+          <td>G11 & G12</td>
+          <td>Canteen</td>
+          <td>▢ Observed</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">7</td>
+          <td class="col-time">10:00 – 10:45 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Shi</td>
+          <td class="col-subject">PSKP</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">8</td>
+          <td class="col-time">10:00 – 10:45 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Nof</td>
+          <td class="col-subject">Pagsulat sa Filipino</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">9</td>
+          <td class="col-time">10:45 – 11:30 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Alim Mamonas</td>
+          <td class="col-subject">Arabic</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">10</td>
+          <td class="col-time">10:45 – 11:30 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Aniah</td>
+          <td class="col-subject">Gen. Physics 2</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr class="break-row">
+          <td>—</td>
+          <td>11:30 AM – 12:40 PM</td>
+          <td colspan="2">—</td>
+          <td>Faculty & Students</td>
+          <td>LUNCH & SALAH BREAK (70 min)</td>
+          <td>G11 & G12</td>
+          <td>Musalla</td>
+          <td>▢ Observed</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">11</td>
+          <td class="col-time">12:40 – 1:25 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Nadzra</td>
+          <td class="col-subject">EC</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">12</td>
+          <td class="col-time">12:40 – 1:25 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Sir Moh</td>
+          <td class="col-subject">PE 12</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">13</td>
+          <td class="col-time">1:25 – 2:10 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Radzmia</td>
+          <td class="col-subject">Gen Bio 2</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">14</td>
+          <td class="col-time">1:25 – 2:10 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Radzmia</td>
+          <td class="col-subject">Gen Bio 2</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">15</td>
+          <td class="col-time">2:15 – 3:00 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Alim Dipatuan</td>
+          <td class="col-subject">Qur'an</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">16</td>
+          <td class="col-time">2:15 – 3:00 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Research Adviser</td>
+          <td class="col-subject">Research Consultation</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr class="break-row">
+          <td>—</td>
+          <td>3:00 – 3:30 PM</td>
+          <td colspan="2">—</td>
+          <td>All Advisers</td>
+          <td>SALAH & DEPARTURE (30 min)</td>
+          <td>G11 & G12</td>
+          <td>Musalla</td>
+          <td>▢ Observed</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="sign-section">
+      <div class="sign-box">
+        <div class="sign-line"></div>
+        <div class="sign-title">Monitoring Officer Signature Over Printed Name</div>
+      </div>
+      <div class="sign-box">
+        <div class="sign-line"></div>
+        <div class="sign-title">School Principal / Academic Head</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== MONDAY ==================== -->
+  <div class="page-sheet">
+    <div class="header-block">
+      <div class="institution-name">Daily Teaching Load Monitoring Form</div>
+      <div class="doc-title">Classroom Monitoring Sheet (Face-to-Face) <span class="day-badge">MONDAY</span></div>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-item"><span class="meta-label">Monitor / Observer:</span><span class="meta-line"></span></div>
+      <div class="meta-item"><span class="meta-label">Date:</span><span class="meta-line"></span></div>
+      <div class="meta-item"><span class="meta-label">Term:</span><span class="meta-line">Second Term (Face-to-Face)</span></div>
+      <div class="meta-item"><span class="meta-label">Day:</span><span class="meta-line"><b>MONDAY</b></span></div>
+    </div>
+
+    <table class="monitoring-table">
+      <thead>
+        <tr>
+          <th class="col-num">#</th>
+          <th class="col-time">Scheduled Time</th>
+          <th class="col-actual">Actual In</th>
+          <th class="col-actual">Actual Out</th>
+          <th class="col-teacher">Teacher's Name</th>
+          <th class="col-subject">Subject / Course</th>
+          <th class="col-grade">Grade / Section</th>
+          <th class="col-room">Room</th>
+          <th class="col-status">Teaching Status</th>
+          <th class="col-remarks">Observation / Remarks</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-num">1</td>
+          <td class="col-time">7:40 – 8:25 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Rowena</td>
+          <td class="col-subject">General Science</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">2</td>
+          <td class="col-time">7:40 – 8:25 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Ethel</td>
+          <td class="col-subject">UCSP</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">3</td>
+          <td class="col-time">8:25 – 9:05 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Norhaima</td>
+          <td class="col-subject">LCS</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">4</td>
+          <td class="col-time">8:25 – 9:05 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Alim Mamonas</td>
+          <td class="col-subject">Arabic</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">5</td>
+          <td class="col-time">9:05 – 9:45 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Jhelyn</td>
+          <td class="col-subject">General Math</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">6</td>
+          <td class="col-time">9:05 – 9:45 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Ethel</td>
+          <td class="col-subject">CPAR</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr class="break-row">
+          <td>—</td>
+          <td>9:45 – 10:00 AM</td>
+          <td colspan="2">—</td>
+          <td>Students / Staff</td>
+          <td>RECESS BREAK (15 min)</td>
+          <td>G11 & G12</td>
+          <td>Canteen</td>
+          <td>▢ Observed</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">7</td>
+          <td class="col-time">10:00 – 10:45 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Shi</td>
+          <td class="col-subject">PSKP</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">8</td>
+          <td class="col-time">10:00 – 10:45 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Nof</td>
+          <td class="col-subject">Pagsulat sa Filipino</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">9</td>
+          <td class="col-time">10:45 – 11:30 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Alim Samsuddin</td>
+          <td class="col-subject">SHAF</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">10</td>
+          <td class="col-time">10:45 – 11:30 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Aniah</td>
+          <td class="col-subject">Gen. Physics 2</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr class="break-row">
+          <td>—</td>
+          <td>11:30 AM – 12:40 PM</td>
+          <td colspan="2">—</td>
+          <td>Faculty & Students</td>
+          <td>LUNCH & SALAH BREAK (70 min)</td>
+          <td>G11 & G12</td>
+          <td>Musalla</td>
+          <td>▢ Observed</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">11</td>
+          <td class="col-time">12:40 – 1:25 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Nadzra</td>
+          <td class="col-subject">EC</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">12</td>
+          <td class="col-time">12:40 – 1:25 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Research Adviser</td>
+          <td class="col-subject">Research Consultation</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">13</td>
+          <td class="col-time">1:25 – 2:10 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Radzmia</td>
+          <td class="col-subject">Gen Bio 2</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">14</td>
+          <td class="col-time">1:25 – 2:10 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Radzmia</td>
+          <td class="col-subject">Gen Bio 2</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">15</td>
+          <td class="col-time">2:15 – 3:00 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Radzmia</td>
+          <td class="col-subject">Gen Bio 2 (Ext.)</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">16</td>
+          <td class="col-time">2:15 – 3:00 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Radzmia</td>
+          <td class="col-subject">Gen Bio 2 (Ext.)</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="sign-section">
+      <div class="sign-box">
+        <div class="sign-line"></div>
+        <div class="sign-title">Monitoring Officer Signature Over Printed Name</div>
+      </div>
+      <div class="sign-box">
+        <div class="sign-line"></div>
+        <div class="sign-title">School Principal / Academic Head</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== TUESDAY ==================== -->
+  <div class="page-sheet">
+    <div class="header-block">
+      <div class="institution-name">Daily Teaching Load Monitoring Form</div>
+      <div class="doc-title">Classroom Monitoring Sheet (Face-to-Face) <span class="day-badge">TUESDAY</span></div>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-item"><span class="meta-label">Monitor / Observer:</span><span class="meta-line"></span></div>
+      <div class="meta-item"><span class="meta-label">Date:</span><span class="meta-line"></span></div>
+      <div class="meta-item"><span class="meta-label">Term:</span><span class="meta-line">Second Term (Face-to-Face)</span></div>
+      <div class="meta-item"><span class="meta-label">Day:</span><span class="meta-line"><b>TUESDAY</b></span></div>
+    </div>
+
+    <table class="monitoring-table">
+      <thead>
+        <tr>
+          <th class="col-num">#</th>
+          <th class="col-time">Scheduled Time</th>
+          <th class="col-actual">Actual In</th>
+          <th class="col-actual">Actual Out</th>
+          <th class="col-teacher">Teacher's Name</th>
+          <th class="col-subject">Subject / Course</th>
+          <th class="col-grade">Grade / Section</th>
+          <th class="col-room">Room</th>
+          <th class="col-status">Teaching Status</th>
+          <th class="col-remarks">Observation / Remarks</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-num">1</td>
+          <td class="col-time">7:40 – 8:25 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Rowena</td>
+          <td class="col-subject">General Science</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">2</td>
+          <td class="col-time">7:40 – 8:25 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Ethel</td>
+          <td class="col-subject">UCSP</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">3</td>
+          <td class="col-time">8:25 – 9:05 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Norhaima</td>
+          <td class="col-subject">LCS</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">4</td>
+          <td class="col-time">8:25 – 9:05 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Alim Samsuddin</td>
+          <td class="col-subject">SHAF</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">5</td>
+          <td class="col-time">9:05 – 9:45 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Jhelyn</td>
+          <td class="col-subject">General Math</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">6</td>
+          <td class="col-time">9:05 – 9:45 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Ethel</td>
+          <td class="col-subject">CPAR</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr class="break-row">
+          <td>—</td>
+          <td>9:45 – 10:00 AM</td>
+          <td colspan="2">—</td>
+          <td>Students / Staff</td>
+          <td>RECESS BREAK (15 min)</td>
+          <td>G11 & G12</td>
+          <td>Canteen</td>
+          <td>▢ Observed</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">7</td>
+          <td class="col-time">10:00 – 10:45 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Shi</td>
+          <td class="col-subject">PSKP</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">8</td>
+          <td class="col-time">10:00 – 10:45 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Nof</td>
+          <td class="col-subject">Pagsulat sa Filipino</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">9</td>
+          <td class="col-time">10:45 – 11:30 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Alim Samsuddin</td>
+          <td class="col-subject">SHAF</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">10</td>
+          <td class="col-time">10:45 – 11:30 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Aniah</td>
+          <td class="col-subject">Gen. Physics 2</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr class="break-row">
+          <td>—</td>
+          <td>11:30 AM – 12:40 PM</td>
+          <td colspan="2">—</td>
+          <td>Faculty & Students</td>
+          <td>LUNCH & SALAH BREAK (70 min)</td>
+          <td>G11 & G12</td>
+          <td>Musalla</td>
+          <td>▢ Observed</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">11</td>
+          <td class="col-time">12:40 – 1:25 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Nadzra</td>
+          <td class="col-subject">EC</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">12</td>
+          <td class="col-time">12:40 – 1:25 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Sir Moh</td>
+          <td class="col-subject">PE 12</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">13</td>
+          <td class="col-time">1:25 – 2:10 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Radzmia</td>
+          <td class="col-subject">Gen Bio 2</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">14</td>
+          <td class="col-time">1:25 – 2:10 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Radzmia</td>
+          <td class="col-subject">Gen Bio 2</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">15</td>
+          <td class="col-time">2:15 – 3:00 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Homeroom Adviser</td>
+          <td class="col-subject">Homeroom</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">16</td>
+          <td class="col-time">2:15 – 3:00 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Alim Dipatuan</td>
+          <td class="col-subject">Qur'an</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="sign-section">
+      <div class="sign-box">
+        <div class="sign-line"></div>
+        <div class="sign-title">Monitoring Officer Signature Over Printed Name</div>
+      </div>
+      <div class="sign-box">
+        <div class="sign-line"></div>
+        <div class="sign-title">School Principal / Academic Head</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== WEDNESDAY ==================== -->
+  <div class="page-sheet">
+    <div class="header-block">
+      <div class="institution-name">Daily Teaching Load Monitoring Form</div>
+      <div class="doc-title">Classroom Monitoring Sheet (Face-to-Face) <span class="day-badge">WEDNESDAY</span></div>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-item"><span class="meta-label">Monitor / Observer:</span><span class="meta-line"></span></div>
+      <div class="meta-item"><span class="meta-label">Date:</span><span class="meta-line"></span></div>
+      <div class="meta-item"><span class="meta-label">Term:</span><span class="meta-line">Second Term (Face-to-Face)</span></div>
+      <div class="meta-item"><span class="meta-label">Day:</span><span class="meta-line"><b>WEDNESDAY</b></span></div>
+    </div>
+
+    <table class="monitoring-table">
+      <thead>
+        <tr>
+          <th class="col-num">#</th>
+          <th class="col-time">Scheduled Time</th>
+          <th class="col-actual">Actual In</th>
+          <th class="col-actual">Actual Out</th>
+          <th class="col-teacher">Teacher's Name</th>
+          <th class="col-subject">Subject / Course</th>
+          <th class="col-grade">Grade / Section</th>
+          <th class="col-room">Room</th>
+          <th class="col-status">Teaching Status</th>
+          <th class="col-remarks">Observation / Remarks</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-num">1</td>
+          <td class="col-time">7:40 – 8:25 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Rowena</td>
+          <td class="col-subject">General Science</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">2</td>
+          <td class="col-time">7:40 – 8:25 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Ethel</td>
+          <td class="col-subject">UCSP</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">3</td>
+          <td class="col-time">8:25 – 9:05 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Norhaima</td>
+          <td class="col-subject">LCS</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">4</td>
+          <td class="col-time">8:25 – 9:05 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Alim Mamonas</td>
+          <td class="col-subject">Arabic</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">5</td>
+          <td class="col-time">9:05 – 9:45 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Jhelyn</td>
+          <td class="col-subject">General Math</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">6</td>
+          <td class="col-time">9:05 – 9:45 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Ethel</td>
+          <td class="col-subject">CPAR</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr class="break-row">
+          <td>—</td>
+          <td>9:45 – 10:00 AM</td>
+          <td colspan="2">—</td>
+          <td>Students / Staff</td>
+          <td>RECESS BREAK (15 min)</td>
+          <td>G11 & G12</td>
+          <td>Canteen</td>
+          <td>▢ Observed</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">7</td>
+          <td class="col-time">10:00 – 10:45 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Shi</td>
+          <td class="col-subject">PSKP</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">8</td>
+          <td class="col-time">10:00 – 10:45 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Nof</td>
+          <td class="col-subject">Pagsulat sa Filipino</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">9</td>
+          <td class="col-time">10:45 – 11:30 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Alim Mamonas</td>
+          <td class="col-subject">Arabic</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">10</td>
+          <td class="col-time">10:45 – 11:30 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Aniah</td>
+          <td class="col-subject">Gen. Physics 2</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr class="break-row">
+          <td>—</td>
+          <td>11:30 AM – 12:40 PM</td>
+          <td colspan="2">—</td>
+          <td>Faculty & Students</td>
+          <td>LUNCH & SALAH BREAK (70 min)</td>
+          <td>G11 & G12</td>
+          <td>Musalla</td>
+          <td>▢ Observed</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">11</td>
+          <td class="col-time">12:40 – 1:25 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Nadzra</td>
+          <td class="col-subject">EC</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">12</td>
+          <td class="col-time">12:40 – 1:25 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Sir Moh</td>
+          <td class="col-subject">PE 12</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">13</td>
+          <td class="col-time">1:25 – 2:10 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Radzmia</td>
+          <td class="col-subject">Gen Bio 2</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">14</td>
+          <td class="col-time">1:25 – 2:10 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Radzmia</td>
+          <td class="col-subject">Gen Bio 2</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">15</td>
+          <td class="col-time">2:15 – 3:00 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Homeroom Adviser</td>
+          <td class="col-subject">Homeroom</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">16</td>
+          <td class="col-time">2:15 – 3:00 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Alim Dipatuan</td>
+          <td class="col-subject">Qur'an</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="sign-section">
+      <div class="sign-box">
+        <div class="sign-line"></div>
+        <div class="sign-title">Monitoring Officer Signature Over Printed Name</div>
+      </div>
+      <div class="sign-box">
+        <div class="sign-line"></div>
+        <div class="sign-title">School Principal / Academic Head</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== THURSDAY ==================== -->
+  <div class="page-sheet">
+    <div class="header-block">
+      <div class="institution-name">Daily Teaching Load Monitoring Form</div>
+      <div class="doc-title">Classroom Monitoring Sheet (Face-to-Face) <span class="day-badge">THURSDAY</span></div>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-item"><span class="meta-label">Monitor / Observer:</span><span class="meta-line"></span></div>
+      <div class="meta-item"><span class="meta-label">Date:</span><span class="meta-line"></span></div>
+      <div class="meta-item"><span class="meta-label">Term:</span><span class="meta-line">Second Term (Face-to-Face)</span></div>
+      <div class="meta-item"><span class="meta-label">Day:</span><span class="meta-line"><b>THURSDAY</b></span></div>
+    </div>
+
+    <table class="monitoring-table">
+      <thead>
+        <tr>
+          <th class="col-num">#</th>
+          <th class="col-time">Scheduled Time</th>
+          <th class="col-actual">Actual In</th>
+          <th class="col-actual">Actual Out</th>
+          <th class="col-teacher">Teacher's Name</th>
+          <th class="col-subject">Subject / Course</th>
+          <th class="col-grade">Grade / Section</th>
+          <th class="col-room">Room</th>
+          <th class="col-status">Teaching Status</th>
+          <th class="col-remarks">Observation / Remarks</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-num">1</td>
+          <td class="col-time">7:40 – 8:25 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Rowena</td>
+          <td class="col-subject">General Science</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">2</td>
+          <td class="col-time">7:40 – 8:25 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Ethel</td>
+          <td class="col-subject">UCSP</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">3</td>
+          <td class="col-time">8:25 – 9:05 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Norhaima</td>
+          <td class="col-subject">LCS</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">4</td>
+          <td class="col-time">8:25 – 9:05 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Alim Samsuddin</td>
+          <td class="col-subject">SHAF</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">5</td>
+          <td class="col-time">9:05 – 9:45 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Jhelyn</td>
+          <td class="col-subject">Gen Math / HR</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">6</td>
+          <td class="col-time">9:05 – 9:45 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Ethel</td>
+          <td class="col-subject">CPAR</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr class="break-row">
+          <td>—</td>
+          <td>9:45 – 10:00 AM</td>
+          <td colspan="2">—</td>
+          <td>Students / Staff</td>
+          <td>RECESS BREAK (15 min)</td>
+          <td>G11 & G12</td>
+          <td>Canteen</td>
+          <td>▢ Observed</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">7</td>
+          <td class="col-time">10:00 – 10:45 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Shi</td>
+          <td class="col-subject">PSKP</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">8</td>
+          <td class="col-time">10:00 – 10:45 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Nof</td>
+          <td class="col-subject">Pagsulat sa Filipino</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">9</td>
+          <td class="col-time">10:45 – 11:30 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Homeroom Adviser</td>
+          <td class="col-subject">Homeroom</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">10</td>
+          <td class="col-time">10:45 – 11:30 AM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Aniah</td>
+          <td class="col-subject">Gen. Physics 2</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr class="break-row">
+          <td>—</td>
+          <td>11:30 AM – 12:40 PM</td>
+          <td colspan="2">—</td>
+          <td>Faculty & Students</td>
+          <td>LUNCH & SALAH BREAK (70 min)</td>
+          <td>G11 & G12</td>
+          <td>Musalla</td>
+          <td>▢ Observed</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">11</td>
+          <td class="col-time">12:40 – 1:25 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Nadzra</td>
+          <td class="col-subject">EC</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">12</td>
+          <td class="col-time">12:40 – 1:25 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Homeroom Adviser</td>
+          <td class="col-subject">Homeroom</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">13</td>
+          <td class="col-time">1:25 – 2:10 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Radzmia</td>
+          <td class="col-subject">Gen Bio 2</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">14</td>
+          <td class="col-time">1:25 – 2:10 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Radzmia</td>
+          <td class="col-subject">Gen Bio 2</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">15</td>
+          <td class="col-time">2:15 – 3:00 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Alim Dipatuan</td>
+          <td class="col-subject">Qur'an</td>
+          <td class="col-grade">Grade 11</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="col-num">16</td>
+          <td class="col-time">2:15 – 3:00 PM</td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td><span class="actual-box">[ : ]</span></td>
+          <td class="col-teacher">Tchr. Aniah</td>
+          <td class="col-subject">Gen. Physics 2</td>
+          <td class="col-grade">Grade 12 (Suhayb)</td>
+          <td></td>
+          <td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="sign-section">
+      <div class="sign-box">
+        <div class="sign-line"></div>
+        <div class="sign-title">Monitoring Officer Signature Over Printed Name</div>
+      </div>
+      <div class="sign-box">
+        <div class="sign-line"></div>
+        <div class="sign-title">School Principal / Academic Head</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== BLANK CUSTOMIZABLE DAILY SHEET ==================== -->
+  <div class="page-sheet">
+    <div class="header-block">
+      <div class="institution-name">Daily Teaching Load Monitoring Form</div>
+      <div class="doc-title">Blank Master Monitoring Sheet (Any Day)</div>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-item"><span class="meta-label">Monitor / Observer:</span><span class="meta-line"></span></div>
+      <div class="meta-item"><span class="meta-label">Date:</span><span class="meta-line"></span></div>
+      <div class="meta-item"><span class="meta-label">Term:</span><span class="meta-line">Second Term [ ] &nbsp; Third Term [ ]</span></div>
+      <div class="meta-item"><span class="meta-label">Day:</span><span class="meta-line">[ ] Sun &nbsp; [ ] Mon &nbsp; [ ] Tue &nbsp; [ ] Wed &nbsp; [ ] Thu</span></div>
+    </div>
+
+    <table class="monitoring-table">
+      <thead>
+        <tr>
+          <th class="col-num">#</th>
+          <th class="col-time">Scheduled Time</th>
+          <th class="col-actual">Actual In</th>
+          <th class="col-actual">Actual Out</th>
+          <th class="col-teacher">Teacher's Name</th>
+          <th class="col-subject">Subject / Course</th>
+          <th class="col-grade">Grade / Section</th>
+          <th class="col-room">Room</th>
+          <th class="col-status">Teaching Status</th>
+          <th class="col-remarks">Observation / Remarks</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 15 Blank Rows for on-the-fly monitoring -->
+        <tr><td class="col-num">1</td><td></td><td><span class="actual-box">[ : ]</span></td><td><span class="actual-box">[ : ]</span></td><td></td><td></td><td></td><td></td><td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td><td></td></tr>
+        <tr><td class="col-num">2</td><td></td><td><span class="actual-box">[ : ]</span></td><td><span class="actual-box">[ : ]</span></td><td></td><td></td><td></td><td></td><td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td><td></td></tr>
+        <tr><td class="col-num">3</td><td></td><td><span class="actual-box">[ : ]</span></td><td><span class="actual-box">[ : ]</span></td><td></td><td></td><td></td><td></td><td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td><td></td></tr>
+        <tr><td class="col-num">4</td><td></td><td><span class="actual-box">[ : ]</span></td><td><span class="actual-box">[ : ]</span></td><td></td><td></td><td></td><td></td><td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td><td></td></tr>
+        <tr><td class="col-num">5</td><td></td><td><span class="actual-box">[ : ]</span></td><td><span class="actual-box">[ : ]</span></td><td></td><td></td><td></td><td></td><td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td><td></td></tr>
+        <tr><td class="col-num">6</td><td></td><td><span class="actual-box">[ : ]</span></td><td><span class="actual-box">[ : ]</span></td><td></td><td></td><td></td><td></td><td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td><td></td></tr>
+        <tr><td class="col-num">7</td><td></td><td><span class="actual-box">[ : ]</span></td><td><span class="actual-box">[ : ]</span></td><td></td><td></td><td></td><td></td><td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td><td></td></tr>
+        <tr><td class="col-num">8</td><td></td><td><span class="actual-box">[ : ]</span></td><td><span class="actual-box">[ : ]</span></td><td></td><td></td><td></td><td></td><td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td><td></td></tr>
+        <tr><td class="col-num">9</td><td></td><td><span class="actual-box">[ : ]</span></td><td><span class="actual-box">[ : ]</span></td><td></td><td></td><td></td><td></td><td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td><td></td></tr>
+        <tr><td class="col-num">10</td><td></td><td><span class="actual-box">[ : ]</span></td><td><span class="actual-box">[ : ]</span></td><td></td><td></td><td></td><td></td><td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td><td></td></tr>
+        <tr><td class="col-num">11</td><td></td><td><span class="actual-box">[ : ]</span></td><td><span class="actual-box">[ : ]</span></td><td></td><td></td><td></td><td></td><td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td><td></td></tr>
+        <tr><td class="col-num">12</td><td></td><td><span class="actual-box">[ : ]</span></td><td><span class="actual-box">[ : ]</span></td><td></td><td></td><td></td><td></td><td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td><td></td></tr>
+        <tr><td class="col-num">13</td><td></td><td><span class="actual-box">[ : ]</span></td><td><span class="actual-box">[ : ]</span></td><td></td><td></td><td></td><td></td><td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td><td></td></tr>
+        <tr><td class="col-num">14</td><td></td><td><span class="actual-box">[ : ]</span></td><td><span class="actual-box">[ : ]</span></td><td></td><td></td><td></td><td></td><td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td><td></td></tr>
+        <tr><td class="col-num">15</td><td></td><td><span class="actual-box">[ : ]</span></td><td><span class="actual-box">[ : ]</span></td><td></td><td></td><td></td><td></td><td class="col-status"><div class="status-checks"><span>▢ Cond.</span><span>▢ Late</span><span>▢ Absent</span><span>▢ No Class</span></div></td><td></td></tr>
+      </tbody>
+    </table>
+
+    <div class="sign-section">
+      <div class="sign-box">
+        <div class="sign-line"></div>
+        <div class="sign-title">Monitoring Officer Signature Over Printed Name</div>
+      </div>
+      <div class="sign-box">
+        <div class="sign-line"></div>
+        <div class="sign-title">School Principal / Academic Head</div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
