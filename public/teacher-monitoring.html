@@ -469,6 +469,7 @@
       <div class="teacher-select-box">
         <label for="teacher-select" class="filter-label">Select Teacher:</label>
         <select id="teacher-select" onchange="onTeacherSelectChange()">
+          <option value="all">🌟 All Faculty (Show All 47 Teachers)</option>
           <option value="0">Alim Abdulwahab (4 F2F classes)</option>\n          <option value="1">Alim Dipatuan (4 F2F classes)</option>\n          <option value="2">Alim Mamonas (8 F2F classes)</option>\n          <option value="3">Alim Samsuddin (12 F2F classes)</option>\n          <option value="4">Sir Moh (10 F2F classes)</option>\n          <option value="5">Tchr. Angeleni (6 F2F classes)</option>\n          <option value="6">Tchr. Arvin (15 F2F classes)</option>\n          <option value="7">Tchr. Ayah and Ustadha Saliha (5 F2F classes)</option>\n          <option value="8">Tchr. Erica (5 F2F classes)</option>\n          <option value="9">Tchr. Fhairudz (15 F2F classes)</option>\n          <option value="10">Tchr. Franchette (6 F2F classes)</option>\n          <option value="11">Tchr. Halnaisa (11 F2F classes)</option>\n          <option value="12">Tchr. Jayra (13 F2F classes)</option>\n          <option value="13">Tchr. Jenny (5 F2F classes)</option>\n          <option value="14">Tchr. Jerlyn (9 F2F classes)</option>\n          <option value="15">Tchr. Jessa (15 F2F classes)</option>\n          <option value="16">Tchr. Jhelyn (15 F2F classes)</option>\n          <option value="17">Tchr. Junaisah (17 F2F classes)</option>\n          <option value="18">Tchr. Katrina (8 F2F classes)</option>\n          <option value="19">Tchr. Keychell (23 F2F classes)</option>\n          <option value="20">Tchr. Marham (14 F2F classes)</option>\n          <option value="21">Tchr. Monisa (12 F2F classes)</option>\n          <option value="22">Tchr. Nadzra (14 F2F classes)</option>\n          <option value="23">Tchr. Nof (9 F2F classes)</option>\n          <option value="24">Tchr. Norhaima (16 F2F classes)</option>\n          <option value="25">Tchr. Norhydie (17 F2F classes)</option>\n          <option value="26">Tchr. Radzmia (16 F2F classes)</option>\n          <option value="27">Tchr. Rowena (19 F2F classes)</option>\n          <option value="28">Tchr. Sahdia (12 F2F classes)</option>\n          <option value="29">Tchr. Shi (14 F2F classes)</option>\n          <option value="30">Tchr. Shirehan (6 F2F classes)</option>\n          <option value="31">Tchr. Sitti (10 F2F classes)</option>\n          <option value="32">Tchr. Sophia (17 F2F classes)</option>\n          <option value="33">Tchr. Thea (5 F2F classes)</option>\n          <option value="34">Tchr. Wendelyn (5 F2F classes)</option>\n          <option value="35">Tchr. Wendy (22 F2F classes)</option>\n          <option value="36">Tchr. Zara (3 F2F classes)</option>\n          <option value="37">Ust. Abdi (2 F2F classes)</option>\n          <option value="38">Ust. Abdiraheem (7 F2F classes)</option>\n          <option value="39">Ust. Ali (4 F2F classes)</option>\n          <option value="40">Ust. Ersahad (17 F2F classes)</option>\n          <option value="41">Ust. Faidh (2 F2F classes)</option>\n          <option value="42">Ust. Obaydah (13 F2F classes)</option>\n          <option value="43">Ustadh Jaisam (8 F2F classes)</option>\n          <option value="44">Ustadh Muh Ali (4 F2F classes)</option>\n          <option value="45">Ustadha Saliha (18 F2F classes)</option>\n          <option value="46">Ustadha Silfa (11 F2F classes)</option>\n        </select>
       </div>
     </div>
@@ -16451,9 +16452,28 @@
       });
     }
 
-    function showTeacher(idx) {
-      activeIndex = idx;
+    function showTeacher(val) {
       const select = document.getElementById('teacher-select');
+      if (val === 'all') {
+        if (select) select.value = 'all';
+        document.querySelectorAll('.page-sheet').forEach(sh => {
+          const cat = sh.getAttribute('data-cat');
+          let match = false;
+          if (currentDept === 'all') match = true;
+          else if (currentDept === 'jhs' && cat === 'jhs') match = true;
+          else if (currentDept === 'shs' && cat === 'shs') match = true;
+          else if (currentDept === 'elem' && cat === 'elem') match = true;
+          else if (currentDept === 'isal' && cat === 'isal') match = true;
+
+          if (match) sh.classList.remove('hidden-sheet');
+          else sh.classList.add('hidden-sheet');
+        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
+      const idx = parseInt(val, 10);
+      activeIndex = idx;
       if (select) select.value = idx;
 
       document.querySelectorAll('.page-sheet').forEach(sh => {
@@ -16465,21 +16485,17 @@
         }
       });
 
-      const activeEl = document.getElementById('sheet-' + idx);
-      if (activeEl) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function onTeacherSelectChange() {
       const select = document.getElementById('teacher-select');
-      const idx = parseInt(select.value, 10);
-      showTeacher(idx);
+      showTeacher(select.value);
     }
 
     function navigateTeacher(delta) {
       const select = document.getElementById('teacher-select');
-      const visibleOptions = Array.from(select.options).filter(opt => opt.style.display !== 'none');
+      const visibleOptions = Array.from(select.options).filter(opt => opt.style.display !== 'none' && opt.value !== 'all');
       if (visibleOptions.length === 0) return;
 
       const currentVal = parseInt(select.value, 10);
@@ -16498,7 +16514,15 @@
       document.querySelectorAll('.dept-pill').forEach(btn => {
         btn.classList.remove('active');
       });
-      event.target.classList.add('active');
+      const activeBtn = Array.from(document.querySelectorAll('.dept-pill')).find(b => {
+        if (dept === 'all' && b.innerText.includes('All')) return true;
+        if (dept === 'jhs' && b.innerText.includes('Junior')) return true;
+        if (dept === 'shs' && b.innerText.includes('Senior')) return true;
+        if (dept === 'elem' && b.innerText.includes('Elementary')) return true;
+        if (dept === 'isal' && b.innerText.includes('ISAL')) return true;
+        return false;
+      });
+      if (activeBtn) activeBtn.classList.add('active');
 
       const select = document.getElementById('teacher-select');
       let firstVisible = -1;
@@ -16524,44 +16548,51 @@
         }
       });
 
-      if (firstVisible !== -1) {
+      if (select && select.value === 'all') {
+        showTeacher('all');
+      } else if (firstVisible !== -1) {
         showTeacher(firstVisible);
       }
     }
 
     function printActiveTeacher() {
-      document.querySelectorAll('.page-sheet').forEach(sh => {
-        const idx = parseInt(sh.getAttribute('data-idx'), 10);
-        if (idx === activeIndex) {
-          sh.classList.remove('hidden-sheet');
-        } else {
-          sh.classList.add('hidden-sheet');
-        }
-      });
-      window.print();
+      const select = document.getElementById('teacher-select');
+      if (select && select.value === 'all') {
+        showTeacher(activeIndex >= 0 ? activeIndex : 0);
+      } else {
+        showTeacher(activeIndex);
+      }
+      setTimeout(() => {
+        window.print();
+      }, 150);
     }
 
     function printAllTeachers() {
-      document.querySelectorAll('.page-sheet').forEach(sh => {
-        const cat = sh.getAttribute('data-cat');
-        let match = false;
-        if (currentDept === 'all') match = true;
-        else if (currentDept === 'jhs' && cat === 'jhs') match = true;
-        else if (currentDept === 'shs' && cat === 'shs') match = true;
-        else if (currentDept === 'elem' && cat === 'elem') match = true;
-        else if (currentDept === 'isal' && cat === 'isal') match = true;
+      // 1. Force ALL FILTER before print all
+      filterDept('all');
 
-        if (match) {
-          sh.classList.remove('hidden-sheet');
-        } else {
-          sh.classList.add('hidden-sheet');
-        }
+      // 2. Unhide all 47 sheets
+      document.querySelectorAll('.page-sheet').forEach(sh => {
+        sh.classList.remove('hidden-sheet');
       });
-      window.print();
+
+      // 3. Mark select dropdown as all
+      const select = document.getElementById('teacher-select');
+      if (select) select.value = 'all';
+
+      // 4. Trigger print dialog after DOM layout settles
+      setTimeout(() => {
+        window.print();
+      }, 150);
     }
 
     window.addEventListener('afterprint', () => {
-      showTeacher(activeIndex);
+      const select = document.getElementById('teacher-select');
+      if (select && select.value === 'all') {
+        showTeacher('all');
+      } else {
+        showTeacher(activeIndex);
+      }
     });
 
     window.addEventListener('keydown', (e) => {
