@@ -94,6 +94,10 @@ def normalize_teacher(name):
     if name in ["Tchr. Junaisa", "Tchr. Junaisah"]: return "Tchr. Junaisah"
     if name == "Tchr. Jairah": return "Tchr. Jayra"
     if name in ["Tchr. Moh", "Sir Mohaymen", "Sir Moh"]: return "Sir Moh"
+    if name in ["Tchr. Shi", "Tchr. Shirehan"]: return "Tchr. Shirehan"
+    if name in ["Tchr. Zara", "Tchr. Franchette"]: return "Tchr. Franchette"
+    if name in ["Ust. Abdi", "Ust. Abdiraheem", "Ustadh Abdi", "Ustadh Abdiraheem", "Ustd. Abdi", "Ustd. Abdiraheem"]: return "Ust. Abdiraheem"
+    if name in ["Ust. Ali", "Ustadh Ali", "Ustadh Muh Ali", "Ustdh ali", "Ustdh. Ali", "Ust. Muh Ali", "Ustadh Muh. Ali"]: return "Ustadh Muh Ali"
     return name
 
 def clean_parse(text):
@@ -156,7 +160,7 @@ sections = [
 
 # Build Header
 def build_header_html(form_title, form_subtitle=None):
-    sub_markup = f'<div class="form-sub">{form_subtitle}</div>' if form_subtitle else '<div class="form-sub">Pure Face-to-Face & Blended Modality &bull; School Year 2025–2026</div>'
+    sub_markup = f'<div class="form-sub">{form_subtitle}</div>' if form_subtitle else '<div class="form-sub">Pure Face-to-Face & Blended Modality &bull; School Year 2026 - 2027</div>'
     return f'''
         <div class="sheet-header">
           <div class="header-logo-side">
@@ -1053,7 +1057,7 @@ html_out.append('''<!DOCTYPE html>
     <!-- MODALITY NAVIGATION -->
     <div class="modality-bar">
       <span class="modality-label">Learning Modality:</span>
-      <a href="/f2f-monitoring.html" class="modality-pill active" title="Active S.Y. 2025-2026">
+      <a href="/f2f-monitoring.html" class="modality-pill active" title="Active S.Y. 2026 - 2027">
         <span class="modality-dot dot-active"></span>
         🏫 Face-to-Face (F2F)
       </a>
@@ -1078,7 +1082,7 @@ html_out.append('''<!DOCTYPE html>
             <span class="badge-f2f">Pure F2F Portal</span>
           </div>
           <div style="font-size:11.5px;color:#475569;font-weight:500;">
-            Instructional Teaching Load Monitoring System &bull; Pure Face-to-Face & Blended Modality (S.Y. 2025-2026)
+            Instructional Teaching Load Monitoring System &bull; Pure Face-to-Face & Blended Modality (S.Y. 2026 - 2027)
           </div>
         </div>
       </div>
@@ -1192,7 +1196,7 @@ for d in days:
     for sec in sections:
         header_markup = build_header_html(
             "DAILY CLASSROOM INSTRUCTIONAL LOAD MONITORING FORM",
-            f"Pure Face-to-Face Modality &bull; {sec['name']} &bull; S.Y. 2025–2026"
+            f"Pure Face-to-Face Modality &bull; {sec['name']} &bull; S.Y. 2026 - 2027"
         )
         s_grid = elem_grid if sec['sheet'] == 'ELEM' else (hs_new_grid if sec['sheet'] == 'HS SCHED (NEW)' else hs_grid)
         d_idx = days.index(d)
@@ -1349,7 +1353,7 @@ for d in days:
           <div class="meta-row"><span class="meta-lbl">Date:</span><span class="meta-val"></span></div>
           <div class="meta-row"><span class="meta-lbl">Monitored Sections:</span><span class="meta-val">{len(cl['sections'])} Pure F2F Classes</span></div>
           <div class="meta-row"><span class="meta-lbl">Monitoring Purpose:</span><span class="meta-val">Classroom Attendance & Instructional Verification</span></div>
-          <div class="meta-row"><span class="meta-lbl">School Year:</span><span class="meta-val">2025 - 2026</span></div>
+          <div class="meta-row"><span class="meta-lbl">School Year:</span><span class="meta-val">2026 - 2027</span></div>
         </div>
 
         <!-- TABLE -->
@@ -1409,7 +1413,7 @@ for d in days:
 for sec in sections:
     header_markup = build_header_html(
         "WEEKLY CLASS TIMETABLE & INSTRUCTIONAL LOAD MATRIX",
-        f"Master Weekly Schedule &bull; {sec['name']} &bull; S.Y. 2025–2026"
+        f"Master Weekly Schedule &bull; {sec['name']} &bull; S.Y. 2026 - 2027"
     )
     s_grid = elem_grid if sec['sheet'] == 'ELEM' else (hs_new_grid if sec['sheet'] == 'HS SCHED (NEW)' else hs_grid)
     
@@ -1430,7 +1434,7 @@ for sec in sections:
           <div class="meta-row"><span class="meta-lbl">Room:</span><span class="meta-val"></span></div>
           <div class="meta-row"><span class="meta-lbl">Department:</span><span class="meta-val">{sec['dept_label']}</span></div>
           <div class="meta-row"><span class="meta-lbl">Modality:</span><span class="meta-val">Pure Face-to-Face</span></div>
-          <div class="meta-row"><span class="meta-lbl">School Year:</span><span class="meta-val">2025 - 2026</span></div>
+          <div class="meta-row"><span class="meta-lbl">School Year:</span><span class="meta-val">2026 - 2027</span></div>
         </div>
 
         <!-- TABLE -->
@@ -1500,7 +1504,7 @@ for t in teacher_loads_data:
     cat_esc = html.escape(t['category'])
     header_markup = build_header_html(
         "INDIVIDUAL TEACHER'S TEACHING LOAD & WEEKLY SCHEDULE",
-        f"Master Weekly Faculty Program &bull; {t_name_esc} &bull; S.Y. 2025–2026"
+        f"Master Weekly Faculty Program &bull; {t_name_esc} &bull; S.Y. 2026 - 2027"
     )
 
     html_out.append(f'''
@@ -1520,7 +1524,7 @@ for t in teacher_loads_data:
           <div class="meta-row"><span class="meta-lbl">Room Assignment:</span><span class="meta-val"></span></div>
           <div class="meta-row"><span class="meta-lbl">Department / Faculty:</span><span class="meta-val">{dept_esc}</span></div>
           <div class="meta-row"><span class="meta-lbl">Instructional Mode:</span><span class="meta-val">Pure Face-to-Face & Blended</span></div>
-          <div class="meta-row"><span class="meta-lbl">School Year:</span><span class="meta-val">2025 – 2026</span></div>
+          <div class="meta-row"><span class="meta-lbl">School Year:</span><span class="meta-val">2026 - 2027</span></div>
         </div>
 
         <!-- SECTION 1: WEEKLY SCHEDULE MATRIX -->
@@ -1632,7 +1636,7 @@ for t in teacher_loads_data:
           <div class="sign-col">
             <div class="sign-title">Prepared & Conformed by:</div>
             <div class="sign-name">{t_name_esc}</div>
-            <div class="sign-role">Faculty Member / Subject Teacher &bull; S.Y. 2025–2026</div>
+            <div class="sign-role">Faculty Member / Subject Teacher &bull; S.Y. 2026 - 2027</div>
           </div>
           <div class="sign-col">
             <div class="sign-title">Attested & Approved by:</div>
@@ -1670,7 +1674,7 @@ for t_name in sorted(teacher_schedule.keys()):
           <div class="meta-row"><span class="meta-lbl">Total Weekly Loads:</span><span class="meta-val td-bold">{len(t_items)} Pure F2F Classes</span></div>
           <div class="meta-row"><span class="meta-lbl">Department:</span><span class="meta-val">{t_dept}</span></div>
           <div class="meta-row"><span class="meta-lbl">Instructional Mode:</span><span class="meta-val">Pure Face-to-Face</span></div>
-          <div class="meta-row"><span class="meta-lbl">School Year:</span><span class="meta-val">2025 - 2026</span></div>
+          <div class="meta-row"><span class="meta-lbl">School Year:</span><span class="meta-val">2026 - 2027</span></div>
           <div class="meta-row"><span class="meta-lbl">Faculty Status:</span><span class="meta-val">Active Faculty Member</span></div>
         </div>
 

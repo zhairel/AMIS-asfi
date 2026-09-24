@@ -107,6 +107,10 @@ def normalize_teacher(name):
     if name in ["Tchr. Junaisa", "Tchr. Junaisah"]: return "Tchr. Junaisah"
     if name == "Tchr. Jairah": return "Tchr. Jayra"
     if name in ["Tchr. Moh", "Sir Mohaymen", "Sir Moh"]: return "Sir Moh"
+    if name in ["Tchr. Shi", "Tchr. Shirehan"]: return "Tchr. Shirehan"
+    if name in ["Tchr. Zara", "Tchr. Franchette"]: return "Tchr. Franchette"
+    if name in ["Ust. Abdi", "Ust. Abdiraheem", "Ustadh Abdi", "Ustadh Abdiraheem", "Ustd. Abdi", "Ustd. Abdiraheem"]: return "Ust. Abdiraheem"
+    if name in ["Ust. Ali", "Ustadh Ali", "Ustadh Muh Ali", "Ustdh ali", "Ustdh. Ali", "Ust. Muh Ali", "Ustadh Muh. Ali"]: return "Ustadh Muh Ali"
     return name
 
 def clean_parse(text):
@@ -713,7 +717,7 @@ html_out.append('''<!DOCTYPE html>
     <!-- MODALITY NAVIGATION -->
     <div class="modality-bar">
       <span class="modality-label">Learning Modality:</span>
-      <a href="/teacher-monitoring.html" class="modality-pill active" title="Active S.Y. 2025-2026">
+      <a href="/teacher-monitoring.html" class="modality-pill active" title="Active S.Y. 2026 - 2027">
         <span class="modality-dot dot-active"></span>
         🏫 Face-to-Face (F2F)
       </a>
@@ -738,7 +742,7 @@ html_out.append('''<!DOCTYPE html>
             <span class="badge-f2f">Teacher Monitoring Portal</span>
           </div>
           <div style="font-size:11.5px;color:#475569;font-weight:500;">
-            Daily Instructional Attendance & Load Monitoring Record (Face-to-Face &bull; S.Y. 2025–2026)
+            Daily Instructional Attendance & Load Monitoring Record (Face-to-Face &bull; S.Y. 2026 - 2027)
           </div>
         </div>
       </div>
@@ -815,7 +819,7 @@ for idx, t in enumerate(teachers_list):
             <div class="arabic-header" dir="rtl" lang="ar">المدرسة المنورة الإسلامية</div>
             <div class="school-name">AL MUNAWWARA ISLAMIC SCHOOL</div>
             <div class="form-title">TEACHER INSTRUCTIONAL ATTENDANCE & LOAD MONITORING RECORD</div>
-            <div class="form-sub">Face-to-Face Modality &bull; Faculty Monitoring Form &bull; School Year 2025–2026</div>
+            <div class="form-sub">Face-to-Face Modality &bull; Faculty Monitoring Form &bull; School Year 2026 - 2027</div>
           </div>
           <div class="header-logo-side">
             <img class="header-logo amis-img" alt="AMIS Logo">
@@ -828,7 +832,7 @@ for idx, t in enumerate(teachers_list):
           <div class="meta-row"><span class="meta-lbl">Total Weekly Loads:</span><span class="meta-val td-bold">{len(items)} F2F Classes</span></div>
           <div class="meta-row"><span class="meta-lbl">Room Assignment:</span><span class="meta-val"></span></div>
           <div class="meta-row" style="grid-column: span 2;"><span class="meta-lbl">Week Monitored:</span><span class="meta-val"></span></div>
-          <div class="meta-row"><span class="meta-lbl">School Year:</span><span class="meta-val">2025 – 2026</span></div>
+          <div class="meta-row"><span class="meta-lbl">School Year:</span><span class="meta-val">2026 - 2027</span></div>
         </div>
 
         <!-- TABLE -->
