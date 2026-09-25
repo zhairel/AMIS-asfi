@@ -779,28 +779,9 @@ for idx, t in enumerate(all_teachers):
           </tr>''')
         row_num += 1
 
-    html_out.append(f'''
+    html_out.append('''
         </tbody>
       </table>
-
-      <!-- SIGNATURE BLOCK -->
-      <div class="sign-row">
-        <div class="sign-col">
-          <div class="sign-line"></div>
-          <div class="sign-label">{t_name_esc}</div>
-          <div class="sign-title">Teacher's Signature over Printed Name</div>
-        </div>
-        <div class="sign-col">
-          <div class="sign-line"></div>
-          <div class="sign-label">Academic Coordinator / Department Head</div>
-          <div class="sign-title">Verified & Monitored By</div>
-        </div>
-        <div class="sign-col">
-          <div class="sign-line"></div>
-          <div class="sign-label">School Principal / Directress</div>
-          <div class="sign-title">Approved By</div>
-        </div>
-      </div>
     </div>
 ''')
 

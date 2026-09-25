@@ -1699,22 +1699,6 @@ for t in teacher_loads_data:
               </th>
             </tr>
           </tfoot>
-        </table>
-
-        <!-- SIGN-OFF BLOCK -->
-        <div class="sign-block">
-          <div class="sign-col">
-            <div class="sign-title">Prepared & Conformed by:</div>
-            <div class="sign-name">{t_name_esc}</div>
-            <div class="sign-role">Faculty Member / Subject Teacher &bull; S.Y. 2026 - 2027</div>
-          </div>
-          <div class="sign-col">
-            <div class="sign-title">Attested & Approved by:</div>
-            <div class="sign-name">ACADEMIC COORDINATOR / PRINCIPAL</div>
-            <div class="sign-role">Al Munawwara Islamic School</div>
-          </div>
-        </div>
-
       </div>
     </div>
 ''')
@@ -1829,25 +1813,6 @@ for t_name in sorted(teacher_schedule.keys()):
     html_out.append(f'''
           </tbody>
         </table>
-
-        <!-- SIGNATURE BLOCK -->
-        <div class="sign-row" style="margin-top:auto;padding-top:6px;border-top:1.5px solid #cbd5e1;display:grid;grid-template-columns:repeat(3, 1fr);gap:16px;font-size:7.5pt;">
-          <div class="sign-col" style="text-align:center;">
-            <div style="border-bottom:1.5px solid #0f172a;height:24px;margin-bottom:4px;"></div>
-            <div style="font-weight:800;color:#1e293b;text-transform:uppercase;font-size:7pt;letter-spacing:0.3px;">{html.escape(t_name)}</div>
-            <div style="font-size:6.8pt;color:#64748b;font-weight:600;">Teacher's Signature over Printed Name</div>
-          </div>
-          <div class="sign-col" style="text-align:center;">
-            <div style="border-bottom:1.5px solid #0f172a;height:24px;margin-bottom:4px;"></div>
-            <div style="font-weight:800;color:#1e293b;text-transform:uppercase;font-size:7pt;letter-spacing:0.3px;">Academic Coordinator / Department Head</div>
-            <div style="font-size:6.8pt;color:#64748b;font-weight:600;">Verified & Monitored By</div>
-          </div>
-          <div class="sign-col" style="text-align:center;">
-            <div style="border-bottom:1.5px solid #0f172a;height:24px;margin-bottom:4px;"></div>
-            <div style="font-weight:800;color:#1e293b;text-transform:uppercase;font-size:7pt;letter-spacing:0.3px;">School Principal / Directress</div>
-            <div style="font-size:6.8pt;color:#64748b;font-weight:600;">Approved By</div>
-          </div>
-        </div>
       </div>
     </div>
 ''')

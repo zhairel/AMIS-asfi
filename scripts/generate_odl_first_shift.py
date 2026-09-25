@@ -1178,24 +1178,6 @@ for sec in sections:
           </tbody>
         </table>
       </div>
-
-      <div class="sign-row">
-        <div class="sign-col">
-          <div class="sign-line"></div>
-          <div class="sign-label">Class Adviser / Monitoring Officer</div>
-          <div class="sign-title">Signature over Printed Name</div>
-        </div>
-        <div class="sign-col">
-          <div class="sign-line"></div>
-          <div class="sign-label">Department Head / Coordinator</div>
-          <div class="sign-title">Academic Verification</div>
-        </div>
-        <div class="sign-col">
-          <div class="sign-line"></div>
-          <div class="sign-label">School Principal</div>
-          <div class="sign-title">Final Approval &amp; DepEd Endorsement</div>
-        </div>
-      </div>
     </div>
 ''')
 
@@ -1306,24 +1288,6 @@ for t_data in teachers_list:
     html_out.append('''
           </tbody>
         </table>
-      </div>
-
-      <div class="sign-row">
-        <div class="sign-col">
-          <div class="sign-line"></div>
-          <div class="sign-label">Teacher In-Charge</div>
-          <div class="sign-title">Conforme / Signature</div>
-        </div>
-        <div class="sign-col">
-          <div class="sign-line"></div>
-          <div class="sign-label">Department Head / Coordinator</div>
-          <div class="sign-title">Verified by Academic Department</div>
-        </div>
-        <div class="sign-col">
-          <div class="sign-line"></div>
-          <div class="sign-label">School Principal</div>
-          <div class="sign-title">Approved Teaching Load</div>
-        </div>
       </div>
     </div>
 ''')
