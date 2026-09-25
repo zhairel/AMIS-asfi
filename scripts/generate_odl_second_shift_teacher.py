@@ -320,24 +320,6 @@ for t_name, t_data in teacher_monitor_map.items():
 teachers_list = sorted(teacher_monitor_map.values(), key=lambda x: x['name'])
 print(f"Extracted {len(teachers_list)} teachers for ODL 2nd Shift.")
 
-def build_header_html():
-    return f'''
-        <div class="sheet-header">
-          <div class="header-logo-side">
-            <img class="header-logo deped-img" alt="Department of Education Logo">
-          </div>
-          <div class="header-center-text">
-            <div class="arabic-header" dir="rtl" lang="ar">المدرسة المنورة الإسلامية</div>
-            <div class="school-name">AL MUNAWWARA ISLAMIC SCHOOL</div>
-            <div class="form-title">TEACHER INSTRUCTIONAL ATTENDANCE & LOAD MONITORING RECORD</div>
-            <div class="form-sub">Online Distance Learning (Second Shift) &bull; Official Monitoring Record &bull; SY 2026 - 2027</div>
-          </div>
-          <div class="header-logo-side">
-            <img class="header-logo amis-img" alt="Al Munawwara Islamic School Official Seal">
-          </div>
-        </div>
-    '''
-
 html_out = []
 html_out.append('''<!DOCTYPE html>
 <html lang="en">
@@ -349,22 +331,18 @@ html_out.append('''<!DOCTYPE html>
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <title>Per-Teacher Instructional Attendance & Load Monitoring Record (ODL Second Shift) - Al Munawwara Islamic School</title>
   <style>
-    @page {
-      size: A4 portrait;
-      margin: 5mm 6mm 5mm 6mm;
-    }
     * {
       box-sizing: border-box;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    }
-    html, body {
       margin: 0;
       padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: #f1f5f9;
       color: #0f172a;
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
       -webkit-font-smoothing: antialiased;
+      line-height: 1.3;
     }
 
     /* TOOLBAR */
@@ -404,30 +382,44 @@ html_out.append('''<!DOCTYPE html>
       font-size: 11px;
       font-weight: 700;
       text-decoration: none;
-      transition: all 0.15s ease;
-      border: 1px solid #cbd5e1;
+      color: #475569;
       background: #f8fafc;
-      color: #334155;
+      border: 1px solid #cbd5e1;
+      transition: all 0.15s ease;
     }
     .modality-pill:hover {
       background: #f1f5f9;
-      color: #0f172a;
       border-color: #94a3b8;
+      color: #0f172a;
     }
     .modality-pill.active {
-      background: #064e3b;
-      color: #ffffff;
-      border-color: #064e3b;
+      background: #ecfdf5;
+      color: #065f46;
+      border-color: #10b981;
     }
     .modality-dot {
       width: 7px;
       height: 7px;
       border-radius: 50%;
-      display: inline-block;
+      background: #94a3b8;
     }
     .dot-active {
       background: #10b981;
-      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
+      box-shadow: 0 0 0 2px #d1fae5;
+    }
+    .dot-dev {
+      background: #f59e0b;
+    }
+    .badge-dev {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+      font-size: 9px;
+      padding: 1px 5px;
+      border-radius: 9999px;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+      text-transform: uppercase;
     }
 
     .toolbar-header {
@@ -457,10 +449,10 @@ html_out.append('''<!DOCTYPE html>
       align-items: center;
       gap: 8px;
     }
-    .badge-shift {
-      background: #dbeafe;
-      color: #1e40af;
-      border: 1px solid #3b82f6;
+    .badge-f2f {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #10b981;
       font-size: 10px;
       padding: 2px 7px;
       border-radius: 9999px;
@@ -552,32 +544,30 @@ html_out.append('''<!DOCTYPE html>
 
     /* SHEET LAYOUT */
     .sheet-wrapper {
-      padding: 16px 10px 60px 10px;
+      padding: 24px 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 20px;
+      gap: 24px;
     }
     .page-sheet {
-      width: 210mm;
-      height: 297mm;
-      max-height: 297mm;
-      padding: 5mm 6mm;
       background: #ffffff;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-      border: 1px solid #cbd5e1;
-      position: relative;
+      width: 210mm;
+      min-height: 297mm;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+      border-radius: 2px;
+      padding: 7mm 9mm 6mm 9mm;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
-      box-sizing: border-box;
-      overflow: hidden;
+      position: relative;
+    }
+    .page-sheet.hidden-sheet {
+      display: none !important;
     }
     .sheet-content {
-      flex: 1;
       display: flex;
       flex-direction: column;
-      height: 100%;
+      flex: 1;
     }
 
     /* HEADER */
@@ -585,91 +575,79 @@ html_out.append('''<!DOCTYPE html>
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 2px solid #0f172a;
-      padding-bottom: 3px;
+      border-bottom: 2px solid #064e3b;
+      padding-bottom: 4px;
       margin-bottom: 4px;
-      gap: 8px;
     }
     .header-logo-side {
-      width: 44px;
+      width: 52px;
+      height: 52px;
       display: flex;
-      justify-content: center;
       align-items: center;
-      flex-shrink: 0;
+      justify-content: center;
     }
     .header-logo {
-      width: 44px;
-      height: 44px;
+      max-width: 100%;
+      max-height: 100%;
       object-fit: contain;
     }
     .header-center-text {
-      flex: 1;
       text-align: center;
+      flex: 1;
+      padding: 0 8px;
     }
     .arabic-header {
-      font-family: 'Amiri', 'Traditional Arabic', 'Times New Roman', serif;
-      font-size: 14pt;
-      font-weight: 700;
+      font-family: 'Amiri', serif;
+      font-size: 11.5pt;
       color: #064e3b;
+      font-weight: 700;
+      line-height: 1.1;
       direction: rtl;
-      line-height: 1.15;
-      margin-bottom: 2px;
-      text-align: center;
-      letter-spacing: 0.5px;
     }
     .school-name {
-      font-size: 11pt;
+      font-size: 9.5pt;
       font-weight: 900;
-      color: #0f172a;
+      color: #064e3b;
       letter-spacing: 0.8px;
-      margin: 1px 0 2px 0;
-      text-transform: uppercase;
-      line-height: 1.15;
     }
     .form-title {
-      font-size: 9.2pt;
+      font-size: 8.5pt;
       font-weight: 800;
-      color: #064e3b;
+      color: #0f172a;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      line-height: 1.15;
+      letter-spacing: 0.4px;
+      margin-top: 1px;
     }
     .form-sub {
-      font-size: 7pt;
+      font-size: 7.2pt;
       color: #475569;
       font-weight: 600;
-      margin-top: 2px;
-      letter-spacing: 0.3px;
     }
 
     /* META BOX */
     .meta-box {
-      border: 1.5px solid #94a3b8;
+      border: 1px solid #94a3b8;
       background: #f8fafc;
-      border-radius: 4px;
-      padding: 5px 9px;
-      margin-bottom: 6px;
+      border-radius: 3px;
+      padding: 4px 8px;
+      margin-bottom: 5px;
       display: grid;
-      grid-template-columns: 1.3fr 1.2fr 1fr;
+      grid-template-columns: 1.4fr 1.2fr 1fr;
       gap: 3px 12px;
-      font-size: 7.8pt;
+      font-size: 7.5pt;
     }
     .meta-row {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
     }
     .meta-lbl {
-      font-size: 7.5pt;
       font-weight: 700;
-      color: #475569;
+      color: #334155;
       white-space: nowrap;
-      text-transform: uppercase;
-      letter-spacing: 0.3px;
     }
     .meta-val {
-      font-size: 8.2pt;
-      font-weight: 800;
+      font-weight: 600;
       color: #0f172a;
       border-bottom: 1px dotted #94a3b8;
       flex: 1;
@@ -684,23 +662,22 @@ html_out.append('''<!DOCTYPE html>
     table.sheet-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 7.5pt;
+      font-size: 7.4pt;
       line-height: 1.15;
     }
     table.sheet-table th, table.sheet-table td {
-      border: 1px solid #94a3b8;
-      padding: 3.5px 4.5px;
-      vertical-align: middle;
+      border: 1px solid #64748b;
+      padding: 3px 4px;
     }
-    table.sheet-table thead th {
+    table.sheet-table th {
       background: #f1f5f9;
       color: #0f172a;
       font-weight: 800;
-      text-align: center;
-      font-size: 7.5pt;
-      padding: 4px 4px;
+      font-size: 7.2pt;
+      padding: 4px 3px;
       text-transform: uppercase;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.2px;
+      text-align: center;
     }
     .th-num { width: 3%; }
     .th-day { width: 6.5%; }
@@ -746,7 +723,7 @@ html_out.append('''<!DOCTYPE html>
       font-size: 7.8pt;
       white-space: nowrap;
     }
-    
+
     /* 2x2 STATUS GRID CHECKLIST */
     .status-grid {
       display: flex;
@@ -775,12 +752,7 @@ html_out.append('''<!DOCTYPE html>
       cursor: pointer;
     }
 
-    /* SIGNATURE FOOTER */
-    .sign-container {
-      margin-top: auto;
-      padding-top: 6px;
-      border-top: 1.5px solid #cbd5e1;
-    }
+    /* SIGNATURE BLOCK */
     .sign-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -831,7 +803,7 @@ html_out.append('''<!DOCTYPE html>
         width: 100% !important;
         height: 297mm !important;
       }
-      .page-sheet.hide-in-print {
+      .page-sheet.hidden-sheet {
         display: none !important;
       }
     }
@@ -839,130 +811,165 @@ html_out.append('''<!DOCTYPE html>
 </head>
 <body>
 
-  <!-- TOP TOOLBAR -->
-  <div class="toolbar no-print">
-    <!-- Modality Switcher -->
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <!-- MODALITY NAVIGATION -->
     <div class="modality-bar">
       <span class="modality-label">Learning Modality:</span>
-      <a href="/teacher-monitoring.html" class="modality-pill"><span class="modality-dot"></span>Face-to-Face (45 Teachers)</a>
-      <a href="/odl-teacher-monitoring.html" class="modality-pill"><span class="modality-dot"></span>ODL First Shift (53 Teachers)</a>
-      <a href="/odl-second-shift-teacher.html" class="modality-pill active"><span class="modality-dot dot-active"></span>ODL Second Shift (54 Teachers)</a>
-      <a href="/all-teachers-monitoring.html" class="modality-pill" style="border-color:#3b82f6;color:#2563eb;background:#eff6ff;"><span class="modality-dot" style="background:#2563eb;"></span>All Modalities (152 Teachers)</a>
+      <a href="/teacher-monitoring.html" class="modality-pill" title="Face-to-Face Portal">
+        <span class="modality-dot"></span>
+        Face-to-Face (45 Teachers)
+      </a>
+      <a href="/odl-teacher-monitoring.html" class="modality-pill" title="Online Distance Learning First Shift Portal">
+        <span class="modality-dot"></span>
+        ODL First Shift (53 Teachers)
+      </a>
+      <a href="/odl-second-shift-teacher.html" class="modality-pill active" title="Online Distance Learning Second Shift Portal">
+        <span class="modality-dot dot-active"></span>
+        ODL Second Shift (54 Teachers)
+      </a>
+      <a href="/all-teachers-monitoring.html" class="modality-pill" title="Unified Multi-Modality Portal" style="border-color:#3b82f6;color:#2563eb;background:#eff6ff;">
+        <span class="modality-dot" style="background:#2563eb;"></span>
+        All Modalities (152 Teachers)
+      </a>
     </div>
 
     <div class="toolbar-header">
       <div class="toolbar-brand">
-        <img class="toolbar-logo deped-img" alt="DepEd Logo">
         <img class="toolbar-logo amis-img" alt="AMIS Logo">
         <div>
           <div class="toolbar-title">
             AL MUNAWWARA ISLAMIC SCHOOL
-            <span class="badge-shift">ODL Second Shift</span>
+            <span class="badge-f2f">ODL 2nd Shift Teacher Portal</span>
           </div>
-          <div style="font-size: 11px; color: #64748b; font-weight: 600;">Daily Per-Teacher Instructional Attendance & Load Monitoring Record</div>
+          <div style="font-size:11.5px;color:#475569;font-weight:500;">
+            Daily Instructional Attendance & Load Monitoring Record (Online Distance Learning &bull; 2nd Shift &bull; S.Y. 2026 - 2027)
+          </div>
         </div>
       </div>
       <div class="toolbar-actions">
-        <a href="/odl-second-shift.html" class="btn btn-outline">Go to Section Monitoring</a>
-        <button class="btn btn-primary" onclick="window.print()">Print Active Sheet</button>
-        <button class="btn btn-blue" onclick="showAllTeachersForPrint()">Print All Teachers</button>
+        <a href="/odl-second-shift.html" class="btn btn-outline" title="Return to Classroom Section Monitoring">
+          Classroom Monitoring Forms
+        </a>
+        <button class="btn btn-outline" onclick="navigateTeacher(-1)" title="Previous Teacher">
+          Prev
+        </button>
+        <button class="btn btn-outline" onclick="navigateTeacher(1)" title="Next Teacher">
+          Next
+        </button>
+        <button class="btn btn-blue" onclick="printActiveTeacher()">
+          Print Active Teacher
+        </button>
+        <button class="btn btn-primary" onclick="printAllTeachers()">
+          Print All Teachers (A4)
+        </button>
       </div>
     </div>
 
     <!-- FILTER BAR -->
     <div class="filter-bar">
-      <span class="filter-label">Filter Department:</span>
-      <button class="dept-pill active" onclick="filterDepartment('all', this)">All Faculty</button>
-      <button class="dept-pill" onclick="filterDepartment('isal', this)">ISAL Faculty</button>
-      <button class="dept-pill" onclick="filterDepartment('elem', this)">Elementary Faculty</button>
-      <button class="dept-pill" onclick="filterDepartment('jhs', this)">Junior High Faculty</button>
-      <button class="dept-pill" onclick="filterDepartment('shs', this)">Senior High Faculty</button>
+      <span class="filter-label">Filter Faculty:</span>
+      <button class="dept-pill active" onclick="filterDept('all')">All Faculty (''' + str(len(teachers_list)) + ''')</button>
+      <button class="dept-pill" onclick="filterDept('jhs')">Junior High School</button>
+      <button class="dept-pill" onclick="filterDept('shs')">Senior High School</button>
+      <button class="dept-pill" onclick="filterDept('elem')">Elementary Faculty</button>
+      <button class="dept-pill" onclick="filterDept('isal')">ISAL Department</button>
 
       <div class="teacher-select-box">
-        <span class="filter-label">Select Teacher:</span>
-        <select id="teacherSelect" onchange="onTeacherSelectChange()">
+        <label for="teacher-select" class="filter-label">Select Teacher:</label>
+        <select id="teacher-select" onchange="onTeacherSelectChange()">
+          <option value="all">All Faculty (Show All ''' + str(len(teachers_list)) + ''' Teachers)</option>
 ''')
 
-for t in teachers_list:
-    cat_code = t.get('cat', 'elem')
-    html_out.append(f'          <option value="{html.escape(t["name"])}" data-cat="{cat_code}">{html.escape(t["name"])} ({html.escape(t["dept"])})</option>\n')
+for idx, t in enumerate(teachers_list):
+    html_out.append(f'          <option value="{idx}">{html.escape(t["name"])} ({len(t["items"])} ODL classes)</option>\n')
 
 html_out.append('''        </select>
       </div>
     </div>
   </div>
 
-  <!-- TEACHER SHEETS WRAPPER -->
-  <div class="sheet-wrapper" id="sheetsContainer">
+  <!-- SHEETS CONTAINER -->
+  <div class="sheet-wrapper" id="sheet-wrapper">
 ''')
 
-ROWS_PER_PAGE = 14
-
-for t_idx, t in enumerate(teachers_list):
-    t_name = t['name']
-    t_dept = t['dept']
-    t_cat = t.get('cat', 'elem')
+for idx, t in enumerate(teachers_list):
+    t_name_esc = html.escape(t['name'])
+    dept_esc = html.escape(t['dept'])
+    cat_esc = html.escape(t['cat'])
     items = t['items']
-    
-    total_pages = max(1, (len(items) + ROWS_PER_PAGE - 1) // ROWS_PER_PAGE)
-    
-    for page in range(total_pages):
-        page_items = items[page * ROWS_PER_PAGE : (page + 1) * ROWS_PER_PAGE]
-        page_sheet_id = f"sheet-{re.sub(r'[^a-zA-Z0-9]', '_', t_name)}-p{page+1}"
-        
-        display_style = "display: flex;" if t_idx == 0 else "display: none;"
-        print_class = "" if t_idx == 0 else "hide-in-print"
-        
-        page_note = f" (Page {page+1} of {total_pages})" if total_pages > 1 else ""
+    items.sort(key=lambda x: (days.index(x['day']), time_to_sort_key(x['time'])))
 
-        html_out.append(f'''
-    <!-- TEACHER RECORD SHEET: {html.escape(t_name)}{page_note} -->
-    <div class="page-sheet teacher-sheet dept-target-{t_cat} {print_class}" id="{page_sheet_id}" data-teacher="{html.escape(t_name)}" data-cat="{t_cat}" style="{display_style}">
+    hidden_cls = "" if idx == 0 else "hidden-sheet"
+
+    html_out.append(f'''
+    <!-- SHEET {idx}: {t_name_esc} -->
+    <div class="page-sheet {hidden_cls}" 
+         id="sheet-{idx}"
+         data-idx="{idx}"
+         data-teacher="{t_name_esc}"
+         data-cat="{cat_esc}">
+      
       <div class="sheet-content">
-        {build_header_html()}
-
-        <div class="meta-box">
-          <div class="meta-row"><span class="meta-lbl">Teacher's Name:</span><span class="meta-val td-bold">{html.escape(t_name)}</span></div>
-          <div class="meta-row"><span class="meta-lbl">Department / Faculty:</span><span class="meta-val">{html.escape(t_dept)}</span></div>
-          <div class="meta-row"><span class="meta-lbl">Shift Modality:</span><span class="meta-val td-bold">ODL Second Shift</span></div>
-          <div class="meta-row"><span class="meta-lbl">School Year:</span><span class="meta-val">2026 - 2027</span></div>
-          <div class="meta-row"><span class="meta-lbl">Weekly Teaching Load:</span><span class="meta-val td-bold">{len(items)} Official Periods</span></div>
-          <div class="meta-row"><span class="meta-lbl">Form Status:</span><span class="meta-val">Active Record{page_note}</span></div>
+        <!-- HEADER -->
+        <div class="sheet-header">
+          <div class="header-logo-side">
+            <img class="header-logo deped-img" alt="DepEd Logo">
+          </div>
+          <div class="header-center-text">
+            <div class="arabic-header" dir="rtl" lang="ar">المدرسة المنورة الإسلامية</div>
+            <div class="school-name">AL MUNAWWARA ISLAMIC SCHOOL</div>
+            <div class="form-title">TEACHER INSTRUCTIONAL ATTENDANCE & LOAD MONITORING RECORD</div>
+            <div class="form-sub">Online Distance Learning (Second Shift) Modality &bull; Faculty Monitoring Form &bull; School Year 2026 - 2027</div>
+          </div>
+          <div class="header-logo-side">
+            <img class="header-logo amis-img" alt="AMIS Logo">
+          </div>
         </div>
 
+        <!-- TEACHER META BOX -->
+        <div class="meta-box">
+          <div class="meta-row"><span class="meta-lbl">Teacher's Name:</span><span class="meta-val td-bold">{t_name_esc}</span></div>
+          <div class="meta-row"><span class="meta-lbl">Total Weekly Loads:</span><span class="meta-val td-bold">{len(items)} ODL Classes</span></div>
+          <div class="meta-row"><span class="meta-lbl">Room Assignment:</span><span class="meta-val">Virtual / Google Meet</span></div>
+          <div class="meta-row" style="grid-column: span 2;"><span class="meta-lbl">Week Monitored:</span><span class="meta-val"></span></div>
+          <div class="meta-row"><span class="meta-lbl">School Year:</span><span class="meta-val">2026 - 2027</span></div>
+        </div>
+
+        <!-- TABLE -->
         <table class="sheet-table">
           <thead>
             <tr>
               <th class="th-num">#</th>
-              <th class="th-day">DAY</th>
-              <th class="th-time">SCHEDULED TIME</th>
-              <th class="th-mins">MINS</th>
-              <th class="th-in">ACTUAL TIME IN</th>
-              <th class="th-out">ACTUAL TIME OUT</th>
-              <th class="th-grade">GRADE / SEC</th>
-              <th class="th-subject">SUBJECT / LEARNING AREA</th>
-              <th class="th-room">ROOM</th>
-              <th class="th-status">INSTRUCTION STATUS</th>
-              <th class="th-remarks">SIGN</th>
+              <th class="th-day">Day</th>
+              <th class="th-time">Scheduled Time</th>
+              <th class="th-mins">Mins</th>
+              <th class="th-in">Actual In</th>
+              <th class="th-out">Actual Out</th>
+              <th class="th-grade">Grade / Sec</th>
+              <th class="th-subject">Subject / Learning Area</th>
+              <th class="th-room">Room</th>
+              <th class="th-status">Instruction Status</th>
+              <th class="th-remarks">Signature</th>
             </tr>
           </thead>
-          <tbody>
-        ''')
+          <tbody>''')
 
-        for row_idx in range(ROWS_PER_PAGE):
-            row_num = page * ROWS_PER_PAGE + row_idx + 1
-            if row_idx < len(page_items):
-                it = page_items[row_idx]
-                html_out.append(f'''            <tr>
-              <td class="td-center" style="font-weight:700; color:#64748b;">{row_num}</td>
-              <td class="day-cell">{html.escape(it['day_abbr'])}</td>
-              <td class="time-slot">{html.escape(it['time'])}</td>
-              <td class="td-center" style="font-weight:700;">{html.escape(it['mins'])}</td>
-              <td class="td-center">&nbsp;</td>
-              <td class="td-center">&nbsp;</td>
-              <td class="grade-cell">{html.escape(it['section'])}</td>
-              <td class="subject-cell">{html.escape(it['subject'])}</td>
-              <td class="td-center" style="font-size: 7.2pt; color: #475569;">{html.escape(it.get('room', 'ODL'))}</td>
+    row_num = 1
+    for it in items:
+        subj_upper = html.escape(it['subject'].upper())
+        sec_short = html.escape(it['section'])
+        html_out.append(f'''
+            <tr>
+              <td class="td-center" style="font-weight:700;color:#64748b;">{row_num}</td>
+              <td class="day-cell">{it['day_abbr']}</td>
+              <td class="time-slot">{it['time']}</td>
+              <td class="td-center" style="font-weight:700;color:#475569;">{it['mins']}</td>
+              <td class="td-center"></td>
+              <td class="td-center"></td>
+              <td class="grade-cell">{sec_short}</td>
+              <td class="subject-cell">{subj_upper}</td>
+              <td class="td-center"></td>
               <td>
                 <div class="status-grid">
                   <div class="status-cell-row">
@@ -975,20 +982,23 @@ for t_idx, t in enumerate(teachers_list):
                   </div>
                 </div>
               </td>
-              <td class="td-center">&nbsp;</td>
-            </tr>
-''')
-            else:
-                html_out.append(f'''            <tr>
-              <td class="td-center" style="font-weight:600; color:#cbd5e1;">{row_num}</td>
-              <td class="td-center">&nbsp;</td>
-              <td class="td-center">&nbsp;</td>
-              <td class="td-center">&nbsp;</td>
-              <td class="td-center">&nbsp;</td>
-              <td class="td-center">&nbsp;</td>
-              <td class="td-center">&nbsp;</td>
-              <td class="td-center">&nbsp;</td>
-              <td class="td-center">&nbsp;</td>
+              <td></td>
+            </tr>''')
+        row_num += 1
+
+    blank_to_add = max(2, 14 - len(items))
+    for b in range(blank_to_add):
+        html_out.append(f'''
+            <tr class="row-blank">
+              <td class="td-center" style="color:#cbd5e1;font-weight:600;">{row_num}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td class="td-center"></td>
+              <td class="td-center"></td>
+              <td></td>
+              <td style="color:#cbd5e1;font-size:7pt;font-weight:700;text-transform:uppercase;">(SUBSTITUTE / REMEDIAL LOAD)</td>
+              <td></td>
               <td>
                 <div class="status-grid">
                   <div class="status-cell-row">
@@ -1001,114 +1011,212 @@ for t_idx, t in enumerate(teachers_list):
                   </div>
                 </div>
               </td>
-              <td class="td-center">&nbsp;</td>
-            </tr>
-''')
+              <td></td>
+            </tr>''')
+        row_num += 1
 
-        html_out.append(f'''          </tbody>
+    html_out.append(f'''
+          </tbody>
         </table>
 
         <!-- SIGNATURE BLOCK -->
-        <div class="sign-container">
-          <div class="sign-row">
-            <div class="sign-col">
-              <div class="sign-line"></div>
-              <div class="sign-label">{html.escape(t_name)}</div>
-              <div class="sign-title">Teacher's Signature over Printed Name</div>
-            </div>
-            <div class="sign-col">
-              <div class="sign-line"></div>
-              <div class="sign-label">Academic Coordinator / Department Head</div>
-              <div class="sign-title">Verified & Monitored By</div>
-            </div>
-            <div class="sign-col">
-              <div class="sign-line"></div>
-              <div class="sign-label">School Principal / Directress</div>
-              <div class="sign-title">Approved By</div>
-            </div>
+        <div class="sign-row" style="margin-top: auto; padding-top: 6px; border-top: 1.5px solid #cbd5e1;">
+          <div class="sign-col">
+            <div class="sign-line"></div>
+            <div class="sign-label">{t_name_esc}</div>
+            <div class="sign-title">Teacher's Signature over Printed Name</div>
+          </div>
+          <div class="sign-col">
+            <div class="sign-line"></div>
+            <div class="sign-label">Academic Coordinator / Department Head</div>
+            <div class="sign-title">Verified & Monitored By</div>
+          </div>
+          <div class="sign-col">
+            <div class="sign-line"></div>
+            <div class="sign-label">School Principal / Directress</div>
+            <div class="sign-title">Approved By</div>
           </div>
         </div>
       </div>
     </div>
 ''')
 
-html_out.append('''  </div>
+html_out.append('''
+  </div>
 
   <script>
-    const AMIS_LOGO_B64 = ''' + json.dumps(amis_b64) + ''';
-    const DEPED_LOGO_B64 = ''' + json.dumps(deped_b64) + ''';
+    const AMIS_LOGO_SRC = "''' + amis_b64 + '''";
+    const DEPED_LOGO_SRC = "''' + deped_b64 + '''";
 
-    document.addEventListener("DOMContentLoaded", () => {
-      document.querySelectorAll(".deped-img").forEach(img => img.src = DEPED_LOGO_B64);
-      document.querySelectorAll(".amis-img").forEach(img => img.src = AMIS_LOGO_B64);
-    });
-
+    let activeIndex = 0;
     let currentDept = 'all';
 
-    function filterDepartment(dept, btn) {
-      currentDept = dept;
-      document.querySelectorAll(".dept-pill").forEach(p => p.classList.remove("active"));
-      if (btn) btn.classList.add("active");
-
-      const select = document.getElementById("teacherSelect");
-      let firstVisible = null;
-
-      for (let i = 0; i < select.options.length; i++) {
-        const opt = select.options[i];
-        const cat = opt.getAttribute("data-cat");
-        if (dept === 'all' || cat === dept) {
-          opt.style.display = "block";
-          if (!firstVisible) firstVisible = opt.value;
-        } else {
-          opt.style.display = "none";
+    function populateLogos() {
+      document.querySelectorAll('.amis-img').forEach(img => {
+        if (!img.src || img.src === window.location.href) {
+          img.src = AMIS_LOGO_SRC;
         }
+      });
+      document.querySelectorAll('.deped-img').forEach(img => {
+        if (!img.src || img.src === window.location.href) {
+          img.src = DEPED_LOGO_SRC;
+        }
+      });
+    }
+
+    function showTeacher(val) {
+      const select = document.getElementById('teacher-select');
+      if (val === 'all') {
+        if (select) select.value = 'all';
+        document.querySelectorAll('.page-sheet').forEach(sh => {
+          const cat = sh.getAttribute('data-cat');
+          let match = false;
+          if (currentDept === 'all') match = true;
+          else if (currentDept === 'jhs' && cat === 'jhs') match = true;
+          else if (currentDept === 'shs' && cat === 'shs') match = true;
+          else if (currentDept === 'elem' && cat === 'elem') match = true;
+          else if (currentDept === 'isal' && cat === 'isal') match = true;
+
+          if (match) sh.classList.remove('hidden-sheet');
+          else sh.classList.add('hidden-sheet');
+        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
       }
 
-      if (firstVisible) {
-        select.value = firstVisible;
-        onTeacherSelectChange();
-      }
+      const idx = parseInt(val, 10);
+      activeIndex = idx;
+      if (select) select.value = idx;
+
+      document.querySelectorAll('.page-sheet').forEach(sh => {
+        const sIdx = parseInt(sh.getAttribute('data-idx'), 10);
+        if (sIdx === idx) {
+          sh.classList.remove('hidden-sheet');
+        } else {
+          sh.classList.add('hidden-sheet');
+        }
+      });
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function onTeacherSelectChange() {
-      const selectedTeacher = document.getElementById("teacherSelect").value;
-      const sheets = document.querySelectorAll(".teacher-sheet");
-
-      sheets.forEach(sheet => {
-        if (sheet.getAttribute("data-teacher") === selectedTeacher) {
-          sheet.style.display = "flex";
-          sheet.classList.remove("hide-in-print");
-        } else {
-          sheet.style.display = "none";
-          sheet.classList.add("hide-in-print");
-        }
-      });
+      const select = document.getElementById('teacher-select');
+      showTeacher(select.value);
     }
 
-    function showAllTeachersForPrint() {
-      const sheets = document.querySelectorAll(".teacher-sheet");
-      sheets.forEach(sheet => {
-        const cat = sheet.getAttribute("data-cat");
-        if (currentDept === 'all' || cat === currentDept) {
-          sheet.style.display = "flex";
-          sheet.classList.remove("hide-in-print");
-        } else {
-          sheet.style.display = "none";
-          sheet.classList.add("hide-in-print");
+    function navigateTeacher(delta) {
+      const select = document.getElementById('teacher-select');
+      const visibleOptions = Array.from(select.options).filter(opt => opt.style.display !== 'none' && opt.value !== 'all');
+      if (visibleOptions.length === 0) return;
+
+      const currentVal = parseInt(select.value, 10);
+      let curIndexInVisible = visibleOptions.findIndex(opt => parseInt(opt.value, 10) === currentVal);
+      if (curIndexInVisible === -1) curIndexInVisible = 0;
+
+      let nextIndexInVisible = curIndexInVisible + delta;
+      if (nextIndexInVisible < 0) nextIndexInVisible = visibleOptions.length - 1;
+      if (nextIndexInVisible >= visibleOptions.length) nextIndexInVisible = 0;
+
+      showTeacher(parseInt(visibleOptions[nextIndexInVisible].value, 10));
+    }
+
+    function filterDept(dept) {
+      currentDept = dept;
+      document.querySelectorAll('.dept-pill').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      const activeBtn = Array.from(document.querySelectorAll('.dept-pill')).find(b => {
+        if (dept === 'all' && b.innerText.includes('All')) return true;
+        if (dept === 'jhs' && b.innerText.includes('Junior')) return true;
+        if (dept === 'shs' && b.innerText.includes('Senior')) return true;
+        if (dept === 'elem' && b.innerText.includes('Elementary')) return true;
+        if (dept === 'isal' && b.innerText.includes('ISAL')) return true;
+        return false;
+      });
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const select = document.getElementById('teacher-select');
+
+      document.querySelectorAll('.page-sheet').forEach(sh => {
+        const cat = sh.getAttribute('data-cat');
+        const idx = parseInt(sh.getAttribute('data-idx'), 10);
+        const opt = select.querySelector('option[value="' + idx + '"]');
+
+        let match = false;
+        if (dept === 'all') match = true;
+        else if (dept === 'jhs' && cat === 'jhs') match = true;
+        else if (dept === 'shs' && cat === 'shs') match = true;
+        else if (dept === 'elem' && cat === 'elem') match = true;
+        else if (dept === 'isal' && cat === 'isal') match = true;
+
+        if (opt) {
+          opt.style.display = match ? '' : 'none';
         }
       });
-      window.print();
+
+      showTeacher('all');
     }
+
+    function printActiveTeacher() {
+      const select = document.getElementById('teacher-select');
+      if (select && select.value === 'all') {
+        showTeacher(activeIndex >= 0 ? activeIndex : 0);
+      } else {
+        showTeacher(activeIndex);
+      }
+      setTimeout(() => {
+        window.print();
+      }, 200);
+    }
+
+    function printAllTeachers() {
+      filterDept('all');
+
+      document.querySelectorAll('.page-sheet').forEach(sh => {
+        sh.classList.remove('hidden-sheet');
+      });
+
+      const select = document.getElementById('teacher-select');
+      if (select) select.value = 'all';
+
+      setTimeout(() => {
+        window.print();
+      }, 300);
+    }
+
+    window.addEventListener('afterprint', () => {
+      const select = document.getElementById('teacher-select');
+      if (select && select.value === 'all') {
+        showTeacher('all');
+      } else {
+        showTeacher(activeIndex);
+      }
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') {
+        navigateTeacher(-1);
+      } else if (e.key === 'ArrowRight') {
+        navigateTeacher(1);
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      populateLogos();
+      filterDept('all');
+    });
   </script>
 </body>
 </html>
 ''')
 
+output_content = "".join(html_out)
 with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
-    f.write(''.join(html_out))
+    f.write(output_content)
+
+print(f"Successfully generated {OUTPUT_FILE} ({len(output_content)} bytes).")
 
 with open(ROOT_OUTPUT_FILE, 'w', encoding='utf-8') as f:
-    f.write(''.join(html_out))
-
-print(f"Successfully generated: {OUTPUT_FILE} ({os.path.getsize(OUTPUT_FILE):,} bytes)")
-print(f"Successfully mirrored: {ROOT_OUTPUT_FILE}")
+    f.write(output_content)
+print(f"Successfully mirrored to {ROOT_OUTPUT_FILE}")

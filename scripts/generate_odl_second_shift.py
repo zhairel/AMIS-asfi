@@ -150,6 +150,11 @@ def normalize_teacher(name):
     if name in ['Tr Nof', 'Tchr. Nof', 'Nof']: return 'Tchr. Nof'
     return name
 
+def is_routine_text(text):
+    if not text: return False
+    u = text.upper()
+    return any(kw in u for kw in ['GENERAL ASSEMBLY', 'RECESS', 'LUNCH', 'SALAH', 'DEPARTURE', 'SHORT BREAK', 'TRANSITION', 'BREAK', 'HOMEROOM', 'ENTRANCE EXAM REVIEW', 'RESEARCH CONSULTATION'])
+
 def clean_parse(text):
     text = text.strip()
     if not text: return '', '', 'EMPTY'
@@ -328,11 +333,11 @@ html_out.append('''<!DOCTYPE html>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&display=swap" rel="stylesheet">
-  <title>ODL Second Shift Instructional Monitoring & Section Schedules - Al Munawwara Islamic School</title>
+  <title>ODL Second Shift Instructional Monitoring & Teaching Loads - Al Munawwara Islamic School</title>
   <style>
     @page {
       size: A4 portrait;
-      margin: 5mm 6mm 5mm 6mm;
+      margin: 6mm 8mm 6mm 8mm;
     }
     * {
       box-sizing: border-box;
@@ -384,9 +389,9 @@ html_out.append('''<!DOCTYPE html>
       gap: 10px;
     }
     .badge-shift {
-      background: #dbeafe;
-      color: #1e40af;
-      border: 1px solid #3b82f6;
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #10b981;
       font-size: 11px;
       padding: 2px 8px;
       border-radius: 9999px;
@@ -444,6 +449,20 @@ html_out.append('''<!DOCTYPE html>
       background: #10b981;
       box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
     }
+    .dot-dev {
+      background: #f59e0b;
+    }
+    .badge-dev {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+      font-size: 9.5px;
+      padding: 1px 6px;
+      border-radius: 9999px;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+      text-transform: uppercase;
+    }
     .toolbar-actions {
       display: flex;
       gap: 8px;
@@ -467,8 +486,6 @@ html_out.append('''<!DOCTYPE html>
     .btn-primary:hover { background: #047857; }
     .btn-blue { background: #0284c7; color: #ffffff; }
     .btn-blue:hover { background: #0369a1; }
-    .btn-purple { background: #7c3aed; color: #ffffff; }
-    .btn-purple:hover { background: #6d28d9; }
     .btn-outline { background: #ffffff; color: #334155; border-color: #cbd5e1; }
     .btn-outline:hover { background: #f8fafc; color: #0f172a; border-color: #94a3b8; }
 
@@ -555,7 +572,7 @@ html_out.append('''<!DOCTYPE html>
     .page-sheet {
       width: 210mm;
       min-height: 290mm;
-      padding: 5mm 6mm;
+      padding: 6mm 8mm;
       background: #ffffff;
       box-shadow: 0 4px 15px rgba(0,0,0,0.08);
       border: 1px solid #e2e8f0;
@@ -577,20 +594,20 @@ html_out.append('''<!DOCTYPE html>
       align-items: center;
       justify-content: space-between;
       border-bottom: 2px solid #0f172a;
-      padding-bottom: 4px;
-      margin-bottom: 4px;
+      padding-bottom: 5px;
+      margin-bottom: 5px;
       gap: 10px;
     }
     .header-logo-side {
-      width: 48px;
+      width: 50px;
       display: flex;
       justify-content: center;
       align-items: center;
       flex-shrink: 0;
     }
     .header-logo {
-      width: 48px;
-      height: 48px;
+      width: 50px;
+      height: 50px;
       object-fit: contain;
     }
     .header-center-text {
@@ -599,11 +616,11 @@ html_out.append('''<!DOCTYPE html>
     }
     .arabic-header {
       font-family: 'Amiri', 'Traditional Arabic', 'Times New Roman', serif;
-      font-size: 14pt;
+      font-size: 15pt;
       font-weight: 700;
       color: #064e3b;
       direction: rtl;
-      line-height: 1.15;
+      line-height: 1.2;
       margin-bottom: 1px;
       text-align: center;
     }
@@ -679,6 +696,25 @@ html_out.append('''<!DOCTYPE html>
       height: 1px;
       background: #cbd5e1;
     }
+    table.sheet-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 7.4pt;
+      line-height: 1.15;
+    }
+    table.sheet-table th, table.sheet-table td {
+      border: 1px solid #94a3b8;
+      padding: 3px 5px;
+      vertical-align: middle;
+    }
+    table.sheet-table thead th {
+      background: #e2e8f0;
+      color: #0f172a;
+      font-weight: 800;
+      text-align: center;
+      font-size: 7.5pt;
+      padding: 4px 5px;
+    }
     table.schedule-table {
       width: 100%;
       border-collapse: collapse;
@@ -743,42 +779,109 @@ html_out.append('''<!DOCTYPE html>
       font-size: 6.5pt;
       margin-top: 1px;
     }
+    .sign-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 8px;
+      padding-top: 6px;
+      border-top: 1px solid #cbd5e1;
+      font-size: 7.2pt;
+    }
+    .sign-col {
+      text-align: center;
+    }
+    .sign-line {
+      border-bottom: 1px solid #0f172a;
+      height: 22px;
+      margin-bottom: 3px;
+    }
+    .sign-label {
+      font-weight: 800;
+      color: #1e293b;
+      text-transform: uppercase;
+      font-size: 6.8pt;
+    }
+    .sign-title {
+      font-size: 6.5pt;
+      color: #64748b;
+    }
+    .badge-dept {
+      display: inline-block;
+      font-size: 6.5pt;
+      font-weight: 800;
+      padding: 1px 5px;
+      border-radius: 3px;
+      text-transform: uppercase;
+    }
+    .dept-elem { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
+    .dept-jhs { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+    .dept-shs { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
 
-    /* TEACHER SHEET TABLE */
-    table.teacher-record-table {
+    /* ATTENDANCE TABLE VIEW */
+    .attendance-view-container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      padding: 20px;
+      display: none;
+    }
+    .attendance-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 7.5pt;
-      line-height: 1.15;
+      font-size: 11.5px;
     }
-    table.teacher-record-table th, table.teacher-record-table td {
-      border: 1px solid #94a3b8;
-      padding: 3.5px 4.5px;
+    .attendance-table th, .attendance-table td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 8px;
       vertical-align: middle;
     }
-    table.teacher-record-table thead th {
-      background: #f1f5f9;
-      color: #0f172a;
-      font-weight: 800;
-      text-align: center;
-      font-size: 7.5pt;
-      padding: 4px 4px;
+    .attendance-table thead th {
+      background: #064e3b;
+      color: #ffffff;
+      font-weight: 700;
+      text-align: left;
+      font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.3px;
     }
-    .th-num { width: 3%; }
-    .th-day { width: 6.5%; }
-    .th-time { width: 16.5%; }
-    .th-mins { width: 4.5%; }
-    .th-in { width: 8%; }
-    .th-out { width: 8%; }
-    .th-grade { width: 13.5%; }
-    .th-subject { width: 18.5%; }
-    .th-room { width: 5%; }
-    .th-status { width: 11.5%; }
-    .th-remarks { width: 5%; }
-    .td-center { text-align: center; }
+    .attendance-table tbody tr:hover {
+      background: #f8fafc;
+    }
+    .day-badge {
+      display: inline-block;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      background: #0284c7;
+      color: white;
+    }
 
+    /* 2x2 STATUS GRID CHECKLIST */
+    .status-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5px;
+      font-size: 6.5pt;
+      font-weight: 700;
+      color: #334155;
+      line-height: 1.15;
+    }
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 2px;
+      white-space: nowrap;
+    }
+    .row-blank {
+      background: #ffffff;
+      height: 22px;
+    }
     .day-cell {
       font-weight: 800;
       color: #064e3b;
@@ -811,302 +914,197 @@ html_out.append('''<!DOCTYPE html>
       white-space: nowrap;
     }
 
-    /* 2x2 STATUS CHECKLIST */
-    .status-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5px;
-      font-size: 6.8pt;
-      font-weight: 700;
-    }
-    .status-cell-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 3px;
-    }
-    .status-chk {
-      display: inline-flex;
-      align-items: center;
-      gap: 2px;
-      cursor: pointer;
-      user-select: none;
-      white-space: nowrap;
-    }
-    .status-chk input {
-      margin: 0;
-      width: 10px;
-      height: 10px;
-      cursor: pointer;
-    }
-
-    /* SIGNATURE FOOTER */
-    .sign-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-top: 8px;
-      padding-top: 6px;
-      border-top: 1px solid #cbd5e1;
-      font-size: 7.2pt;
-    }
-    .sign-col {
-      text-align: center;
-    }
-    .sign-line {
-      border-bottom: 1px solid #0f172a;
-      height: 22px;
-      margin-bottom: 3px;
-    }
-    .sign-label {
-      font-weight: 800;
-      color: #1e293b;
-      text-transform: uppercase;
-      font-size: 6.8pt;
-    }
-    .sign-title {
-      font-size: 6.5pt;
-      color: #64748b;
-    }
-
-    /* ATTENDANCE TABLE VIEW */
-    .attendance-view-container {
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-      background: #ffffff;
-      border-radius: 8px;
-      border: 1px solid #cbd5e1;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-      padding: 20px;
-      display: none;
-    }
-    .attendance-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 11.5px;
-    }
-    .attendance-table th, .attendance-table td {
-      border: 1px solid #cbd5e1;
-      padding: 6px 8px;
-      vertical-align: middle;
-    }
-    .attendance-table thead th {
-      background: #064e3b;
-      color: #ffffff;
-      font-weight: 700;
-      text-align: left;
-    }
-    .day-matrix-tabs {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 16px;
-      border-bottom: 1px solid #e2e8f0;
-      padding-bottom: 8px;
-    }
-    .day-matrix-tab {
-      padding: 6px 14px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 700;
-      border: 1px solid #cbd5e1;
-      background: #f8fafc;
-      color: #475569;
-      cursor: pointer;
-    }
-    .day-matrix-tab.active {
-      background: #059669;
-      color: #ffffff;
-      border-color: #059669;
-    }
-
     @media print {
-      body {
-        background: #ffffff !important;
-        margin: 0;
-        padding: 0;
-      }
-      .toolbar, .no-print {
-        display: none !important;
-      }
-      .sheet-wrapper {
-        padding: 0 !important;
-        gap: 0 !important;
-      }
+      body { background: #ffffff !important; }
+      .toolbar { display: none !important; }
+      .sheet-wrapper { padding: 0 !important; gap: 0 !important; }
       .page-sheet {
         box-shadow: none !important;
         border: none !important;
         margin: 0 !important;
-        padding: 4mm 6mm !important;
         width: 100% !important;
-        min-height: auto !important;
-        page-break-after: always !important;
-        break-after: page !important;
-      }
-      .page-sheet.hide-in-print {
-        display: none !important;
+        min-height: 100vh !important;
+        padding: 5mm 6mm !important;
       }
       .attendance-view-container {
         display: block !important;
         box-shadow: none !important;
         border: none !important;
         padding: 0 !important;
-        max-width: 100% !important;
       }
     }
   </style>
 </head>
 <body>
 
-  <div class="toolbar no-print">
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <!-- MODALITY NAVIGATION -->
+    <div class="modality-bar">
+      <span class="modality-label">Learning Modality:</span>
+      <a href="/teacher-monitoring.html" class="modality-pill" title="Face-to-Face Portal">
+        <span class="modality-dot dot-active"></span>
+        Face-to-Face (F2F)
+      </a>
+      <a href="/odl-second-shift.html" class="modality-pill active" title="Online Distance Learning First Shift">
+        <span class="modality-dot dot-active"></span>
+        ODL Second Shift (Classroom Forms)
+      </a>
+      <a href="/odl-second-shift-teacher.html" class="modality-pill" title="Daily Per-Teacher Attendance Monitoring">
+        <span class="modality-dot dot-active"></span>
+        ODL 2nd Shift (Daily Per-Teacher Portal)
+      </a>
+      <a href="/odl-second-shift.html" class="modality-pill" title="Online Distance Learning Second Shift">
+        <span class="modality-dot dot-active"></span>
+        ODL Second Shift
+      </a>
+    </div>
+
     <div class="toolbar-header">
       <div class="toolbar-brand">
-        <img class="toolbar-logo deped-img" alt="DepEd Logo">
         <img class="toolbar-logo amis-img" alt="AMIS Logo">
         <div>
           <div class="toolbar-title">
             AL MUNAWWARA ISLAMIC SCHOOL
-            <span class="badge-shift">ODL Second Shift</span>
+            <span class="badge-shift">ODL 2nd Shift</span>
           </div>
-          <div style="font-size: 11px; color: #64748b; font-weight: 600;">Instructional Monitoring & Daily Per-Teacher Loads</div>
+          <div style="font-size:11.5px;color:#475569;font-weight:500;">
+            Online Distance Learning (Second Shift) Instructional Monitoring &amp; Faculty Load Portal &bull; S.Y. 2026 - 2027
+          </div>
         </div>
       </div>
       <div class="toolbar-actions">
-        <a href="/odl-second-shift-teacher.html" class="btn btn-purple">Open Standalone Teacher Portal</a>
-        <button class="btn btn-primary" onclick="window.print()">Print Current View</button>
-        <button class="btn btn-outline" id="btnPrintAll" onclick="handlePrintAll()">Print All Sheets</button>
+        <a href="/odl-second-shift-teacher.html" class="btn btn-primary" title="Open Per-Teacher Attendance Portal">
+          Open Per-Teacher Daily Records
+        </a>
+        <button class="btn btn-blue" onclick="window.print()">
+          Print Current View
+        </button>
+        <button class="btn btn-primary" onclick="showAllAndPrint()">
+          Print All Forms
+        </button>
       </div>
     </div>
 
-    <!-- Modality Switcher -->
-    <div class="modality-bar">
-      <span class="modality-label">Learning Modality:</span>
-      <a href="/f2f-monitoring.html" class="modality-pill"><span class="modality-dot"></span>Face-to-Face</a>
-      <a href="/odl-first-shift.html" class="modality-pill"><span class="modality-dot"></span>ODL First Shift</a>
-      <a href="/odl-second-shift.html" class="modality-pill active"><span class="modality-dot dot-active"></span>ODL Second Shift</a>
-      <a href="/all-teachers-monitoring.html" class="modality-pill" style="border-color:#3b82f6;color:#2563eb;background:#eff6ff;"><span class="modality-dot" style="background:#2563eb;"></span>All Modalities (152 Teachers)</a>
-    </div>
-
-    <!-- View Switcher Tabs -->
+    <!-- VIEW TABS -->
     <div class="view-tabs">
-      <button class="view-tab active" id="tabSections" onclick="switchView('sections')">Section Classrooms (29 Sections)</button>
-      <button class="view-tab" id="tabTeachers" onclick="switchView('teachers')">Daily Per-Teacher Attendance Sheets (54 Teachers)</button>
-      <button class="view-tab" id="tabMasterAttendance" onclick="switchView('master')">Master Daily Attendance Matrix</button>
+      <button class="view-tab active" id="tab-sections" onclick="switchView('sections')">
+        Classroom Monitoring Forms (29 Sections)
+      </button>
+      <button class="view-tab" id="tab-loads" onclick="switchView('loads')">
+        Daily Per-Teacher Attendance Sheets (54 Teachers)
+      </button>
+      <button class="view-tab" id="tab-matrix" onclick="switchView('matrix')">
+        Master Daily Attendance Tracking Matrix
+      </button>
     </div>
 
-    <!-- Section Filter Controls -->
-    <div id="controlsSections" class="filter-grid">
+    <!-- FILTERS -->
+    <div class="filter-grid" id="filter-controls">
       <div class="filter-group">
-        <label>Filter Department</label>
-        <select id="deptFilter" onchange="applySectionFilter()">
-          <option value="all">All Departments</option>
-          <option value="elem">Kindergarten & Elementary (20 Sections)</option>
-          <option value="jhs">Junior High School (6 Sections)</option>
-          <option value="shs">Senior High School (3 Sections)</option>
+        <label>Department</label>
+        <select id="filter-dept" onchange="applyFilters()">
+          <option value="all">All Departments (Elementary, JHS, SHS)</option>
+          <option value="elem">Kindergarten &amp; Elementary</option>
+          <option value="jhs">Junior High School</option>
+          <option value="shs">Senior High School</option>
+          <option value="isal">ISAL Department</option>
         </select>
       </div>
-      <div class="filter-group">
-        <label>Quick Jump Section</label>
-        <select id="sectionJump" onchange="jumpToSection()">
-          <option value="all">-- Show All Matching Sections --</option>
+
+      <div class="filter-group" id="group-sec-filter">
+        <label>Section</label>
+        <select id="filter-sec" onchange="applyFilters()">
+          <option value="all">All Sections (29 Sections)</option>
 ''')
 
 for sec in sections:
-    html_out.append(f'          <option value="{sec["id"]}">{sec["name"]}</option>\n')
+    html_out.append(f'          <option value="{sec["id"]}">{html.escape(sec["name"])}</option>\n')
 
 html_out.append('''        </select>
       </div>
-      <div class="filter-group">
-        <label>Search Teacher or Subject</label>
-        <input type="text" id="secSearch" placeholder="Type teacher or subject..." onkeyup="searchSectionClasses()">
-      </div>
-    </div>
 
-    <!-- Teacher Filter Controls -->
-    <div id="controlsTeachers" class="filter-grid" style="display: none;">
-      <div class="filter-group">
-        <label>Faculty Department</label>
-        <select id="tchrDeptFilter" onchange="onTchrDeptChange()">
-          <option value="all">All Faculty (54 Teachers)</option>
-          <option value="isal">ISAL & Islamic Studies Department</option>
-          <option value="elem">Elementary Faculty</option>
-          <option value="jhs">Junior High School Faculty</option>
-          <option value="shs">Senior High School Faculty</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label>Select Teacher</label>
-        <select id="teacherSelect" onchange="onTeacherSelectChange()">
+      <div class="filter-group" id="group-teacher-filter">
+        <label>Teacher</label>
+        <select id="filter-teacher" onchange="applyFilters()">
+          <option value="all">All Teachers (Show All 54 Teachers)</option>
 ''')
 
-for t in teachers_list:
-    cat_code = t.get('cat', 'elem')
-    html_out.append(f'          <option value="{html.escape(t["name"])}" data-cat="{cat_code}">{html.escape(t["name"])} ({html.escape(t["dept"])})</option>\n')
+for t in sorted(teacher_monitor_map.keys()):
+    html_out.append(f'          <option value="{html.escape(t)}">{html.escape(t)}</option>\n')
 
 html_out.append('''        </select>
       </div>
-      <div class="filter-group">
-        <label>Search Teacher</label>
-        <input type="text" id="tchrSearch" placeholder="Type teacher name..." onkeyup="searchTeacherByName()">
-      </div>
-    </div>
 
-    <!-- Master Attendance Matrix Filter Controls -->
-    <div id="controlsMaster" class="filter-grid" style="display: none;">
       <div class="filter-group">
-        <label>Filter By Day</label>
-        <select id="matrixDaySelect" onchange="renderMatrixTable()">
-          <option value="Sunday">Sunday (SUN)</option>
-          <option value="Monday">Monday (MON)</option>
-          <option value="Tuesday">Tuesday (TUE)</option>
-          <option value="Wednesday">Wednesday (WED)</option>
-          <option value="Thursday">Thursday (THU)</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label>Department</label>
-        <select id="matrixDeptFilter" onchange="renderMatrixTable()">
-          <option value="all">All Departments</option>
-          <option value="elem">Kindergarten & Elementary</option>
-          <option value="jhs">Junior High School</option>
-          <option value="shs">Senior High School</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label>Search Class</label>
-        <input type="text" id="matrixSearch" placeholder="Search teacher, subject, or section..." onkeyup="renderMatrixTable()">
+        <label>Search Keyword</label>
+        <input type="text" id="search-keyword" placeholder="Search teacher, subject, room..." oninput="applyFilters()">
       </div>
     </div>
 
     <div class="status-summary">
-      <span id="resultCountInfo">Displaying 29 Section Monitoring Sheets (ODL Second Shift)</span>
-      <span>Official School Year 2026 - 2027</span>
+      <span id="results-count">Showing all 29 ODL 2nd Shift Section Forms</span>
+      <span style="font-weight:700;color:#064e3b;">Official S.Y. 2026 - 2027 Schedule Timetable</span>
     </div>
   </div>
 
-  <!-- SECTION SHEETS CONTAINER -->
-  <div class="sheet-wrapper" id="sectionsContainer">
+  <!-- CONTAINER FOR PAGES -->
+  <div class="sheet-wrapper" id="sheets-container">
 ''')
 
-for s_idx, sec in enumerate(sections):
+# 1. RENDER CLASSROOM SECTION SHEETS (26 Sections)
+for sec in sections:
     s_grid = elem_grid if sec['sheet'] == 'ELEM' else (hs_new_grid if sec['sheet'] == 'HS SCHED (NEW)' else hs_grid)
     c_start = sec['c_start']
     
     html_out.append(f'''
     <!-- SECTION SHEET: {sec["name"]} -->
-    <div class="page-sheet section-sheet dept-target-{sec["dept_code"]}" id="sheet-{sec["id"]}" data-id="{sec["id"]}" data-dept="{sec["dept_code"]}">
+    <div class="page-sheet section-sheet" data-type="section" data-dept="{sec['dept_code']}" data-sec="{sec['id']}" id="sheet-{sec['id']}">
       <div class="sheet-content">
-        {build_header_html("CLASSROOM INSTRUCTIONAL MONITORING & SCHEDULE SHEET", "Online Distance Learning (Second Shift) &bull; SY 2026 - 2027")}
+        {build_header_html("DAILY CLASSROOM INSTRUCTIONAL MONITORING SHEET", "Online Distance Learning (Second Shift) Modality &bull; School Year 2026 - 2027")}
         
         <div class="meta-box">
-          <div class="meta-row"><span class="meta-lbl">Grade & Section:</span><span class="meta-val td-bold">{sec["name"]}</span></div>
-          <div class="meta-row"><span class="meta-lbl">Department:</span><span class="meta-val">{sec["dept_label"]}</span></div>
-          <div class="meta-row"><span class="meta-lbl">Assigned Room:</span><span class="meta-val">{sec["room"]}</span></div>
-          <div class="meta-row"><span class="meta-lbl">Class Adviser:</span><span class="meta-val">{sec["adviser"]}</span></div>
-          <div class="meta-row"><span class="meta-lbl">Shift Modality:</span><span class="meta-val td-bold">Second Shift (Afternoon/Evening)</span></div>
-          <div class="meta-row"><span class="meta-lbl">School Year:</span><span class="meta-val">2026 - 2027</span></div>
+          <div class="meta-row">
+            <span class="meta-lbl">Grade &amp; Section:</span>
+            <span class="meta-val td-bold">{html.escape(sec['name'])}</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-lbl">Department:</span>
+            <span class="meta-val">{html.escape(sec['dept_label'])}</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-lbl">Virtual Room:</span>
+            <span class="meta-val">{html.escape(sec.get('room', 'ODL Virtual Room'))}</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-lbl">Learning Modality:</span>
+            <span class="meta-val">Online Distance Learning (ODL 2nd Shift)</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-lbl">Class Adviser:</span>
+            <span class="meta-val td-bold">{html.escape(sec.get('adviser', 'TBA'))}</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-lbl">Monitoring Date:</span>
+            <span class="meta-val">____________________</span>
+          </div>
         </div>
 
-        <div class="section-title">Weekly Instructional Timetable</div>
+        <div class="section-title">Weekly Instructional Timetable &bull; Sunday to Thursday</div>
+''')
+
+    if sec.get('is_placeholder'):
+        html_out.append(f'''
+        <div style="background:#f8fafc;border:1px dashed #cbd5e1;border-radius:6px;padding:30px;text-align:center;margin:20px 0;">
+          <div style="font-size:14px;font-weight:800;color:#064e3b;margin-bottom:6px;">ODL Second Shift Timetable Pending</div>
+          <div style="font-size:12px;color:#64748b;max-width:500px;margin:0 auto;">
+            Class schedule for <strong>{html.escape(sec['name'])}</strong> with Adviser <strong>{html.escape(sec.get('adviser', 'TBA'))}</strong> is being finalized.
+            Official class hours and Google Meet links will be posted upon administrative approval.
+          </div>
+        </div>
+''')
+    else:
+        html_out.append('''
         <table class="schedule-table">
           <thead>
             <tr>
@@ -1120,527 +1118,455 @@ for s_idx, sec in enumerate(sections):
             </tr>
           </thead>
           <tbody>
-    ''')
-
-    for r in range(sec['r_start'], sec['r_end'] + 1):
-        raw_t = s_grid.get((r, c_start), '')
-        t_slot = clean_time(raw_t)
-        mins_val = parse_mins(s_grid.get((r, c_start + 1), ''))
-        if not t_slot: continue
-        
-        is_routine = False
-        sample_cell = s_grid.get((r, c_start + 2), '')
-        _, _, s_type = clean_parse(sample_cell)
-        if s_type == 'ROUTINE': is_routine = True
-        
-        html_out.append('            <tr>\n')
-        html_out.append(f'              <td class="time-slot-col">{html.escape(t_slot)}</td>\n')
-        html_out.append(f'              <td class="mins-col">{mins_val}</td>\n')
-        
-        if is_routine:
-            html_out.append(f'              <td colspan="5" class="routine-row-cell">{html.escape(sample_cell)}</td>\n')
-        else:
-            for d_idx, day in enumerate(days):
-                c_val = s_grid.get((r, c_start + 2 + d_idx), '').strip()
-                if not c_val:
-                    html_out.append('              <td class="day-col">&mdash;</td>\n')
-                    continue
-                subj, tchr, kind = clean_parse(c_val)
-                if kind == 'ROUTINE':
-                    html_out.append(f'              <td class="day-col routine-row-cell">{html.escape(c_val)}</td>\n')
-                elif kind == 'CLASS':
-                    tchr_clean = tchr if tchr != 'TBA' else 'TBA'
-                    html_out.append(f'''              <td class="day-col class-cell">
-                    <div class="cell-subj">{html.escape(subj.upper())}</div>
-                    <div class="cell-tchr">{html.escape(tchr_clean)}</div>
-                  </td>\n''')
-                else:
-                    html_out.append(f'              <td class="day-col">{html.escape(c_val)}</td>\n')
-        html_out.append('            </tr>\n')
-
-    html_out.append(f'''          </tbody>
+''')
+        for r in range(sec['r_start'], sec['r_end'] + 1):
+            raw_t = s_grid.get((r, c_start), '')
+            t_slot = clean_time(raw_t)
+            mins_val = parse_mins(s_grid.get((r, c_start + 1), ''))
+            if not t_slot: continue
+            
+            day_cells = [s_grid.get((r, c_start + 2 + d), '').strip() for d in range(5)]
+            first_c = next((c for c in day_cells if c), '')
+            is_routine = False
+            routine_lbl = ''
+            if first_c and is_routine_text(first_c):
+                is_routine = True
+                routine_lbl = first_c
+                
+            html_out.append(f'''
+            <tr>
+              <td class="time-slot-col">{html.escape(t_slot)}</td>
+              <td class="mins-col">{mins_val}</td>
+''')
+            if is_routine:
+                html_out.append(f'''
+              <td colspan="5" class="routine-row-cell">{html.escape(routine_lbl)}</td>
+            </tr>
+''')
+            else:
+                for d_idx in range(5):
+                    c_txt = day_cells[d_idx]
+                    if not c_txt:
+                        html_out.append('              <td class="day-col" style="background:#ffffff;">-</td>\n')
+                    else:
+                        subj, tchr, kind = clean_parse(c_txt)
+                        if kind == 'ROUTINE':
+                            html_out.append(f'              <td class="day-col routine-row-cell">{html.escape(subj)}</td>\n')
+                        else:
+                            tchr_html = f'<div class="cell-tchr">{html.escape(tchr)}</div>' if tchr and tchr != 'TBA' else ''
+                            html_out.append(f'''              <td class="day-col class-cell">
+                <div class="cell-subj">{html.escape(subj)}</div>
+                {tchr_html}
+              </td>
+''')
+                html_out.append('            </tr>\n')
+                
+        html_out.append('''
+          </tbody>
         </table>
+''')
 
-        <div class="section-title">Instructional Attendance & Delivery Sign-Off</div>
-        <div style="font-size: 6.8pt; color: #475569; margin-bottom: 4px;">
-          This official monitoring record certifies that instructional periods have been conducted according to the DepEd MATATAG / DepEd-approved curriculum and schedule.
-        </div>
+    html_out.append('''
+        <div class="section-title">Daily Instructional Attendance &amp; Delivery Verification</div>
+        <table class="sheet-table">
+          <thead>
+            <tr>
+              <th style="width:12%;">Day</th>
+              <th style="width:20%;">Time Slot</th>
+              <th style="width:28%;">Subject / Learning Area</th>
+              <th style="width:22%;">Teacher In-Charge</th>
+              <th style="width:18%;">Teacher Signature</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align:center;font-weight:700;">SUN</td>
+              <td style="text-align:center;">12:40 - 1:20 PM</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td style="text-align:center;font-weight:700;">MON</td>
+              <td style="text-align:center;">12:40 - 1:20 PM</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td style="text-align:center;font-weight:700;">TUE</td>
+              <td style="text-align:center;">1:30 - 2:10 PM</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td style="text-align:center;font-weight:700;">WED</td>
+              <td style="text-align:center;">2:20 - 3:00 PM</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td style="text-align:center;font-weight:700;">THU</td>
+              <td style="text-align:center;">3:00 - 3:30 PM</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       <div class="sign-row">
         <div class="sign-col">
           <div class="sign-line"></div>
-          <div class="sign-label">Class Adviser / Homeroom Teacher</div>
-          <div class="sign-title">Prepared & Certified Correct</div>
+          <div class="sign-label">Class Adviser / Monitoring Officer</div>
+          <div class="sign-title">Signature over Printed Name</div>
         </div>
         <div class="sign-col">
           <div class="sign-line"></div>
-          <div class="sign-label">Academic Coordinator / Department Head</div>
-          <div class="sign-title">Verified & Monitored</div>
+          <div class="sign-label">Department Head / Coordinator</div>
+          <div class="sign-title">Academic Verification</div>
         </div>
         <div class="sign-col">
           <div class="sign-line"></div>
-          <div class="sign-label">School Principal / Directress</div>
-          <div class="sign-title">Noted & Approved</div>
+          <div class="sign-label">School Principal</div>
+          <div class="sign-title">Final Approval &amp; DepEd Endorsement</div>
         </div>
       </div>
     </div>
-    ''')
-
-html_out.append('''  </div>
-
-  <!-- TEACHER SHEETS CONTAINER -->
-  <div class="sheet-wrapper" id="teachersContainer" style="display: none;">
 ''')
 
-ROWS_PER_PAGE = 14
-
-for t_idx, t in enumerate(teachers_list):
-    t_name = t['name']
-    t_dept = t['dept']
-    t_cat = t.get('cat', 'elem')
-    items = t['items']
+# 2. RENDER TEACHER DAILY INSTRUCTIONAL ATTENDANCE RECORD (IDENTICAL TO teacher-monitoring.html)
+for t_data in teachers_list:
+    t_name = t_data['name']
+    dept = t_data['dept']
+    cat = t_data['cat']
+    items = t_data['items']
+    items.sort(key=lambda x: (days.index(x['day']), time_to_sort_key(x['time'])))
     
-    total_pages = max(1, (len(items) + ROWS_PER_PAGE - 1) // ROWS_PER_PAGE)
-    
-    for page in range(total_pages):
-        page_items = items[page * ROWS_PER_PAGE : (page + 1) * ROWS_PER_PAGE]
-        page_sheet_id = f"sheet-tchr-{re.sub(r'[^a-zA-Z0-9]', '_', t_name)}-p{page+1}"
-        
-        display_style = "display: flex;" if t_idx == 0 else "display: none;"
-        print_class = "" if t_idx == 0 else "hide-in-print"
-        page_note = f" (Page {page+1} of {total_pages})" if total_pages > 1 else ""
-
-        html_out.append(f'''
-    <!-- TEACHER RECORD SHEET: {html.escape(t_name)}{page_note} -->
-    <div class="page-sheet teacher-sheet dept-target-{t_cat} {print_class}" id="{page_sheet_id}" data-teacher="{html.escape(t_name)}" data-cat="{t_cat}" style="{display_style}">
+    html_out.append(f'''
+    <!-- TEACHER LOAD SHEET: {html.escape(t_name)} -->
+    <div class="page-sheet teacher-sheet hidden-sheet" data-type="load" data-dept="{cat}" data-teacher="{html.escape(t_name)}" id="sheet-tchr-{re.sub(r'[^a-zA-Z0-9]', '', t_name)}">
       <div class="sheet-content">
-        {build_header_html("TEACHER INSTRUCTIONAL ATTENDANCE & LOAD MONITORING RECORD", "Online Distance Learning (Second Shift) &bull; Official Monitoring Record &bull; SY 2026 - 2027")}
+        <!-- HEADER -->
+        <div class="sheet-header">
+          <div class="header-logo-side">
+            <img class="header-logo deped-img" alt="DepEd Logo">
+          </div>
+          <div class="header-center-text">
+            <div class="arabic-header" dir="rtl" lang="ar">المدرسة المنورة الإسلامية</div>
+            <div class="school-name">AL MUNAWWARA ISLAMIC SCHOOL</div>
+            <div class="form-title">TEACHER INSTRUCTIONAL ATTENDANCE & LOAD MONITORING RECORD</div>
+            <div class="form-sub">Online Distance Learning (Second Shift) Modality &bull; Faculty Monitoring Form &bull; School Year 2026 - 2027</div>
+          </div>
+          <div class="header-logo-side">
+            <img class="header-logo amis-img" alt="AMIS Logo">
+          </div>
+        </div>
 
+        <!-- TEACHER META BOX -->
         <div class="meta-box">
           <div class="meta-row"><span class="meta-lbl">Teacher's Name:</span><span class="meta-val td-bold">{html.escape(t_name)}</span></div>
-          <div class="meta-row"><span class="meta-lbl">Department / Faculty:</span><span class="meta-val">{html.escape(t_dept)}</span></div>
-          <div class="meta-row"><span class="meta-lbl">Shift Modality:</span><span class="meta-val td-bold">ODL Second Shift</span></div>
+          <div class="meta-row"><span class="meta-lbl">Total Weekly Loads:</span><span class="meta-val td-bold">{len(items)} ODL Classes</span></div>
+          <div class="meta-row"><span class="meta-lbl">Room Assignment:</span><span class="meta-val">Virtual / Google Meet</span></div>
+          <div class="meta-row" style="grid-column: span 2;"><span class="meta-lbl">Week Monitored:</span><span class="meta-val"></span></div>
           <div class="meta-row"><span class="meta-lbl">School Year:</span><span class="meta-val">2026 - 2027</span></div>
-          <div class="meta-row"><span class="meta-lbl">Weekly Teaching Load:</span><span class="meta-val td-bold">{len(items)} Official Periods</span></div>
-          <div class="meta-row"><span class="meta-lbl">Form Status:</span><span class="meta-val">Active Record{page_note}</span></div>
         </div>
 
-        <table class="teacher-record-table">
+        <!-- TABLE -->
+        <table class="sheet-table">
           <thead>
             <tr>
-              <th class="th-num">#</th>
-              <th class="th-day">DAY</th>
-              <th class="th-time">SCHEDULED TIME</th>
-              <th class="th-mins">MINS</th>
-              <th class="th-in">ACTUAL TIME IN</th>
-              <th class="th-out">ACTUAL TIME OUT</th>
-              <th class="th-grade">GRADE / SEC</th>
-              <th class="th-subject">SUBJECT / LEARNING AREA</th>
-              <th class="th-room">ROOM</th>
-              <th class="th-status">INSTRUCTION STATUS</th>
-              <th class="th-remarks">SIGN</th>
+              <th class="th-num" style="width:3%;">#</th>
+              <th class="th-day" style="width:6.5%;">Day</th>
+              <th class="th-time" style="width:16.5%;">Scheduled Time</th>
+              <th class="th-mins" style="width:4.5%;">Mins</th>
+              <th class="th-in" style="width:8%;">Actual In</th>
+              <th class="th-out" style="width:8%;">Actual Out</th>
+              <th class="th-grade" style="width:13.5%;">Grade / Sec</th>
+              <th class="th-subject" style="width:18.5%;">Subject / Learning Area</th>
+              <th class="th-room" style="width:5%;">Room</th>
+              <th class="th-status" style="width:11.5%;">Instruction Status</th>
+              <th class="th-remarks" style="width:5%;">Signature</th>
             </tr>
           </thead>
-          <tbody>
-        ''')
+          <tbody>''')
 
-        for row_idx in range(ROWS_PER_PAGE):
-            row_num = page * ROWS_PER_PAGE + row_idx + 1
-            if row_idx < len(page_items):
-                it = page_items[row_idx]
-                html_out.append(f'''            <tr>
-              <td class="td-center" style="font-weight:700; color:#64748b;">{row_num}</td>
-              <td class="day-cell">{html.escape(it['day_abbr'])}</td>
-              <td class="time-slot">{html.escape(it['time'])}</td>
-              <td class="td-center" style="font-weight:700;">{html.escape(it['mins'])}</td>
-              <td class="td-center">&nbsp;</td>
-              <td class="td-center">&nbsp;</td>
-              <td class="grade-cell">{html.escape(it['section'])}</td>
-              <td class="subject-cell">{html.escape(it['subject'])}</td>
-              <td class="td-center" style="font-size: 7.2pt; color: #475569;">{html.escape(it.get('room', 'ODL'))}</td>
+    row_num = 1
+    for it in items:
+        subj_upper = html.escape(it['subject'].upper())
+        sec_short = html.escape(it['section'])
+        html_out.append(f'''
+            <tr>
+              <td style="text-align:center;font-weight:700;color:#64748b;">{row_num}</td>
+              <td class="day-cell">{it['day_abbr']}</td>
+              <td class="time-slot">{it['time']}</td>
+              <td style="text-align:center;font-weight:700;color:#475569;">{it['mins']}</td>
+              <td style="text-align:center;"></td>
+              <td style="text-align:center;"></td>
+              <td class="grade-cell">{sec_short}</td>
+              <td class="subject-cell">{subj_upper}</td>
+              <td style="text-align:center;"></td>
               <td>
                 <div class="status-grid">
-                  <div class="status-cell-row">
-                    <label class="status-chk"><input type="checkbox"> In</label>
-                    <label class="status-chk"><input type="checkbox"> Late</label>
-                  </div>
-                  <div class="status-cell-row">
-                    <label class="status-chk"><input type="checkbox"> Abs</label>
-                    <label class="status-chk"><input type="checkbox"> Sub</label>
-                  </div>
+                  <div class="status-row"><span>[ ] In</span><span>[ ] Late</span></div>
+                  <div class="status-row"><span>[ ] Abs</span><span>[ ] Sub</span></div>
                 </div>
               </td>
-              <td class="td-center">&nbsp;</td>
-            </tr>
-''')
-            else:
-                html_out.append(f'''            <tr>
-              <td class="td-center" style="font-weight:600; color:#cbd5e1;">{row_num}</td>
-              <td class="td-center">&nbsp;</td>
-              <td class="td-center">&nbsp;</td>
-              <td class="td-center">&nbsp;</td>
-              <td class="td-center">&nbsp;</td>
-              <td class="td-center">&nbsp;</td>
-              <td class="td-center">&nbsp;</td>
-              <td class="td-center">&nbsp;</td>
-              <td class="td-center">&nbsp;</td>
+              <td></td>
+            </tr>''')
+        row_num += 1
+
+    blank_to_add = max(2, 14 - len(items))
+    for b in range(blank_to_add):
+        html_out.append(f'''
+            <tr class="row-blank">
+              <td style="text-align:center;color:#cbd5e1;font-weight:600;">{row_num}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td style="text-align:center;"></td>
+              <td style="text-align:center;"></td>
+              <td></td>
+              <td style="color:#cbd5e1;font-size:7pt;font-weight:700;text-transform:uppercase;">(SUBSTITUTE / REMEDIAL LOAD)</td>
+              <td></td>
               <td>
                 <div class="status-grid">
-                  <div class="status-cell-row">
-                    <label class="status-chk"><input type="checkbox"> In</label>
-                    <label class="status-chk"><input type="checkbox"> Late</label>
-                  </div>
-                  <div class="status-cell-row">
-                    <label class="status-chk"><input type="checkbox"> Abs</label>
-                    <label class="status-chk"><input type="checkbox"> Sub</label>
-                  </div>
+                  <div class="status-row"><span>[ ] In</span><span>[ ] Late</span></div>
+                  <div class="status-row"><span>[ ] Abs</span><span>[ ] Sub</span></div>
                 </div>
               </td>
-              <td class="td-center">&nbsp;</td>
-            </tr>
-''')
+              <td></td>
+            </tr>''')
+        row_num += 1
 
-        html_out.append(f'''          </tbody>
+    html_out.append('''
+          </tbody>
         </table>
+      </div>
 
-        <!-- SIGNATURE BLOCK -->
-        <div class="sign-row" style="margin-top: auto; padding-top: 6px; border-top: 1.5px solid #cbd5e1;">
-          <div class="sign-col">
-            <div class="sign-line"></div>
-            <div class="sign-label">{html.escape(t_name)}</div>
-            <div class="sign-title">Teacher's Signature over Printed Name</div>
-          </div>
-          <div class="sign-col">
-            <div class="sign-line"></div>
-            <div class="sign-label">Academic Coordinator / Department Head</div>
-            <div class="sign-title">Verified & Monitored By</div>
-          </div>
-          <div class="sign-col">
-            <div class="sign-line"></div>
-            <div class="sign-label">School Principal / Directress</div>
-            <div class="sign-title">Approved By</div>
-          </div>
+      <div class="sign-row">
+        <div class="sign-col">
+          <div class="sign-line"></div>
+          <div class="sign-label">Teacher In-Charge</div>
+          <div class="sign-title">Conforme / Signature</div>
+        </div>
+        <div class="sign-col">
+          <div class="sign-line"></div>
+          <div class="sign-label">Department Head / Coordinator</div>
+          <div class="sign-title">Verified by Academic Department</div>
+        </div>
+        <div class="sign-col">
+          <div class="sign-line"></div>
+          <div class="sign-label">School Principal</div>
+          <div class="sign-title">Approved Teaching Load</div>
         </div>
       </div>
     </div>
 ''')
 
-html_out.append('''  </div>
+# 3. RENDER MASTER ATTENDANCE TRACKING MATRIX
+html_out.append('''
+  </div>
 
-  <!-- MASTER DAILY ATTENDANCE MATRIX CONTAINER -->
-  <div id="masterAttendanceContainer" class="attendance-view-container">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+  <!-- MASTER ATTENDANCE MATRIX VIEW CONTAINER -->
+  <div class="attendance-view-container" id="matrix-container">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;border-bottom:2px solid #064e3b;padding-bottom:12px;">
       <div>
-        <h2 style="margin: 0; font-size: 16px; color: #064e3b; font-weight: 800; text-transform: uppercase;">
-          Master Daily Attendance & Instructional Matrix
+        <h2 style="font-size:18px;font-weight:800;color:#064e3b;margin:0 0 4px 0;">
+          Master Daily Instructional Attendance Matrix (ODL Second Shift)
         </h2>
-        <div style="font-size: 12px; color: #64748b; margin-top: 2px;">
-          Online Distance Learning (Second Shift) &bull; SY 2026 - 2027
+        <div style="font-size:12px;color:#475569;">
+          Real-time tracking of all 356 scheduled synchronous virtual class sessions &bull; Sunday to Thursday
         </div>
       </div>
       <div>
-        <button class="btn btn-primary" onclick="window.print()">Print Matrix</button>
+        <button class="btn btn-blue" onclick="window.print()">Print Matrix</button>
       </div>
     </div>
 
-    <!-- Day Selector Tabs -->
-    <div class="day-matrix-tabs">
-      <button class="day-matrix-tab active" data-day="Sunday" onclick="setMatrixDay('Sunday', this)">Sunday (SUN)</button>
-      <button class="day-matrix-tab" data-day="Monday" onclick="setMatrixDay('Monday', this)">Monday (MON)</button>
-      <button class="day-matrix-tab" data-day="Tuesday" onclick="setMatrixDay('Tuesday', this)">Tuesday (TUE)</button>
-      <button class="day-matrix-tab" data-day="Wednesday" onclick="setMatrixDay('Wednesday', this)">Wednesday (WED)</button>
-      <button class="day-matrix-tab" data-day="Thursday" onclick="setMatrixDay('Thursday', this)">Thursday (THU)</button>
-    </div>
-
-    <table class="attendance-table">
+    <table class="attendance-table" id="attendance-table-element">
       <thead>
         <tr>
-          <th style="width: 50px; text-align: center;">#</th>
-          <th style="width: 140px;">Scheduled Time</th>
-          <th style="width: 50px; text-align: center;">Mins</th>
-          <th style="width: 200px;">Grade & Section</th>
-          <th style="width: 180px;">Learning Area / Subject</th>
-          <th style="width: 180px;">Assigned Teacher</th>
-          <th style="width: 100px;">Room</th>
-          <th style="width: 110px; text-align: center;">Status</th>
+          <th style="width:7%;">Day</th>
+          <th style="width:13%;">Time Slot</th>
+          <th style="width:8%;">Dept</th>
+          <th style="width:25%;">Section</th>
+          <th style="width:22%;">Subject</th>
+          <th style="width:15%;">Teacher</th>
+          <th style="width:10%;">Status</th>
         </tr>
       </thead>
-      <tbody id="matrixTableBody">
-        <!-- Populated via JavaScript -->
+      <tbody>
+''')
+
+day_order = {'SUN': 1, 'MON': 2, 'TUE': 3, 'WED': 4, 'THU': 5}
+all_master_attendance_rows.sort(key=lambda x: (day_order.get(x['day_abbr'], 9), x['sort_time'], x['section']))
+
+for row in all_master_attendance_rows:
+    html_out.append(f'''
+        <tr class="attendance-row" data-day="{row['day_abbr']}" data-dept="{row['dept_code']}" data-sec="{row['sec_code']}" data-teacher="{html.escape(row['teacher'])}" data-search="{html.escape(row['teacher'].lower())} {html.escape(row['subject'].lower())} {html.escape(row['section'].lower())}">
+          <td style="text-align:center;"><span class="day-badge">{row['day_abbr']}</span></td>
+          <td style="font-weight:600;font-size:11px;">{html.escape(row['time'])}</td>
+          <td><span class="badge-dept dept-{row['dept_code']}">{row['dept_code'].upper()}</span></td>
+          <td style="font-weight:700;color:#0f172a;">{html.escape(row['section'])}</td>
+          <td style="font-weight:700;color:#064e3b;">{html.escape(row['subject'])}</td>
+          <td style="font-weight:600;color:#0284c7;">{html.escape(row['teacher'])}</td>
+          <td style="text-align:center;">
+            <select style="font-size:10.5px;padding:3px 6px;border-radius:4px;border:1px solid #cbd5e1;background:#f8fafc;font-weight:700;">
+              <option value="present">Present</option>
+              <option value="late">Late</option>
+              <option value="sub">Substituted</option>
+              <option value="async">Async</option>
+              <option value="absent">Absent</option>
+            </select>
+          </td>
+        </tr>
+''')
+
+html_out.append('''
       </tbody>
     </table>
   </div>
 
   <script>
-    const AMIS_LOGO_B64 = ''' + json.dumps(amis_b64) + ''';
-    const DEPED_LOGO_B64 = ''' + json.dumps(deped_b64) + ''';
-    const MASTER_ATTENDANCE = ''' + json.dumps(all_master_attendance_rows) + ''';
+    const AMIS_LOGO_B64 = "''' + amis_b64 + '''";
+    const DEPED_LOGO_B64 = "''' + deped_b64 + '''";
 
-    document.addEventListener("DOMContentLoaded", () => {
-      document.querySelectorAll(".deped-img").forEach(img => img.src = DEPED_LOGO_B64);
+    document.addEventListener("DOMContentLoaded", function() {
       document.querySelectorAll(".amis-img").forEach(img => img.src = AMIS_LOGO_B64);
-      renderMatrixTable();
+      document.querySelectorAll(".deped-img").forEach(img => img.src = DEPED_LOGO_B64);
     });
 
     let currentView = 'sections';
-    let currentMatrixDay = 'Sunday';
-    let currentTchrDept = 'all';
 
-    function switchView(view) {
-      currentView = view;
-      const tabSections = document.getElementById("tabSections");
-      const tabTeachers = document.getElementById("tabTeachers");
-      const tabMaster = document.getElementById("tabMasterAttendance");
+    function switchView(viewName) {
+      currentView = viewName;
+      document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
+      
+      const tabBtn = document.getElementById('tab-' + viewName);
+      if (tabBtn) tabBtn.classList.add('active');
 
-      const ctrlSections = document.getElementById("controlsSections");
-      const ctrlTeachers = document.getElementById("controlsTeachers");
-      const ctrlMaster = document.getElementById("controlsMaster");
+      const sheetsContainer = document.getElementById('sheets-container');
+      const matrixContainer = document.getElementById('matrix-container');
+      const secFilterGroup = document.getElementById('group-sec-filter');
+      const teacherFilterGroup = document.getElementById('group-teacher-filter');
 
-      const secContainer = document.getElementById("sectionsContainer");
-      const tchrContainer = document.getElementById("teachersContainer");
-      const masterContainer = document.getElementById("masterAttendanceContainer");
-
-      // Reset tabs
-      tabSections.classList.remove("active");
-      tabTeachers.classList.remove("active");
-      tabMaster.classList.remove("active");
-
-      // Hide all controls and containers
-      ctrlSections.style.display = "none";
-      ctrlTeachers.style.display = "none";
-      ctrlMaster.style.display = "none";
-
-      secContainer.style.display = "none";
-      tchrContainer.style.display = "none";
-      masterContainer.style.display = "none";
-
-      if (view === 'sections') {
-        tabSections.classList.add("active");
-        ctrlSections.style.display = "grid";
-        secContainer.style.display = "flex";
-        applySectionFilter();
-      } else if (view === 'teachers') {
-        tabTeachers.classList.add("active");
-        ctrlTeachers.style.display = "grid";
-        tchrContainer.style.display = "flex";
-        onTeacherSelectChange();
-      } else if (view === 'master') {
-        tabMaster.classList.add("active");
-        ctrlMaster.style.display = "grid";
-        masterContainer.style.display = "block";
-        renderMatrixTable();
-      }
-    }
-
-    function applySectionFilter() {
-      const dept = document.getElementById("deptFilter").value;
-      const sheets = document.querySelectorAll(".section-sheet");
-      let visibleCount = 0;
-      sheets.forEach(sheet => {
-        const sDept = sheet.getAttribute("data-dept");
-        if (dept === "all" || dept === sDept) {
-          sheet.style.display = "flex";
-          sheet.classList.remove("hide-in-print");
-          visibleCount++;
-        } else {
-          sheet.style.display = "none";
-          sheet.classList.add("hide-in-print");
-        }
-      });
-      document.getElementById("sectionJump").value = "all";
-      document.getElementById("resultCountInfo").textContent = `Displaying ${visibleCount} Section Monitoring Sheets (ODL Second Shift)`;
-    }
-
-    function jumpToSection() {
-      const secId = document.getElementById("sectionJump").value;
-      const sheets = document.querySelectorAll(".section-sheet");
-      if (secId === "all") {
-        applySectionFilter();
-        return;
-      }
-      let visibleCount = 0;
-      sheets.forEach(sheet => {
-        if (sheet.getAttribute("data-id") === secId) {
-          sheet.style.display = "flex";
-          sheet.classList.remove("hide-in-print");
-          sheet.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          visibleCount++;
-        } else {
-          sheet.style.display = "none";
-          sheet.classList.add("hide-in-print");
-        }
-      });
-      document.getElementById("resultCountInfo").textContent = `Displaying Section: ${secId.toUpperCase()}`;
-    }
-
-    function searchSectionClasses() {
-      const query = document.getElementById("secSearch").value.toLowerCase().trim();
-      const sheets = document.querySelectorAll(".section-sheet");
-      let visibleCount = 0;
-      sheets.forEach(sheet => {
-        const text = sheet.innerText.toLowerCase();
-        if (!query || text.includes(query)) {
-          sheet.style.display = "flex";
-          sheet.classList.remove("hide-in-print");
-          visibleCount++;
-        } else {
-          sheet.style.display = "none";
-          sheet.classList.add("hide-in-print");
-        }
-      });
-      document.getElementById("resultCountInfo").textContent = `Found ${visibleCount} Section Monitoring Sheets matching "${query}"`;
-    }
-
-    function onTchrDeptChange() {
-      const dept = document.getElementById("tchrDeptFilter").value;
-      currentTchrDept = dept;
-      const select = document.getElementById("teacherSelect");
-      let firstVisible = null;
-
-      for (let i = 0; i < select.options.length; i++) {
-        const opt = select.options[i];
-        const cat = opt.getAttribute("data-cat");
-        if (dept === 'all' || cat === dept) {
-          opt.style.display = "block";
-          if (!firstVisible) firstVisible = opt.value;
-        } else {
-          opt.style.display = "none";
-        }
+      if (viewName === 'sections') {
+        sheetsContainer.style.display = 'flex';
+        matrixContainer.style.display = 'none';
+        secFilterGroup.style.display = 'flex';
+        teacherFilterGroup.style.display = 'none';
+      } else if (viewName === 'loads') {
+        sheetsContainer.style.display = 'flex';
+        matrixContainer.style.display = 'none';
+        secFilterGroup.style.display = 'none';
+        teacherFilterGroup.style.display = 'flex';
+      } else if (viewName === 'matrix') {
+        sheetsContainer.style.display = 'none';
+        matrixContainer.style.display = 'block';
+        secFilterGroup.style.display = 'flex';
+        teacherFilterGroup.style.display = 'flex';
       }
 
-      if (firstVisible) {
-        select.value = firstVisible;
-        onTeacherSelectChange();
-      }
+      applyFilters();
     }
 
-    function onTeacherSelectChange() {
-      const selectedTeacher = document.getElementById("teacherSelect").value;
-      const sheets = document.querySelectorAll(".teacher-sheet");
+    function applyFilters() {
+      const dept = document.getElementById('filter-dept').value;
+      const sec = document.getElementById('filter-sec').value;
+      const teacher = document.getElementById('filter-teacher').value;
+      const keyword = document.getElementById('search-keyword').value.toLowerCase().trim();
+
       let visibleCount = 0;
 
-      sheets.forEach(sheet => {
-        if (sheet.getAttribute("data-teacher") === selectedTeacher) {
-          sheet.style.display = "flex";
-          sheet.classList.remove("hide-in-print");
-          visibleCount++;
-        } else {
-          sheet.style.display = "none";
-          sheet.classList.add("hide-in-print");
-        }
-      });
-      document.getElementById("resultCountInfo").textContent = `Displaying Record for: ${selectedTeacher}`;
-    }
-
-    function searchTeacherByName() {
-      const query = document.getElementById("tchrSearch").value.toLowerCase().trim();
-      const select = document.getElementById("teacherSelect");
-      let firstMatch = null;
-      for (let i = 0; i < select.options.length; i++) {
-        const opt = select.options[i];
-        const text = opt.text.toLowerCase();
-        if (!query || text.includes(query)) {
-          opt.style.display = "block";
-          if (!firstMatch) firstMatch = opt.value;
-        } else {
-          opt.style.display = "none";
-        }
-      }
-      if (firstMatch) {
-        select.value = firstMatch;
-        onTeacherSelectChange();
-      }
-    }
-
-    function handlePrintAll() {
       if (currentView === 'sections') {
-        document.getElementById("deptFilter").value = "all";
-        document.getElementById("sectionJump").value = "all";
-        document.getElementById("secSearch").value = "";
-        applySectionFilter();
-        window.print();
-      } else if (currentView === 'teachers') {
-        const sheets = document.querySelectorAll(".teacher-sheet");
-        sheets.forEach(sheet => {
-          const cat = sheet.getAttribute("data-cat");
-          if (currentTchrDept === 'all' || cat === currentTchrDept) {
-            sheet.style.display = "flex";
-            sheet.classList.remove("hide-in-print");
+        const sectionSheets = document.querySelectorAll('.section-sheet');
+        document.querySelectorAll('.teacher-sheet').forEach(el => el.style.display = 'none');
+        
+        sectionSheets.forEach(sheet => {
+          const sDept = sheet.getAttribute('data-dept');
+          const sSec = sheet.getAttribute('data-sec');
+          const textContent = sheet.innerText.toLowerCase();
+
+          const matchesDept = (dept === 'all' || sDept === dept);
+          const matchesSec = (sec === 'all' || sSec === sec);
+          const matchesKw = (!keyword || textContent.includes(keyword));
+
+          if (matchesDept && matchesSec && matchesKw) {
+            sheet.style.display = 'flex';
+            visibleCount++;
           } else {
-            sheet.style.display = "none";
-            sheet.classList.add("hide-in-print");
+            sheet.style.display = 'none';
           }
         });
-        window.print();
-      } else {
-        window.print();
+        document.getElementById('results-count').innerText = `Showing ${visibleCount} Section Form(s)`;
+      } else if (currentView === 'loads') {
+        const teacherSheets = document.querySelectorAll('.teacher-sheet');
+        document.querySelectorAll('.section-sheet').forEach(el => el.style.display = 'none');
+
+        teacherSheets.forEach(sheet => {
+          const tTeacher = sheet.getAttribute('data-teacher');
+          const tDept = sheet.getAttribute('data-dept');
+          const textContent = sheet.innerText.toLowerCase();
+
+          const matchesDept = (dept === 'all' || tDept === dept);
+          const matchesTeacher = (teacher === 'all' || tTeacher === teacher);
+          const matchesKw = (!keyword || textContent.includes(keyword));
+
+          if (matchesDept && matchesTeacher && matchesKw) {
+            sheet.style.display = 'flex';
+            visibleCount++;
+          } else {
+            sheet.style.display = 'none';
+          }
+        });
+        document.getElementById('results-count').innerText = `Showing ${visibleCount} Faculty Instructional Attendance Record(s)`;
+      } else if (currentView === 'matrix') {
+        const rows = document.querySelectorAll('.attendance-row');
+        rows.forEach(row => {
+          const rDept = row.getAttribute('data-dept');
+          const rTeacher = row.getAttribute('data-teacher');
+          const rSearch = row.getAttribute('data-search');
+
+          const matchesDept = (dept === 'all' || rDept === dept);
+          const matchesTeacher = (teacher === 'all' || rTeacher === teacher);
+          const matchesKw = (!keyword || rSearch.includes(keyword));
+
+          if (matchesDept && matchesTeacher && matchesKw) {
+            row.style.display = '';
+            visibleCount++;
+          } else {
+            row.style.display = 'none';
+          }
+        });
+        document.getElementById('results-count').innerText = `Showing ${visibleCount} Synchronous Virtual Class Session(s)`;
       }
     }
 
-    function setMatrixDay(day, btn) {
-      currentMatrixDay = day;
-      document.querySelectorAll(".day-matrix-tab").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      document.getElementById("matrixDaySelect").value = day;
-      renderMatrixTable();
-    }
-
-    function renderMatrixTable() {
-      const day = document.getElementById("matrixDaySelect").value || currentMatrixDay;
-      const dept = document.getElementById("matrixDeptFilter").value;
-      const query = document.getElementById("matrixSearch").value.toLowerCase().trim();
-
-      const tbody = document.getElementById("matrixTableBody");
-      tbody.innerHTML = "";
-
-      const filtered = MASTER_ATTENDANCE.filter(r => {
-        if (r.day !== day) return false;
-        if (dept !== "all" && r.dept_code !== dept) return false;
-        if (query) {
-          const matchStr = `${r.section} ${r.subject} ${r.teacher} ${r.room}`.toLowerCase();
-          if (!matchStr.includes(query)) return false;
-        }
-        return true;
-      });
-
-      filtered.sort((a, b) => a.sort_time - b.sort_time || a.section.localeCompare(b.section));
-
-      if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px; color: #94a3b8;">No scheduled instructional classes found matching the criteria.</td></tr>`;
-        document.getElementById("resultCountInfo").textContent = `Displaying 0 classes for ${day}`;
-        return;
-      }
-
-      filtered.forEach((row, i) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td style="text-align: center; font-weight: 700; color: #64748b;">${i + 1}</td>
-          <td style="font-weight: 700; color: #064e3b;">${row.time}</td>
-          <td style="text-align: center;">${row.mins}m</td>
-          <td style="font-weight: 600;">${row.section}</td>
-          <td style="font-weight: 800; color: #065f46;">${row.subject.toUpperCase()}</td>
-          <td style="font-weight: 700; color: #0284c7;">${row.teacher}</td>
-          <td style="color: #475569;">${row.room}</td>
-          <td style="text-align: center;">
-            <span style="display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0;">SCHEDULED</span>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      document.getElementById("resultCountInfo").textContent = `Displaying ${filtered.length} classes for ${day} (ODL Second Shift)`;
+    function showAllAndPrint() {
+      document.getElementById('filter-dept').value = 'all';
+      document.getElementById('filter-sec').value = 'all';
+      document.getElementById('filter-teacher').value = 'all';
+      document.getElementById('search-keyword').value = '';
+      applyFilters();
+      window.print();
     }
   </script>
 </body>
 </html>
 ''')
 
+output_content = "".join(html_out)
 with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
-    f.write(''.join(html_out))
+    f.write(output_content)
 
+print(f"Successfully generated {OUTPUT_FILE} ({len(output_content)} bytes).")
+
+ROOT_OUTPUT_FILE = os.path.join(REPO_DIR, '..', 'odl-second-shift-monitoring-sheet.html')
 with open(ROOT_OUTPUT_FILE, 'w', encoding='utf-8') as f:
-    f.write(''.join(html_out))
+    f.write(output_content)
+print(f"Successfully mirrored to {ROOT_OUTPUT_FILE}")
 
-print(f"Successfully generated: {OUTPUT_FILE} ({os.path.getsize(OUTPUT_FILE):,} bytes)")
-print(f"Successfully mirrored: {ROOT_OUTPUT_FILE}")

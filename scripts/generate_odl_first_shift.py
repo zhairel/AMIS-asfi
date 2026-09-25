@@ -895,8 +895,8 @@ html_out.append('''<!DOCTYPE html>
     <!-- MODALITY NAVIGATION -->
     <div class="modality-bar">
       <span class="modality-label">Learning Modality:</span>
-      <a href="/teacher-monitoring.html" class="modality-pill" title="Face-to-Face Portal">
-        <span class="modality-dot dot-active"></span>
+      <a href="/f2f-monitoring.html" class="modality-pill" title="Face-to-Face Portal">
+        <span class="modality-dot"></span>
         Face-to-Face (F2F)
       </a>
       <a href="/odl-first-shift.html" class="modality-pill active" title="Online Distance Learning First Shift">
@@ -904,12 +904,20 @@ html_out.append('''<!DOCTYPE html>
         ODL First Shift (Classroom Forms)
       </a>
       <a href="/odl-teacher-monitoring.html" class="modality-pill" title="Daily Per-Teacher Attendance Monitoring">
-        <span class="modality-dot dot-active"></span>
+        <span class="modality-dot"></span>
         ODL 1st Shift (Daily Per-Teacher Portal)
       </a>
       <a href="/odl-second-shift.html" class="modality-pill" title="Online Distance Learning Second Shift">
-        <span class="modality-dot dot-active"></span>
-        ODL Second Shift
+        <span class="modality-dot"></span>
+        ODL Second Shift (Classroom Forms)
+      </a>
+      <a href="/odl-second-shift-teacher.html" class="modality-pill" title="Daily Per-Teacher Attendance Monitoring">
+        <span class="modality-dot"></span>
+        ODL 2nd Shift (Daily Per-Teacher Portal)
+      </a>
+      <a href="/all-teachers-monitoring.html" class="modality-pill" title="Unified Multi-Modality Portal" style="border-color:#3b82f6;color:#2563eb;background:#eff6ff;">
+        <span class="modality-dot" style="background:#2563eb;"></span>
+        All Modalities (152 Teachers)
       </a>
     </div>
 
