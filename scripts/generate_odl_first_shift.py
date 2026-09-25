@@ -48,112 +48,77 @@ hs_grid = get_grid(wb['HS SCHED'])
 def clean_time(t_str):
     if not t_str: return ''
     t = str(t_str).strip()
-    if any(kw in t.upper() for kw in ['GRADE', 'USTADH', 'TEACHER']):
-        return ''
-    
+    if any(kw in t.upper() for kw in ['GRADE', 'USTADH', 'TEACHER']): return ''
     m_odl = re.search(r'([\d:apm\.\s-]+?)\s*(?:\(ODL\)|ODL)', t, re.IGNORECASE)
-    if m_odl:
-        t = m_odl.group(1).strip()
-    else:
-        t = re.sub(r'\(.*?\)', '', t).strip()
-
+    if m_odl: t = m_odl.group(1).strip()
+    else: t = re.sub(r'\(.*?\)', '', t).strip()
     t = re.sub(r'(\d{1,2}:\d{2}):+(\d{1,2}:\d{2})', r'\1 - \2', t)
     t = re.sub(r'(\d{1,2}:\d{2}):00', r'\1', t)
-    
     is_pm = bool(re.search(r'(?:p\.?m\.?|pm)', t, re.IGNORECASE))
     is_am = bool(re.search(r'(?:a\.?m\.?|am)', t, re.IGNORECASE))
-    
     clean = re.sub(r'(?:a\.?m\.?|p\.?m\.?|am|pm)', '', t, flags=re.IGNORECASE).strip()
-    
     parts = re.split(r'\s*[-–]\s*', clean)
     if len(parts) == 2:
         start, end = parts[0].strip(), parts[1].strip()
         start = re.sub(r'^0(\d:)', r'\1', start)
         end = re.sub(r'^0(\d:)', r'\1', end)
-        
         try:
             start_hour = int(start.split(':')[0]) if ':' in start else 0
             end_hour = int(end.split(':')[0]) if ':' in end else 0
         except ValueError:
             return t
-            
         if is_pm:
-            if start_hour == 11 and end_hour == 12:
-                return f"{start} AM - {end} PM"
-            return f"{start} - {end} PM"
-        elif is_am:
-            return f"{start} - {end} AM"
+            if start_hour == 11 and end_hour == 12: return f'{start} AM - {end} PM'
+            return f'{start} - {end} PM'
+        elif is_am: return f'{start} - {end} AM'
         else:
-            if start_hour in [7, 8, 9, 10, 11] and end_hour in [7, 8, 9, 10, 11]:
-                return f"{start} - {end} AM"
-            elif start_hour == 11 and (end_hour == 12 or end_hour <= 1):
-                return f"{start} AM - {end} PM"
-            elif start_hour == 12 or start_hour in [1, 2, 3, 4, 5, 6]:
-                return f"{start} - {end} PM"
-            else:
-                return f"{start} - {end} PM"
+            if start_hour in [7, 8, 9, 10, 11] and end_hour in [7, 8, 9, 10, 11]: return f'{start} - {end} AM'
+            elif start_hour == 11 and (end_hour == 12 or end_hour <= 1): return f'{start} AM - {end} PM'
+            elif start_hour == 12 or start_hour in [1, 2, 3, 4, 5, 6]: return f'{start} - {end} PM'
+            else: return f'{start} - {end} PM'
     elif len(parts) == 1:
         val = parts[0].strip()
         val = re.sub(r'^0(\d:)', r'\1', val)
-        if is_pm or val.startswith(('12:', '1:', '2:', '3:', '4:', '5:')):
-            return f"{val} PM"
-        else:
-            return f"{val} AM"
-    
+        if is_pm or val.startswith(('12:', '1:', '2:', '3:', '4:', '5:')): return f'{val} PM'
+        else: return f'{val} AM'
     return t
 
 def parse_mins(m_str):
-    if not m_str: return 40
+    if not m_str: return '40'
     m_str = str(m_str).strip()
     m = re.search(r'(\d+)', m_str)
-    if m:
-        return int(m.group(1))
-    return 40
+    return str(m.group(1)) if m else '40'
 
 def is_routine_text(text):
     if not text: return False
     u = text.upper()
     return any(kw in u for kw in ['GENERAL ASSEMBLY', 'RECESS', 'LUNCH', 'SALAH', 'DEPARTURE', 'SHORT BREAK', 'TRANSITION', 'BREAK', 'HOMEROOM', 'ENTRANCE EXAM REVIEW', 'RESEARCH CONSULTATION'])
 
-def clean_subject_name(raw_text):
-    raw = raw_text.strip()
-    if not raw: return ''
-    clean = re.sub(r'[-–]?\s*(?:Tchr\.?|Teacher|Sir|Ustadh|Ust\.?|Alim|Tr\.?|Ustadha|Ustadza)\s+[A-Za-z]+', '', raw, flags=re.IGNORECASE).strip()
-    clean = re.sub(r'\s+', ' ', clean).strip(' -–')
-    return clean or raw
-
 def normalize_teacher(name):
-    name = re.sub(r"\s+", " ", name.strip()).strip("-– ")
-    if re.match(r"^Teacher\b", name, re.IGNORECASE):
-        name = "Tchr. " + name[7:].strip()
-    elif re.match(r"^Tr\.?\b", name, re.IGNORECASE):
-        name = "Tchr. " + name[3:].strip()
-    elif re.match(r"^Tchr\.?\b", name, re.IGNORECASE):
-        name = "Tchr. " + re.sub(r"^Tchr\.?\s*", "", name, flags=re.IGNORECASE)
-    elif re.match(r"^(?:Ustadha|Ustadza)\b", name, re.IGNORECASE):
-        name = "Ustadha " + re.sub(r"^(?:Ustadha|Ustadza)\s*", "", name, flags=re.IGNORECASE)
-    elif re.match(r"^Ustadh\b", name, re.IGNORECASE):
-        name = "Ustadh " + name[6:].strip()
-    elif re.match(r"^Ust\.?\b", name, re.IGNORECASE):
-        name = "Ust. " + re.sub(r"^Ust\.?\s*", "", name, flags=re.IGNORECASE)
-        
+    name = re.sub(r'\s+', ' ', name.strip()).strip('-– ')
+    if re.match(r'^Teacher\b', name, re.IGNORECASE): name = 'Tchr. ' + name[7:].strip()
+    elif re.match(r'^Tr\.?\b', name, re.IGNORECASE): name = 'Tchr. ' + name[3:].strip()
+    elif re.match(r'^Tchr\.?\b', name, re.IGNORECASE): name = 'Tchr. ' + re.sub(r'^Tchr\.?\s*', '', name, flags=re.IGNORECASE)
+    elif re.match(r'^(?:Ustadha|Ustadza)\b', name, re.IGNORECASE): name = 'Ustadha ' + re.sub(r'^(?:Ustadha|Ustadza)\s*', '', name, flags=re.IGNORECASE)
+    elif re.match(r'^Ustadh\b', name, re.IGNORECASE): name = 'Ustadh ' + name[6:].strip()
+    elif re.match(r'^Ust\.?\b', name, re.IGNORECASE): name = 'Ust. ' + re.sub(r'^Ust\.?\s*', '', name, flags=re.IGNORECASE)
     name = name.strip()
-    if name in ["Tchr.", "Tchr", "Ust.", "Ust", "Teacher", "Tr.", "Tr", ""]: return "TBA"
-    if name.upper() in ["TCHR. AHMAD", "SIR AHMAD"]: return "Tchr. Ahmad"
-    if name in ["Ustadh Jaisam", "Ust. Jaisam"]: return "Ustadh Jaisam"
-    if name == "Tchr. Kat": return "Tchr. Katrina"
-    if name in ["Ust. Ubaydah", "Ust. Obaydah"]: return "Ust. Obaydah"
-    if name in ["Ust. Silfah", "Ustadha Silfa", "Ust. Silfa", "Ustadza Samsida", "Ustadha Samsida"]:
-        if "Samsida" in name: return "Ustadha Samsida"
-        return "Ustadha Silfa"
-    if name in ["Ustadha Saliha", "Ust. Saliha"]: return "Ustadha Saliha"
-    if name in ["Tchr. Junaisa", "Tchr. Junaisah"]: return "Tchr. Junaisah"
-    if name in ["Tchr. Jairah", "Tchr. Jayra"]: return "Tchr. Jayra"
-    if name in ["Tchr. Moh", "Sir Mohaymen", "Sir Moh"]: return "Sir Moh"
-    if name in ["Tchr. Shi", "Tchr. Shirehan"]: return "Tchr. Shirehan"
-    if name in ["Tchr. Zara", "Tchr. Franchette"]: return "Tchr. Franchette"
-    if name in ["Ust. Abdi", "Ust. Abdiraheem", "Ustadh Abdi", "Ustadh Abdiraheem", "Ustd. Abdi", "Ustd. Abdiraheem"]: return "Ust. Abdiraheem"
-    if name in ["Ust. Ali", "Ustadh Ali", "Ustadh Muh Ali", "Ustdh ali", "Ustdh. Ali", "Ust. Muh Ali", "Ustadh Muh. Ali"]: return "Ustadh Muh Ali"
+    if name in ['Tchr.', 'Tchr', 'Ust.', 'Ust', 'Teacher', 'Tr.', 'Tr', '']: return 'TBA'
+    if name.upper() in ['TCHR. AHMAD', 'SIR AHMAD']: return 'Tchr. Ahmad'
+    if name in ['Ustadh Jaisam', 'Ust. Jaisam']: return 'Ustadh Jaisam'
+    if name == 'Tchr. Kat': return 'Tchr. Katrina'
+    if name in ['Ust. Ubaydah', 'Ust. Obaydah']: return 'Ust. Obaydah'
+    if name in ['Ust. Silfah', 'Ustadha Silfa', 'Ust. Silfa', 'Ustadza Samsida', 'Ustadha Samsida']:
+        if 'Samsida' in name: return 'Ustadha Samsida'
+        return 'Ustadha Silfa'
+    if name in ['Ustadha Saliha', 'Ust. Saliha']: return 'Ustadha Saliha'
+    if name in ['Tchr. Junaisa', 'Tchr. Junaisah']: return 'Tchr. Junaisah'
+    if name in ['Tchr. Jairah', 'Tchr. Jayra']: return 'Tchr. Jayra'
+    if name in ['Tchr. Moh', 'Sir Mohaymen', 'Sir Moh']: return 'Sir Moh'
+    if name in ['Tchr. Shi', 'Tchr. Shirehan']: return 'Tchr. Shirehan'
+    if name in ['Tchr. Zara', 'Tchr. Franchette']: return 'Tchr. Franchette'
+    if name in ['Ust. Abdi', 'Ust. Abdiraheem', 'Ustadh Abdi', 'Ustadh Abdiraheem', 'Ustd. Abdi', 'Ustd. Abdiraheem']: return 'Ust. Abdiraheem'
+    if name in ['Ust. Ali', 'Ustadh Ali', 'Ustadh Muh Ali', 'Ustdh ali', 'Ustdh. Ali', 'Ust. Muh Ali', 'Ustadh Muh. Ali']: return 'Ustadh Muh Ali'
     return name
 
 def clean_parse(text):
@@ -163,34 +128,26 @@ def clean_parse(text):
     for r in ['GENERAL ASSEMBLY', 'LUNCH AND SALAH', 'SALAH & DEPARTURE', 'DEPARTURE', 'RECESS', 'SHORT BREAK', 'TRANSITION', 'BREAK', 'HOMEROOM', 'ENTRANCE EXAM REVIEW', 'RESEARCH CONSULTATION']:
         if upper == r or (upper.startswith(r) and not any(k in upper for k in ['TCHR', 'UST', 'SIR', 'ALIM', 'TEACHER', 'TR'])):
             return text, '', 'ROUTINE'
-            
-    if 'WRAP-UP TIME' in upper:
-        m = re.search(r'Wrap-Up Time\s*[-–]?\s*(.*)', text, re.IGNORECASE)
-        t = normalize_teacher(m.group(1).strip()) if m else 'Tchr. Keychell'
-        return 'Wrap-Up Time', t, 'CLASS'
-        
     t_match = re.search(r'[-–]?\s*(Tchr\.?|Ust\.?|Sir|Alim|Teacher|Ustadha|Ustadza|Ustadh|Tr\.?)\s+(.*)$', text, re.IGNORECASE)
     if t_match:
         tchr_full = normalize_teacher((t_match.group(1) + ' ' + t_match.group(2)).strip())
         subj_part = text[:t_match.start()].strip().rstrip('-–').strip()
         return subj_part or text, tchr_full, 'CLASS'
-        
     for p in ['Tchr.', 'Teacher', 'Sir', 'Ustadh', 'Ustadha', 'Ustadza', 'Ust.', 'Alim', 'Tr.']:
         if p.lower() in text.lower():
             idx = text.lower().find(p.lower())
             tchr_full = normalize_teacher(text[idx:].strip())
             subj_part = text[:idx].strip().rstrip('-–').strip()
             return subj_part or text, tchr_full, 'CLASS'
-            
     return text, 'TBA', 'CLASS'
 
 def time_to_sort_key(t_str):
     m = re.search(r'(\d+):(\d+)', t_str)
     if not m: return 9999
     h, mins = int(m.group(1)), int(m.group(2))
-    if 'p.m.' in t_str.lower() or 'pm' in t_str.lower():
+    if 'PM' in t_str.upper():
         if h < 12: h += 12
-    elif 'a.m.' in t_str.lower() or 'am' in t_str.lower():
+    elif 'AM' in t_str.upper():
         if h == 12: h = 0
     else:
         if h in [1, 2, 3, 4, 5, 6, 12]: h = (h % 12) + 12
@@ -198,37 +155,36 @@ def time_to_sort_key(t_str):
 
 # All 26 ODL First Shift Sections Definition
 sections = [
-    # Kindergarten & Elementary (17 sections)
-    {'id': 'k1_hasan', 'code': 'K1-HAS', 'name': 'Kindergarten 1 - Hasan Ibn Ali (1st Shift)', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 1, 'r_start': 14, 'r_end': 14, 'has_mins': True, 'room': 'ODL Room 1', 'adviser': 'Tchr. Nashra', 'is_placeholder': True},
-    {'id': 'k2_abubakr', 'code': 'K2-ABU', 'name': 'Kindergarten 2 - Abu Bakr As-Sideeq (1st Shift)', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 1, 'r_start': 5, 'r_end': 11, 'has_mins': True, 'room': 'ODL Room 2', 'adviser': 'Tchr. Joanna'},
-    {'id': 'k2_uthman', 'code': 'K2-UTH', 'name': 'Kindergarten 2 - Uthman Ibn Affan (1st Shift)', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 9, 'r_start': 5, 'r_end': 11, 'has_mins': True, 'room': 'ODL Room 3', 'adviser': 'Tchr. Ayah'},
-    {'id': 'g1_hudhayfah', 'code': 'G1-HUD', 'name': 'Grade 1 - Hudhayfah Ibn Al-Yam (1st Shift)', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 1, 'r_start': 26, 'r_end': 32, 'has_mins': True, 'room': 'ODL Room 4', 'adviser': 'Tchr. Sahdia'},
-    {'id': 'g1_ali', 'code': 'G1-ALI', 'name': 'Grade 1 - Ali Ibn Abi Talib (1st Shift)', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 9, 'r_start': 26, 'r_end': 32, 'has_mins': True, 'room': 'ODL Room 5', 'adviser': 'Tchr. Katrina'},
-    {'id': 'g2_talha', 'code': 'G2-TAL', 'name': 'Grade 2 - Talha Ibn Ubaydullah (1st Shift)', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 1, 'r_start': 41, 'r_end': 47, 'has_mins': True, 'room': 'ODL Room 6', 'adviser': 'Tchr. Sitti'},
-    {'id': 'g2_amr', 'code': 'G2-AMR', 'name': 'Grade 2 - Amr Ibn Al-Jamuh (1st Shift)', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 9, 'r_start': 41, 'r_end': 47, 'has_mins': True, 'room': 'ODL Room 7', 'adviser': 'Tchr. Marham'},
-    {'id': 'g3_habib', 'code': 'G3-HAB', 'name': 'Grade 3 - Habib Ibn Zayd Al-Ansari (1st Shift) - Girls', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 1, 'r_start': 56, 'r_end': 62, 'has_mins': True, 'room': 'ODL Room 8', 'adviser': 'Tchr. Jerlyn'},
-    {'id': 'g3_ammar', 'code': 'G3-AMM', 'name': 'Grade 3 - Ammar Ibn Yasir (1st Shift) - Boys', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 9, 'r_start': 56, 'r_end': 62, 'has_mins': True, 'room': 'ODL Room 9', 'adviser': 'Tchr. Ayah'},
-    {'id': 'g3_salman', 'code': 'G3-SAL', 'name': 'Grade 3 - Salman Al Farsi (1st Shift) - Mix', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 9, 'r_start': 66, 'r_end': 72, 'has_mins': True, 'room': 'ODL Room 10', 'adviser': 'Tchr. Keychell'},
-    {'id': 'g4_usayd', 'code': 'G4-USA', 'name': 'Grade 4 - Usayd Ibn Hudhayr (1st Shift) - Mix', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 1, 'r_start': 66, 'r_end': 72, 'has_mins': True, 'room': 'ODL Room 11', 'adviser': 'Tchr. Jenny'},
-    {'id': 'g4_abdur', 'code': 'G4-ABD', 'name': 'Grade 4 - Abdur Rahman Ibn Awf (1st Shift)', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 1, 'r_start': 76, 'r_end': 82, 'has_mins': True, 'room': 'ODL Room 12', 'adviser': 'Tchr. Arvin'},
-    {'id': 'g4_hakim', 'code': 'G4-HAK', 'name': 'Grade 4 - Hakim Ibn Hazm (1st Shift)', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 9, 'r_start': 76, 'r_end': 82, 'has_mins': True, 'room': 'ODL Room 13', 'adviser': 'Tchr. Anna'},
-    {'id': 'g5_hamza', 'code': 'G5-HAM', 'name': 'Grade 5 - Hamza Ibn Abdul (1st Shift)', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 1, 'r_start': 91, 'r_end': 97, 'has_mins': True, 'room': 'ODL Room 14', 'adviser': 'Tchr. Jessa'},
-    {'id': 'g5_muhammad', 'code': 'G5-MUH', 'name': 'Grade 5 - Muhammad Ibn Maslamah (1st Shift)', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 9, 'r_start': 91, 'r_end': 97, 'has_mins': True, 'room': 'ODL Room 15', 'adviser': 'Tchr. Fhairudz'},
-    {'id': 'g6_abdullah', 'code': 'G6-ABD', 'name': 'Grade 6 - Abdullah Ibn Salaam (1st Shift)', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 1, 'r_start': 106, 'r_end': 112, 'has_mins': True, 'room': 'ODL Room 16', 'adviser': 'Tchr. Katrina'},
-    {'id': 'g6_abbas', 'code': 'G6-ABB', 'name': 'Grade 6 - Abbas Ibn Abd Al-Muttalib (1st Shift)', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 9, 'r_start': 106, 'r_end': 112, 'has_mins': True, 'room': 'ODL Room 17', 'adviser': 'Tchr. Jenny'},
+    {'id': 'k1_hasan', 'code': 'K1-HAS', 'sec_short': 'Kinder 1 - Hasan', 'name': 'Kindergarten 1 - Hasan Ibn Ali (1st Shift)', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 1, 'r_start': 14, 'r_end': 14, 'has_mins': True, 'room': 'ODL Room 1', 'adviser': 'Tchr. Nashra', 'is_placeholder': True},
+    {'id': 'k2_abubakr', 'code': 'K2-ABU', 'sec_short': 'K2 - Abu Bakr', 'name': 'Kindergarten 2 - Abu Bakr As-Sideeq (1st Shift)', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 1, 'r_start': 5, 'r_end': 11, 'has_mins': True, 'room': 'ODL Room 2', 'adviser': 'Tchr. Joanna'},
+    {'id': 'k2_uthman', 'code': 'K2-UTH', 'sec_short': 'K2 - Uthman', 'name': 'Kindergarten 2 - Uthman Ibn Affan (1st Shift)', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 9, 'r_start': 5, 'r_end': 11, 'has_mins': True, 'room': 'ODL Room 3', 'adviser': 'Tchr. Ayah'},
+    {'id': 'g1_hudhayfah', 'code': 'G1-HUD', 'sec_short': 'G1 - Hudhayfah', 'name': 'Grade 1 - Hudhayfah Ibn Al-Yam (1st Shift)', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 1, 'r_start': 26, 'r_end': 32, 'has_mins': True, 'room': 'ODL Room 4', 'adviser': 'Tchr. Sahdia'},
+    {'id': 'g1_ali', 'code': 'G1-ALI', 'sec_short': 'G1 - Ali', 'name': 'Grade 1 - Ali Ibn Abi Talib (1st Shift)', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 9, 'r_start': 26, 'r_end': 32, 'has_mins': True, 'room': 'ODL Room 5', 'adviser': 'Tchr. Katrina'},
+    {'id': 'g2_talha', 'code': 'G2-TAL', 'sec_short': 'G2 - Talha', 'name': 'Grade 2 - Talha Ibn Ubaydullah (1st Shift)', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 1, 'r_start': 41, 'r_end': 47, 'has_mins': True, 'room': 'ODL Room 6', 'adviser': 'Tchr. Sitti'},
+    {'id': 'g2_amr', 'code': 'G2-AMR', 'sec_short': 'G2 - Amr', 'name': 'Grade 2 - Amr Ibn Al-Jamuh (1st Shift)', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 9, 'r_start': 41, 'r_end': 47, 'has_mins': True, 'room': 'ODL Room 7', 'adviser': 'Tchr. Marham'},
+    {'id': 'g3_habib', 'code': 'G3-HAB', 'sec_short': 'G3 - Habib (Girls)', 'name': 'Grade 3 - Habib Ibn Zayd Al-Ansari (1st Shift) - Girls', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 1, 'r_start': 56, 'r_end': 62, 'has_mins': True, 'room': 'ODL Room 8', 'adviser': 'Tchr. Jerlyn'},
+    {'id': 'g3_ammar', 'code': 'G3-AMM', 'sec_short': 'G3 - Ammar (Boys)', 'name': 'Grade 3 - Ammar Ibn Yasir (1st Shift) - Boys', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 9, 'r_start': 56, 'r_end': 62, 'has_mins': True, 'room': 'ODL Room 9', 'adviser': 'Tchr. Ayah'},
+    {'id': 'g3_salman', 'code': 'G3-SAL', 'sec_short': 'G3 - Salman (Mix)', 'name': 'Grade 3 - Salman Al Farsi (1st Shift) - Mix', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 9, 'r_start': 66, 'r_end': 72, 'has_mins': True, 'room': 'ODL Room 10', 'adviser': 'Tchr. Keychell'},
+    {'id': 'g4_usayd', 'code': 'G4-USA', 'sec_short': 'G4 - Usayd (Mix)', 'name': 'Grade 4 - Usayd Ibn Hudhayr (1st Shift) - Mix', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 1, 'r_start': 66, 'r_end': 72, 'has_mins': True, 'room': 'ODL Room 11', 'adviser': 'Tchr. Jenny'},
+    {'id': 'g4_abdur', 'code': 'G4-ABD', 'sec_short': 'G4 - Abdur Rahman', 'name': 'Grade 4 - Abdur Rahman Ibn Awf (1st Shift)', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 1, 'r_start': 76, 'r_end': 82, 'has_mins': True, 'room': 'ODL Room 12', 'adviser': 'Tchr. Arvin'},
+    {'id': 'g4_hakim', 'code': 'G4-HAK', 'sec_short': 'G4 - Hakim', 'name': 'Grade 4 - Hakim Ibn Hazm (1st Shift)', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 9, 'r_start': 76, 'r_end': 82, 'has_mins': True, 'room': 'ODL Room 13', 'adviser': 'Tchr. Anna'},
+    {'id': 'g5_hamza', 'code': 'G5-HAM', 'sec_short': 'G5 - Hamza', 'name': 'Grade 5 - Hamza Ibn Abdul (1st Shift)', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 1, 'r_start': 91, 'r_end': 97, 'has_mins': True, 'room': 'ODL Room 14', 'adviser': 'Tchr. Jessa'},
+    {'id': 'g5_muhammad', 'code': 'G5-MUH', 'sec_short': 'G5 - Maslamah', 'name': 'Grade 5 - Muhammad Ibn Maslamah (1st Shift)', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 9, 'r_start': 91, 'r_end': 97, 'has_mins': True, 'room': 'ODL Room 15', 'adviser': 'Tchr. Fhairudz'},
+    {'id': 'g6_abdullah', 'code': 'G6-ABD', 'sec_short': 'G6 - Abdullah', 'name': 'Grade 6 - Abdullah Ibn Salaam (1st Shift)', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 1, 'r_start': 106, 'r_end': 112, 'has_mins': True, 'room': 'ODL Room 16', 'adviser': 'Tchr. Katrina'},
+    {'id': 'g6_abbas', 'code': 'G6-ABB', 'sec_short': 'G6 - Abbas', 'name': 'Grade 6 - Abbas Ibn Abd Al-Muttalib (1st Shift)', 'dept_code': 'elem', 'dept_label': 'Kindergarten & Elementary Department', 'sheet': 'ELEM', 'c_start': 9, 'r_start': 106, 'r_end': 112, 'has_mins': True, 'room': 'ODL Room 17', 'adviser': 'Tchr. Jenny'},
     
     # Junior High School (5 sections)
-    {'id': 'g7_usama', 'code': 'G7-USA', 'name': 'Grade 7 - Usama Ibn Zayd (1st Shift) Girls', 'dept_code': 'jhs', 'dept_label': 'Junior High School Department', 'sheet': 'HS SCHED (NEW)', 'c_start': 2, 'r_start': 7, 'r_end': 13, 'has_mins': True, 'room': 'ODL JHS Room 1', 'adviser': 'Tchr. Jayra'},
-    {'id': 'g7_abusufyan', 'code': 'G7-ABU', 'name': 'Grade 7 - Abu Sufyan Ibn Al-Harith (1st Shift) Boys', 'dept_code': 'jhs', 'dept_label': 'Junior High School Department', 'sheet': 'HS SCHED (NEW)', 'c_start': 2, 'r_start': 18, 'r_end': 24, 'has_mins': True, 'room': 'ODL JHS Room 2', 'adviser': 'Tchr. Ethel'},
-    {'id': 'g8_saad', 'code': 'G8-SAA', 'name': 'Grade 8 - Sa\'ad Ibn Mua\'dh (1st Shift) - Girls', 'dept_code': 'jhs', 'dept_label': 'Junior High School Department', 'sheet': 'HS SCHED (NEW)', 'c_start': 2, 'r_start': 30, 'r_end': 36, 'has_mins': True, 'room': 'ODL JHS Room 3', 'adviser': 'Tchr. Radzmia'},
-    {'id': 'g9_abuhurayrah', 'code': 'G9-ABU', 'name': 'Grade 9 - Abu Hurayrah (1st Shift) Girls', 'dept_code': 'jhs', 'dept_label': 'Junior High School Department', 'sheet': 'HS SCHED (NEW)', 'c_start': 2, 'r_start': 42, 'r_end': 48, 'has_mins': True, 'room': 'ODL JHS Room 4', 'adviser': 'Tchr. Rowena'},
-    {'id': 'g10_utbah', 'code': 'G10-UTB', 'name': 'Grade 10 - Utbah Ibn Ghazwan (1st Shift) Girls', 'dept_code': 'jhs', 'dept_label': 'Junior High School Department', 'sheet': 'HS SCHED (NEW)', 'c_start': 2, 'r_start': 54, 'r_end': 60, 'has_mins': True, 'room': 'ODL JHS Room 5', 'adviser': 'Tchr. Nadzra'},
+    {'id': 'g7_usama', 'code': 'G7-USA', 'sec_short': 'G7 - Usama (Girls)', 'name': 'Grade 7 - Usama Ibn Zayd (1st Shift) Girls', 'dept_code': 'jhs', 'dept_label': 'Junior High School Department', 'sheet': 'HS SCHED (NEW)', 'c_start': 2, 'r_start': 7, 'r_end': 13, 'has_mins': True, 'room': 'ODL JHS Room 1', 'adviser': 'Tchr. Jayra'},
+    {'id': 'g7_abusufyan', 'code': 'G7-ABU', 'sec_short': 'G7 - Abu Sufyan (Boys)', 'name': 'Grade 7 - Abu Sufyan Ibn Al-Harith (1st Shift) Boys', 'dept_code': 'jhs', 'dept_label': 'Junior High School Department', 'sheet': 'HS SCHED (NEW)', 'c_start': 2, 'r_start': 18, 'r_end': 24, 'has_mins': True, 'room': 'ODL JHS Room 2', 'adviser': 'Tchr. Ethel'},
+    {'id': 'g8_saad', 'code': 'G8-SAA', 'sec_short': 'G8 - Sa\'ad (Girls)', 'name': 'Grade 8 - Sa\'ad Ibn Mua\'dh (1st Shift) - Girls', 'dept_code': 'jhs', 'dept_label': 'Junior High School Department', 'sheet': 'HS SCHED (NEW)', 'c_start': 2, 'r_start': 30, 'r_end': 36, 'has_mins': True, 'room': 'ODL JHS Room 3', 'adviser': 'Tchr. Radzmia'},
+    {'id': 'g9_abuhurayrah', 'code': 'G9-ABU', 'sec_short': 'G9 - Abu Hurayrah (Girls)', 'name': 'Grade 9 - Abu Hurayrah (1st Shift) Girls', 'dept_code': 'jhs', 'dept_label': 'Junior High School Department', 'sheet': 'HS SCHED (NEW)', 'c_start': 2, 'r_start': 42, 'r_end': 48, 'has_mins': True, 'room': 'ODL JHS Room 4', 'adviser': 'Tchr. Rowena'},
+    {'id': 'g10_utbah', 'code': 'G10-UTB', 'sec_short': 'G10 - Utbah (Girls)', 'name': 'Grade 10 - Utbah Ibn Ghazwan (1st Shift) Girls', 'dept_code': 'jhs', 'dept_label': 'Junior High School Department', 'sheet': 'HS SCHED (NEW)', 'c_start': 2, 'r_start': 54, 'r_end': 60, 'has_mins': True, 'room': 'ODL JHS Room 5', 'adviser': 'Tchr. Nadzra'},
     
     # Senior High School (4 sections - Term 2 Active + Semester 1)
-    {'id': 'g11_g_term2', 'code': 'G11-G2', 'name': 'Grade 11 - 1st Shift Girls (2nd Term / Active)', 'dept_code': 'shs', 'dept_label': 'Senior High School Department', 'sheet': 'HS SCHED (NEW)', 'c_start': 2, 'r_start': 65, 'r_end': 73, 'has_mins': True, 'room': 'ODL SHS Room 1', 'adviser': 'Tchr. Jhelyn'},
-    {'id': 'g12_g_term2', 'code': 'G12-G2', 'name': 'Grade 12 - Abu Musa Al-Ashari (2nd Term / Active)', 'dept_code': 'shs', 'dept_label': 'Senior High School Department', 'sheet': 'HS SCHED (NEW)', 'c_start': 2, 'r_start': 94, 'r_end': 102, 'has_mins': True, 'room': 'ODL SHS Room 2', 'adviser': 'Tchr. Ethel'},
-    {'id': 'g11_g_sem1', 'code': 'G11-G1', 'name': 'Grade 11 - 1st Shift Girls (1st Semester)', 'dept_code': 'shs', 'dept_label': 'Senior High School Department', 'sheet': 'HS SCHED', 'c_start': 10, 'r_start': 67, 'r_end': 73, 'has_mins': True, 'room': 'ODL SHS Room 1', 'adviser': 'Tchr. Jhelyn'},
-    {'id': 'g12_g_sem1', 'code': 'G12-G1', 'name': 'Grade 12 Abu Musa Al-Ashari (Girls) - 1st Shift (1st Semester)', 'dept_code': 'shs', 'dept_label': 'Senior High School Department', 'sheet': 'HS SCHED', 'c_start': 10, 'r_start': 83, 'r_end': 89, 'has_mins': True, 'room': 'ODL SHS Room 2', 'adviser': 'Tchr. Ethel'},
+    {'id': 'g11_g_term2', 'code': 'G11-G2', 'sec_short': 'G11 Girls (Term 2)', 'name': 'Grade 11 - 1st Shift Girls (2nd Term / Active)', 'dept_code': 'shs', 'dept_label': 'Senior High School Department', 'sheet': 'HS SCHED (NEW)', 'c_start': 2, 'r_start': 65, 'r_end': 73, 'has_mins': True, 'room': 'ODL SHS Room 1', 'adviser': 'Tchr. Jhelyn'},
+    {'id': 'g12_g_term2', 'code': 'G12-G2', 'sec_short': 'G12 Girls (Term 2)', 'name': 'Grade 12 - Abu Musa Al-Ashari (2nd Term / Active)', 'dept_code': 'shs', 'dept_label': 'Senior High School Department', 'sheet': 'HS SCHED (NEW)', 'c_start': 2, 'r_start': 94, 'r_end': 102, 'has_mins': True, 'room': 'ODL SHS Room 2', 'adviser': 'Tchr. Ethel'},
+    {'id': 'g11_g_sem1', 'code': 'G11-G1', 'sec_short': 'G11 Girls (Sem 1)', 'name': 'Grade 11 - 1st Shift Girls (1st Semester)', 'dept_code': 'shs', 'dept_label': 'Senior High School Department', 'sheet': 'HS SCHED', 'c_start': 10, 'r_start': 67, 'r_end': 73, 'has_mins': True, 'room': 'ODL SHS Room 1', 'adviser': 'Tchr. Jhelyn'},
+    {'id': 'g12_g_sem1', 'code': 'G12-G1', 'sec_short': 'G12 Girls (Sem 1)', 'name': 'Grade 12 Abu Musa Al-Ashari (Girls) - 1st Shift (1st Semester)', 'dept_code': 'shs', 'dept_label': 'Senior High School Department', 'sheet': 'HS SCHED', 'c_start': 10, 'r_start': 83, 'r_end': 89, 'has_mins': True, 'room': 'ODL SHS Room 2', 'adviser': 'Tchr. Ethel'},
 ]
 
 print(f"Configured {len(sections)} sections for ODL 1st Shift.")
@@ -252,8 +208,7 @@ def build_header_html(form_title, form_subtitle=None):
         </div>
     '''
 
-teacher_schedule = {}
-teacher_loads_data = []
+teacher_monitor_map = {}
 all_master_attendance_rows = []
 
 for sec in sections:
@@ -274,18 +229,21 @@ for sec in sections:
             
             subj, tchr, kind = clean_parse(c_val)
             if kind == 'CLASS' and tchr and tchr != 'TBA':
-                if tchr not in teacher_schedule:
-                    teacher_schedule[tchr] = []
-                teacher_schedule[tchr].append({
+                if tchr not in teacher_monitor_map:
+                    teacher_monitor_map[tchr] = {
+                        'name': tchr,
+                        'dept': sec['dept_label'],
+                        'dept_code': sec['dept_code'],
+                        'items': []
+                    }
+                teacher_monitor_map[tchr]['items'].append({
                     'day': day,
                     'day_abbr': day_abbr,
                     'time': t_slot,
                     'mins': mins_val,
-                    'section': sec['name'],
-                    'sec_code': sec['code'],
-                    'subject': subj,
-                    'dept_code': sec['dept_code'],
-                    'dept_label': sec['dept_label']
+                    'section': sec['sec_short'],
+                    'sec_full': sec['name'],
+                    'subject': subj.upper()
                 })
                 all_master_attendance_rows.append({
                     'day': day,
@@ -302,48 +260,22 @@ for sec in sections:
                     'room': sec['room']
                 })
 
-for tchr_name, slots in sorted(teacher_schedule.items()):
-    is_isal = any(tchr_name.startswith(p) for p in ['Ust.', 'Ustadh', 'Ustadha', 'Alim'])
-    dept = 'ISAL Department Faculty (ODL)' if is_isal else 'Academics Department Faculty (ODL)'
-    cat = 'isal' if is_isal else 'acad'
-    
-    total_periods = len(slots)
-    total_mins = sum(s['mins'] for s in slots)
-    
-    summary_map = {}
-    for s in slots:
-        sum_key = (s['subject'], s['section'])
-        if sum_key not in summary_map:
-            summary_map[sum_key] = {
-                'subject': s['subject'],
-                'cohort': s['section'],
-                'days': [],
-                'time': s['time'],
-                'mins_per_session': s['mins'],
-                'sessions': 0,
-                'total_mins': 0
-            }
-        if s['day_abbr'] not in summary_map[sum_key]['days']:
-            summary_map[sum_key]['days'].append(s['day_abbr'])
-        summary_map[sum_key]['sessions'] += 1
-        summary_map[sum_key]['total_mins'] += s['mins']
-        
-    summary_list = list(summary_map.values())
-    summary_list.sort(key=lambda x: -x['total_mins'])
-    
-    teacher_loads_data.append({
-        'name': tchr_name,
-        'department': dept,
-        'category': cat,
-        'slots': slots,
-        'summary': summary_list,
-        'total_periods': total_periods,
-        'total_mins': total_mins,
-        'total_hours': round(total_mins / 60.0, 1)
-    })
+for t_name, t_data in teacher_monitor_map.items():
+    if any(t_name.startswith(p) for p in ['Ust.', 'Ustadh', 'Ustadha', 'Alim']):
+        t_data['cat'] = 'isal'
+        t_data['dept'] = 'ISAL & Islamic Studies Department'
+    elif any('G11' in it['section'] or 'G12' in it['section'] for it in t_data['items']):
+        t_data['cat'] = 'shs'
+        t_data['dept'] = 'Senior High School Faculty'
+    elif any('G7' in it['section'] or 'G8' in it['section'] or 'G9' in it['section'] or 'G10' in it['section'] for it in t_data['items']):
+        t_data['cat'] = 'jhs'
+        t_data['dept'] = 'Junior High School Faculty'
+    else:
+        t_data['cat'] = 'elem'
+        t_data['dept'] = 'Elementary Faculty'
 
-print(f"Compiled {len(teacher_loads_data)} teacher load sheets for ODL 1st Shift.")
-print(f"Total attendance matrix records: {len(all_master_attendance_rows)}")
+teachers_list = sorted(teacher_monitor_map.values(), key=lambda x: x['name'])
+print(f"Compiled {len(teachers_list)} teachers for ODL 1st Shift.")
 
 html_out = []
 html_out.append('''<!DOCTYPE html>
@@ -490,25 +422,26 @@ html_out.append('''<!DOCTYPE html>
       align-items: center;
       flex-wrap: wrap;
     }
-    .btn-print {
-      background: #0284c7;
-      color: white;
-      border: none;
-      padding: 8px 18px;
-      font-size: 13px;
+    .btn {
+      padding: 7px 14px;
+      font-size: 12px;
       font-weight: 700;
       border-radius: 6px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: background 0.15s ease;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+      text-decoration: none;
     }
-    .btn-print:hover { background: #0369a1; }
-    .btn-print-green {
-      background: #059669;
-    }
-    .btn-print-green:hover { background: #047857; }
+    .btn-primary { background: #059669; color: #ffffff; }
+    .btn-primary:hover { background: #047857; }
+    .btn-blue { background: #0284c7; color: #ffffff; }
+    .btn-blue:hover { background: #0369a1; }
+    .btn-outline { background: #ffffff; color: #334155; border-color: #cbd5e1; }
+    .btn-outline:hover { background: #f8fafc; color: #0f172a; border-color: #94a3b8; }
+
     .view-tabs {
       display: flex;
       gap: 8px;
@@ -635,7 +568,7 @@ html_out.append('''<!DOCTYPE html>
       text-align: center;
     }
     .arabic-header {
-      font-family: 'Amiri', 'Traditional Arabic', 'Noto Naskh Arabic', 'Scheherazade New', 'Times New Roman', serif;
+      font-family: 'Amiri', 'Traditional Arabic', 'Times New Roman', serif;
       font-size: 15pt;
       font-weight: 700;
       color: #064e3b;
@@ -882,6 +815,58 @@ html_out.append('''<!DOCTYPE html>
       color: white;
     }
 
+    /* 2x2 STATUS GRID CHECKLIST */
+    .status-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5px;
+      font-size: 6.5pt;
+      font-weight: 700;
+      color: #334155;
+      line-height: 1.15;
+    }
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 2px;
+      white-space: nowrap;
+    }
+    .row-blank {
+      background: #ffffff;
+      height: 22px;
+    }
+    .day-cell {
+      font-weight: 800;
+      color: #064e3b;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      font-size: 7.8pt;
+      white-space: nowrap;
+    }
+    .time-slot {
+      font-weight: 800;
+      color: #0f172a;
+      text-align: center;
+      white-space: nowrap;
+      font-size: 7.8pt;
+      letter-spacing: 0.2px;
+      font-variant-numeric: tabular-nums;
+    }
+    .subject-cell {
+      font-weight: 900;
+      color: #064e3b;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      font-size: 8pt;
+    }
+    .grade-cell {
+      font-weight: 700;
+      color: #1e293b;
+      font-size: 7.8pt;
+      white-space: nowrap;
+    }
+
     @media print {
       body { background: #ffffff !important; }
       .toolbar { display: none !important; }
@@ -916,17 +901,16 @@ html_out.append('''<!DOCTYPE html>
       </a>
       <a href="/odl-first-shift.html" class="modality-pill active" title="Online Distance Learning First Shift">
         <span class="modality-dot dot-active"></span>
-        ODL First Shift
-        <span class="badge-shift" style="margin-left:4px;font-size:9px;">Active</span>
+        ODL First Shift (Classroom Forms)
+      </a>
+      <a href="/odl-teacher-monitoring.html" class="modality-pill" title="Daily Per-Teacher Attendance Monitoring">
+        <span class="modality-dot dot-active"></span>
+        ODL 1st Shift (Daily Per-Teacher Portal)
       </a>
       <a href="/odl-second-shift.html" class="modality-pill dev" title="Online Distance Learning Second Shift">
         <span class="modality-dot dot-dev"></span>
         ODL Second Shift
         <span class="badge-dev">Under Developing..</span>
-      </a>
-      <a href="/f2f-monitoring.html" class="modality-pill" title="F2F Classroom Monitoring Forms">
-        <span class="modality-dot dot-active"></span>
-        F2F Forms Portal
       </a>
     </div>
 
@@ -944,10 +928,13 @@ html_out.append('''<!DOCTYPE html>
         </div>
       </div>
       <div class="toolbar-actions">
-        <button class="btn-print" onclick="window.print()">
+        <a href="/odl-teacher-monitoring.html" class="btn btn-primary" title="Open Per-Teacher Attendance Portal">
+          Open Per-Teacher Daily Records
+        </a>
+        <button class="btn btn-blue" onclick="window.print()">
           Print Current View
         </button>
-        <button class="btn-print btn-print-green" onclick="showAllAndPrint()">
+        <button class="btn btn-primary" onclick="showAllAndPrint()">
           Print All Forms
         </button>
       </div>
@@ -959,7 +946,7 @@ html_out.append('''<!DOCTYPE html>
         Classroom Monitoring Forms (26 Sections)
       </button>
       <button class="view-tab" id="tab-loads" onclick="switchView('loads')">
-        Teacher Instructional Loads (Faculty Rosters)
+        Teacher Instructional Attendance Records (53 Teachers)
       </button>
       <button class="view-tab" id="tab-matrix" onclick="switchView('matrix')">
         Master Daily Attendance Tracking Matrix
@@ -975,6 +962,7 @@ html_out.append('''<!DOCTYPE html>
           <option value="elem">Kindergarten &amp; Elementary</option>
           <option value="jhs">Junior High School</option>
           <option value="shs">Senior High School</option>
+          <option value="isal">ISAL Department</option>
         </select>
       </div>
 
@@ -993,10 +981,10 @@ html_out.append('''        </select>
       <div class="filter-group" id="group-teacher-filter">
         <label>Teacher</label>
         <select id="filter-teacher" onchange="applyFilters()">
-          <option value="all">All Teachers</option>
+          <option value="all">All Teachers (Show All 53 Teachers)</option>
 ''')
 
-for t in sorted(teacher_schedule.keys()):
+for t in sorted(teacher_monitor_map.keys()):
     html_out.append(f'          <option value="{html.escape(t)}">{html.escape(t)}</option>\n')
 
 html_out.append('''        </select>
@@ -1092,7 +1080,6 @@ for sec in sections:
             if not t_slot: continue
             
             day_cells = [s_grid.get((r, c_start + 2 + d), '').strip() for d in range(5)]
-            
             first_c = next((c for c in day_cells if c), '')
             is_routine = False
             routine_lbl = ''
@@ -1133,7 +1120,6 @@ for sec in sections:
         </table>
 ''')
 
-    # Add Daily Attendance Log Table (standard DepEd verification format)
     html_out.append('''
         <div class="section-title">Daily Instructional Attendance &amp; Delivery Verification</div>
         <table class="sheet-table">
@@ -1186,7 +1172,6 @@ for sec in sections:
         </table>
       </div>
 
-      <!-- FOOTER SIGNATURES -->
       <div class="sign-row">
         <div class="sign-col">
           <div class="sign-line"></div>
@@ -1207,142 +1192,115 @@ for sec in sections:
     </div>
 ''')
 
-# 2. RENDER TEACHER INSTRUCTIONAL LOAD ROSTERS
-for t_data in teacher_loads_data:
+# 2. RENDER TEACHER DAILY INSTRUCTIONAL ATTENDANCE RECORD (IDENTICAL TO teacher-monitoring.html)
+for t_data in teachers_list:
     t_name = t_data['name']
-    slots = t_data['slots']
-    summary = t_data['summary']
-    dept = t_data['department']
-    cat = t_data['category']
-    tot_p = t_data['total_periods']
-    tot_m = t_data['total_mins']
-    tot_h = t_data['total_hours']
+    dept = t_data['dept']
+    cat = t_data['cat']
+    items = t_data['items']
+    items.sort(key=lambda x: (days.index(x['day']), time_to_sort_key(x['time'])))
     
     html_out.append(f'''
     <!-- TEACHER LOAD SHEET: {html.escape(t_name)} -->
     <div class="page-sheet teacher-sheet" data-type="teacher" data-dept="{cat}" data-teacher="{html.escape(t_name)}" id="sheet-tchr-{re.sub(r'[^a-zA-Z0-9]', '', t_name)}">
       <div class="sheet-content">
-        {build_header_html("FACULTY INSTRUCTIONAL LOAD &amp; MONITORING RECORD", "Online Distance Learning (First Shift) Modality &bull; School Year 2026 - 2027")}
-
-        <div class="meta-box">
-          <div class="meta-row">
-            <span class="meta-lbl">Faculty Member:</span>
-            <span class="meta-val td-bold">{html.escape(t_name)}</span>
+        <!-- HEADER -->
+        <div class="sheet-header">
+          <div class="header-logo-side">
+            <img class="header-logo deped-img" alt="DepEd Logo">
           </div>
-          <div class="meta-row">
-            <span class="meta-lbl">Department:</span>
-            <span class="meta-val">{html.escape(dept)}</span>
+          <div class="header-center-text">
+            <div class="arabic-header" dir="rtl" lang="ar">المدرسة المنورة الإسلامية</div>
+            <div class="school-name">AL MUNAWWARA ISLAMIC SCHOOL</div>
+            <div class="form-title">TEACHER INSTRUCTIONAL ATTENDANCE & LOAD MONITORING RECORD</div>
+            <div class="form-sub">Online Distance Learning (First Shift) Modality &bull; Faculty Monitoring Form &bull; School Year 2026 - 2027</div>
           </div>
-          <div class="meta-row">
-            <span class="meta-lbl">Learning Modality:</span>
-            <span class="meta-val">Online Distance Learning (ODL 1st Shift)</span>
-          </div>
-          <div class="meta-row">
-            <span class="meta-lbl">Weekly Total Load:</span>
-            <span class="meta-val td-bold">{tot_p} Periods &bull; {tot_m} Mins ({tot_h} Hours/Week)</span>
-          </div>
-          <div class="meta-row">
-            <span class="meta-lbl">School Year:</span>
-            <span class="meta-val">2026 - 2027</span>
-          </div>
-          <div class="meta-row">
-            <span class="meta-lbl">Verification Status:</span>
-            <span class="meta-val td-bold" style="color:#059669;">Verified Timetable</span>
+          <div class="header-logo-side">
+            <img class="header-logo amis-img" alt="AMIS Logo">
           </div>
         </div>
 
-        <div class="section-title">Teaching Load Allocation &bull; Subject Breakdown</div>
-        <table class="sheet-table" style="margin-bottom:8px;">
+        <!-- TEACHER META BOX -->
+        <div class="meta-box">
+          <div class="meta-row"><span class="meta-lbl">Teacher's Name:</span><span class="meta-val td-bold">{html.escape(t_name)}</span></div>
+          <div class="meta-row"><span class="meta-lbl">Total Weekly Loads:</span><span class="meta-val td-bold">{len(items)} ODL Classes</span></div>
+          <div class="meta-row"><span class="meta-lbl">Room Assignment:</span><span class="meta-val">Virtual / Google Meet</span></div>
+          <div class="meta-row" style="grid-column: span 2;"><span class="meta-lbl">Week Monitored:</span><span class="meta-val"></span></div>
+          <div class="meta-row"><span class="meta-lbl">School Year:</span><span class="meta-val">2026 - 2027</span></div>
+        </div>
+
+        <!-- TABLE -->
+        <table class="sheet-table">
           <thead>
             <tr>
-              <th style="width:30%;">Learning Area / Subject</th>
-              <th style="width:30%;">Assigned Grade &amp; Section</th>
-              <th style="width:15%;">Teaching Days</th>
-              <th style="width:12%;">Sessions/Wk</th>
-              <th style="width:13%;">Total Mins</th>
+              <th class="th-num" style="width:3%;">#</th>
+              <th class="th-day" style="width:6.5%;">Day</th>
+              <th class="th-time" style="width:16.5%;">Scheduled Time</th>
+              <th class="th-mins" style="width:4.5%;">Mins</th>
+              <th class="th-in" style="width:8%;">Actual In</th>
+              <th class="th-out" style="width:8%;">Actual Out</th>
+              <th class="th-grade" style="width:13.5%;">Grade / Sec</th>
+              <th class="th-subject" style="width:18.5%;">Subject / Learning Area</th>
+              <th class="th-room" style="width:5%;">Room</th>
+              <th class="th-status" style="width:11.5%;">Instruction Status</th>
+              <th class="th-remarks" style="width:5%;">Signature</th>
             </tr>
           </thead>
-          <tbody>
-''')
-    for s_item in summary:
-        days_str = ', '.join(s_item['days'])
+          <tbody>''')
+
+    row_num = 1
+    for it in items:
+        subj_upper = html.escape(it['subject'].upper())
+        sec_short = html.escape(it['section'])
         html_out.append(f'''
             <tr>
-              <td class="td-bold">{html.escape(s_item['subject'])}</td>
-              <td>{html.escape(s_item['cohort'])}</td>
-              <td style="text-align:center;font-weight:700;">{days_str}</td>
-              <td style="text-align:center;">{s_item['sessions']}</td>
-              <td style="text-align:center;font-weight:700;">{s_item['total_mins']} min</td>
-            </tr>
-''')
-    html_out.append(f'''
-            <tr style="background:#f8fafc;font-weight:800;">
-              <td colspan="3" style="text-align:right;">Weekly Instructional Totals:</td>
-              <td style="text-align:center;">{tot_p}</td>
-              <td style="text-align:center;color:#064e3b;">{tot_m} min ({tot_h} hrs)</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div class="section-title">Weekly Schedule Timetable &bull; Sunday to Thursday</div>
-        <table class="schedule-table">
-          <thead>
-            <tr>
-              <th class="time-slot-col">Time Slot</th>
-              <th class="mins-col">Mins</th>
-              <th class="day-col">SUN</th>
-              <th class="day-col">MON</th>
-              <th class="day-col">TUE</th>
-              <th class="day-col">WED</th>
-              <th class="day-col">THU</th>
-            </tr>
-          </thead>
-          <tbody>
-''')
-
-    odl_standard_times = [
-        ('12:30 - 12:40 PM', 10, True, 'GENERAL ASSEMBLY'),
-        ('12:40 - 1:20 PM', 40, False, ''),
-        ('1:20 - 1:30 PM', 10, True, 'TRANSITION'),
-        ('1:30 - 2:10 PM', 40, False, ''),
-        ('2:10 - 2:20 PM', 10, True, 'TRANSITION'),
-        ('2:20 - 3:00 PM', 40, False, ''),
-        ('3:00 - 3:30 PM', 30, True, 'HOMEROOM / ARAL PROGRAM'),
-        ('3:50 - 4:30 PM', 40, False, ''),
-    ]
-
-    for time_slot, default_m, is_routine, routine_lbl in odl_standard_times:
-        html_out.append(f'''
-            <tr>
-              <td class="time-slot-col">{time_slot}</td>
-              <td class="mins-col">{default_m}</td>
-''')
-        if is_routine:
-            html_out.append(f'''
-              <td colspan="5" class="routine-row-cell">{routine_lbl}</td>
-            </tr>
-''')
-        else:
-            for d in days:
-                d_abbr = day_abbr_map[d]
-                matching = [s for s in slots if s['day_abbr'] == d_abbr and (s['time'] == time_slot or time_slot in s['time'] or s['time'] in time_slot)]
-                if matching:
-                    m_item = matching[0]
-                    html_out.append(f'''              <td class="day-col class-cell">
-                <div class="cell-subj">{html.escape(m_item['subject'])}</div>
-                <div class="cell-tchr">{html.escape(m_item['sec_code'])}</div>
+              <td style="text-align:center;font-weight:700;color:#64748b;">{row_num}</td>
+              <td class="day-cell">{it['day_abbr']}</td>
+              <td class="time-slot">{it['time']}</td>
+              <td style="text-align:center;font-weight:700;color:#475569;">{it['mins']}</td>
+              <td style="text-align:center;"></td>
+              <td style="text-align:center;"></td>
+              <td class="grade-cell">{sec_short}</td>
+              <td class="subject-cell">{subj_upper}</td>
+              <td style="text-align:center;"></td>
+              <td>
+                <div class="status-grid">
+                  <div class="status-row"><span>[ ] In</span><span>[ ] Late</span></div>
+                  <div class="status-row"><span>[ ] Abs</span><span>[ ] Sub</span></div>
+                </div>
               </td>
-''')
-                else:
-                    html_out.append('              <td class="day-col" style="background:#ffffff;">-</td>\n')
-            html_out.append('            </tr>\n')
+              <td></td>
+            </tr>''')
+        row_num += 1
+
+    blank_to_add = max(2, 14 - len(items))
+    for b in range(blank_to_add):
+        html_out.append(f'''
+            <tr class="row-blank">
+              <td style="text-align:center;color:#cbd5e1;font-weight:600;">{row_num}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td style="text-align:center;"></td>
+              <td style="text-align:center;"></td>
+              <td></td>
+              <td style="color:#cbd5e1;font-size:7pt;font-weight:700;text-transform:uppercase;">(SUBSTITUTE / REMEDIAL LOAD)</td>
+              <td></td>
+              <td>
+                <div class="status-grid">
+                  <div class="status-row"><span>[ ] In</span><span>[ ] Late</span></div>
+                  <div class="status-row"><span>[ ] Abs</span><span>[ ] Sub</span></div>
+                </div>
+              </td>
+              <td></td>
+            </tr>''')
+        row_num += 1
 
     html_out.append('''
           </tbody>
         </table>
       </div>
 
-      <!-- FOOTER SIGNATURES -->
       <div class="sign-row">
         <div class="sign-col">
           <div class="sign-line"></div>
@@ -1379,7 +1337,7 @@ html_out.append('''
         </div>
       </div>
       <div>
-        <button class="btn-print" onclick="window.print()">Print Matrix</button>
+        <button class="btn btn-blue" onclick="window.print()">Print Matrix</button>
       </div>
     </div>
 
@@ -1427,7 +1385,6 @@ html_out.append('''
     </table>
   </div>
 
-  <!-- SCRIPT FOR SWITCHING VIEWS, FILTERING & PRINTING -->
   <script>
     const AMIS_LOGO_B64 = "''' + amis_b64 + '''";
     const DEPED_LOGO_B64 = "''' + deped_b64 + '''";
@@ -1506,19 +1463,21 @@ html_out.append('''
 
         teacherSheets.forEach(sheet => {
           const tTeacher = sheet.getAttribute('data-teacher');
+          const tDept = sheet.getAttribute('data-dept');
           const textContent = sheet.innerText.toLowerCase();
 
+          const matchesDept = (dept === 'all' || tDept === dept);
           const matchesTeacher = (teacher === 'all' || tTeacher === teacher);
           const matchesKw = (!keyword || textContent.includes(keyword));
 
-          if (matchesTeacher && matchesKw) {
+          if (matchesDept && matchesTeacher && matchesKw) {
             sheet.style.display = 'flex';
             visibleCount++;
           } else {
             sheet.style.display = 'none';
           }
         });
-        document.getElementById('results-count').innerText = `Showing ${visibleCount} Faculty Instructional Load Form(s)`;
+        document.getElementById('results-count').innerText = `Showing ${visibleCount} Faculty Instructional Attendance Record(s)`;
       } else if (currentView === 'matrix') {
         const rows = document.querySelectorAll('.attendance-row');
         rows.forEach(row => {
