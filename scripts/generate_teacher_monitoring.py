@@ -660,7 +660,7 @@ html_out.append('''<!DOCTYPE html>
       display: none !important;
     }
 
-    /* ️ PERFECT A4 PRINT RULES */
+    /*  PERFECT A4 PRINT RULES */
     @media print {
       html, body {
         background: #ffffff !important;
@@ -725,10 +725,9 @@ html_out.append('''<!DOCTYPE html>
         <span class="modality-dot dot-active"></span>
         ODL First Shift
       </a>
-      <a href="/odl-second-shift.html" class="modality-pill dev" title="Online Distance Learning Second Shift">
-        <span class="modality-dot dot-dev"></span>
-         ODL Second Shift
-        <span class="badge-dev">Under Developing..</span>
+      <a href="/odl-second-shift-teacher.html" class="modality-pill" title="Online Distance Learning Second Shift">
+        <span class="modality-dot dot-active"></span>
+        ODL Second Shift
       </a>
     </div>
 
@@ -750,13 +749,13 @@ html_out.append('''<!DOCTYPE html>
            Classroom Monitoring Forms
         </a>
         <button class="btn btn-outline" onclick="navigateTeacher(-1)" title="Previous Teacher">
-          ⬅️ Prev
+          Prev
         </button>
         <button class="btn btn-outline" onclick="navigateTeacher(1)" title="Next Teacher">
-          Next ➡️
+          Next
         </button>
         <button class="btn btn-blue" onclick="printActiveTeacher()">
-          ️ Print Active Teacher
+           Print Active Teacher
         </button>
         <button class="btn btn-primary" onclick="printAllTeachers()">
            Print All Teachers (A4)

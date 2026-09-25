@@ -1124,10 +1124,9 @@ html_out.append('''<!DOCTYPE html>
         <span class="modality-dot dot-active"></span>
         ODL First Shift
       </a>
-      <a href="/odl-second-shift.html" class="modality-pill dev" title="Online Distance Learning Second Shift">
-        <span class="modality-dot dot-dev"></span>
-         ODL Second Shift
-        <span class="badge-dev">Under Developing..</span>
+      <a href="/odl-second-shift.html" class="modality-pill" title="Online Distance Learning Second Shift">
+        <span class="modality-dot dot-active"></span>
+        ODL Second Shift
       </a>
     </div>
 
