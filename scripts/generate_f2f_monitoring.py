@@ -1118,16 +1118,15 @@ html_out.append('''<!DOCTYPE html>
       <span class="modality-label">Learning Modality:</span>
       <a href="/f2f-monitoring.html" class="modality-pill active" title="Active S.Y. 2026 - 2027">
         <span class="modality-dot dot-active"></span>
-        🏫 Face-to-Face (F2F)
+         Face-to-Face (F2F)
       </a>
-      <a href="/odl-first-shift.html" class="modality-pill dev" title="Online Distance Learning First Shift">
-        <span class="modality-dot dot-dev"></span>
-        💻 ODL First Shift
-        <span class="badge-dev">Under Developing..</span>
+      <a href="/odl-first-shift.html" class="modality-pill" title="Online Distance Learning First Shift">
+        <span class="modality-dot dot-active"></span>
+        ODL First Shift
       </a>
       <a href="/odl-second-shift.html" class="modality-pill dev" title="Online Distance Learning Second Shift">
         <span class="modality-dot dot-dev"></span>
-        💻 ODL Second Shift
+         ODL Second Shift
         <span class="badge-dev">Under Developing..</span>
       </a>
     </div>
@@ -1147,24 +1146,24 @@ html_out.append('''<!DOCTYPE html>
       </div>
       <div class="toolbar-actions">
         <a href="/teacher-monitoring.html" class="btn-print" style="text-decoration:none;background:#059669;" title="Open Individual Teacher Load & Attendance Monitoring Sheets">
-          👩‍🏫 Per-Teacher Forms
+          ‍ Per-Teacher Forms
         </a>
         <button class="btn-print" onclick="window.print()">
-          🖨️ Print Active Sheet
+          ️ Print Active Sheet
         </button>
         <button class="btn-print btn-print-green" onclick="showAllAndPrint()">
-          📑 Print All Filtered Sheets
+           Print All Filtered Sheets
         </button>
       </div>
     </div>
 
     <!-- VIEW TABS -->
     <div class="view-tabs">
-      <button class="view-tab" onclick="switchView(this, 'daily')">📋 Classroom Daily Forms (1 Page/Grade/Day)</button>
-      <button class="view-tab" onclick="switchView(this, 'walkthrough')">🏢 Department Walkthrough Sheets (Cluster View)</button>
-      <button class="view-tab" onclick="switchView(this, 'weekly')">📅 Weekly Timetable Matrix (Sunday-Thursday)</button>
-      <button class="view-tab active view-tab-highlight" onclick="switchView(this, 'teacher_loads')">👨‍🏫 Per-Teacher Weekly Loads (HS LOADS)</button>
-      <button class="view-tab" onclick="switchView(this, 'teachers')">📝 Teacher Attendance & Monitoring Log</button>
+      <button class="view-tab" onclick="switchView(this, 'daily')"> Classroom Daily Forms (1 Page/Grade/Day)</button>
+      <button class="view-tab" onclick="switchView(this, 'walkthrough')"> Department Walkthrough Sheets (Cluster View)</button>
+      <button class="view-tab" onclick="switchView(this, 'weekly')"> Weekly Timetable Matrix (Sunday-Thursday)</button>
+      <button class="view-tab active view-tab-highlight" onclick="switchView(this, 'teacher_loads')">‍ Per-Teacher Weekly Loads (HS LOADS)</button>
+      <button class="view-tab" onclick="switchView(this, 'teachers')"> Teacher Attendance & Monitoring Log</button>
     </div>
 
     <!-- FILTERS -->
@@ -1587,7 +1586,7 @@ for t in teacher_loads_data:
         </div>
 
         <!-- SECTION 1: WEEKLY SCHEDULE MATRIX -->
-        <div class="section-title">📅 Part I: Weekly Timetable Matrix (Sunday to Thursday)</div>
+        <div class="section-title"> Part I: Weekly Timetable Matrix (Sunday to Thursday)</div>
         <table class="schedule-table">
           <thead>
             <tr>
@@ -1638,7 +1637,7 @@ for t in teacher_loads_data:
         </table>
 
         <!-- SECTION 2: LOAD SUMMARY BREAKDOWN -->
-        <div class="section-title">📊 Part II: Teaching Load & Instructional Course Summary</div>
+        <div class="section-title"> Part II: Teaching Load & Instructional Course Summary</div>
         <table class="summary-table">
           <thead>
             <tr>

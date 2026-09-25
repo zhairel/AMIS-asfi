@@ -660,7 +660,7 @@ html_out.append('''<!DOCTYPE html>
       display: none !important;
     }
 
-    /* 🖨️ PERFECT A4 PRINT RULES */
+    /* ️ PERFECT A4 PRINT RULES */
     @media print {
       html, body {
         background: #ffffff !important;
@@ -719,16 +719,15 @@ html_out.append('''<!DOCTYPE html>
       <span class="modality-label">Learning Modality:</span>
       <a href="/teacher-monitoring.html" class="modality-pill active" title="Active S.Y. 2026 - 2027">
         <span class="modality-dot dot-active"></span>
-        🏫 Face-to-Face (F2F)
+         Face-to-Face (F2F)
       </a>
-      <a href="/odl-first-shift.html" class="modality-pill dev" title="Online Distance Learning First Shift">
-        <span class="modality-dot dot-dev"></span>
-        💻 ODL First Shift
-        <span class="badge-dev">Under Developing..</span>
+      <a href="/odl-first-shift.html" class="modality-pill" title="Online Distance Learning First Shift">
+        <span class="modality-dot dot-active"></span>
+        ODL First Shift
       </a>
       <a href="/odl-second-shift.html" class="modality-pill dev" title="Online Distance Learning Second Shift">
         <span class="modality-dot dot-dev"></span>
-        💻 ODL Second Shift
+         ODL Second Shift
         <span class="badge-dev">Under Developing..</span>
       </a>
     </div>
@@ -748,7 +747,7 @@ html_out.append('''<!DOCTYPE html>
       </div>
       <div class="toolbar-actions">
         <a href="/f2f-monitoring.html" class="btn btn-outline">
-          📋 Classroom Monitoring Forms
+           Classroom Monitoring Forms
         </a>
         <button class="btn btn-outline" onclick="navigateTeacher(-1)" title="Previous Teacher">
           ⬅️ Prev
@@ -757,10 +756,10 @@ html_out.append('''<!DOCTYPE html>
           Next ➡️
         </button>
         <button class="btn btn-blue" onclick="printActiveTeacher()">
-          🖨️ Print Active Teacher
+          ️ Print Active Teacher
         </button>
         <button class="btn btn-primary" onclick="printAllTeachers()">
-          📑 Print All Teachers (A4)
+           Print All Teachers (A4)
         </button>
       </div>
     </div>
@@ -777,7 +776,7 @@ html_out.append('''<!DOCTYPE html>
       <div class="teacher-select-box">
         <label for="teacher-select" class="filter-label">Select Teacher:</label>
         <select id="teacher-select" onchange="onTeacherSelectChange()">
-          <option value="all">🌟 All Faculty (Show All ''' + str(len(teachers_list)) + ''' Teachers)</option>
+          <option value="all"> All Faculty (Show All ''' + str(len(teachers_list)) + ''' Teachers)</option>
 ''')
 
 for idx, t in enumerate(teachers_list):
