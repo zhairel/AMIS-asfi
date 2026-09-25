@@ -477,7 +477,7 @@ for sec in sections:
     s_grid = elem_grid if sec['sheet'] == 'ELEM' else (hs_new_grid if sec['sheet'] == 'HS SCHED (NEW)' else hs_grid)
     for r in range(sec['r_start'], sec['r_end'] + 1):
         t_slot = clean_time(s_grid.get((r, 2), ''))
-        if not t_slot: continue
+        m_val = parse_mins(s_grid.get((r, 3), '40'))
         
         for d_idx, day in enumerate(days):
             c_val = s_grid.get((r, 4 + d_idx), '').strip()
@@ -490,6 +490,7 @@ for sec in sections:
                 teacher_schedule[tchr].append({
                     'day': day,
                     'time': t_slot,
+                    'mins': m_val,
                     'section': sec['name'],
                     'subject': subj,
                     'dept_code': sec['dept_code'],
@@ -1130,6 +1131,15 @@ html_out.append('''<!DOCTYPE html>
       </a>
     </div>
 
+    <!-- MODALITY NAVIGATION -->
+    <div class="modality-bar" style="display:flex;gap:8px;padding:6px 0 10px;border-bottom:1px solid #e2e8f0;margin-bottom:10px;align-items:center;">
+      <span style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;">Learning Modality:</span>
+      <a href="/f2f-monitoring.html" class="modality-pill active" style="padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;text-decoration:none;background:#059669;color:#fff;">Face-to-Face</a>
+      <a href="/odl-first-shift.html" class="modality-pill" style="padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;text-decoration:none;background:#f1f5f9;color:#334155;border:1px solid #cbd5e1;">ODL First Shift</a>
+      <a href="/odl-second-shift.html" class="modality-pill" style="padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;text-decoration:none;background:#f1f5f9;color:#334155;border:1px solid #cbd5e1;">ODL Second Shift</a>
+      <a href="/all-teachers-monitoring.html" class="modality-pill" style="padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;text-decoration:none;background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;">Teacher Portals</a>
+    </div>
+
     <div class="toolbar-header">
       <div class="toolbar-brand">
         <img class="toolbar-logo amis-img" alt="AMIS Logo">
@@ -1145,24 +1155,24 @@ html_out.append('''<!DOCTYPE html>
       </div>
       <div class="toolbar-actions">
         <a href="/teacher-monitoring.html" class="btn-print" style="text-decoration:none;background:#059669;" title="Open Individual Teacher Load & Attendance Monitoring Sheets">
-          ‍ Per-Teacher Forms
+          Per-Teacher Forms
         </a>
         <button class="btn-print" onclick="window.print()">
-          ️ Print Active Sheet
+          Print Active Sheet
         </button>
         <button class="btn-print btn-print-green" onclick="showAllAndPrint()">
-           Print All Filtered Sheets
+          Print All Filtered Sheets
         </button>
       </div>
     </div>
 
     <!-- VIEW TABS -->
     <div class="view-tabs">
-      <button class="view-tab" onclick="switchView(this, 'daily')"> Classroom Daily Forms (1 Page/Grade/Day)</button>
-      <button class="view-tab" onclick="switchView(this, 'walkthrough')"> Department Walkthrough Sheets (Cluster View)</button>
-      <button class="view-tab" onclick="switchView(this, 'weekly')"> Weekly Timetable Matrix (Sunday-Thursday)</button>
-      <button class="view-tab active view-tab-highlight" onclick="switchView(this, 'teacher_loads')">‍ Per-Teacher Weekly Loads (HS LOADS)</button>
-      <button class="view-tab" onclick="switchView(this, 'teachers')"> Teacher Attendance & Monitoring Log</button>
+      <button class="view-tab" onclick="switchView(this, 'daily')">Classroom Daily Forms (1 Page/Grade/Day)</button>
+      <button class="view-tab" onclick="switchView(this, 'walkthrough')">Department Walkthrough Sheets (Cluster View)</button>
+      <button class="view-tab" onclick="switchView(this, 'weekly')">Weekly Timetable Matrix (Sunday-Thursday)</button>
+      <button class="view-tab" onclick="switchView(this, 'teachers')">Daily Per-Teacher Attendance Sheets (45 Teachers)</button>
+      <button class="view-tab active view-tab-highlight" onclick="switchView(this, 'teacher_loads')">Per-Teacher Weekly Loads (HS LOADS)</button>
     </div>
 
     <!-- FILTERS -->
@@ -1183,7 +1193,7 @@ html_out.append('''<!DOCTYPE html>
         <label>Department / Category</label>
         <select id="filter-dept" onchange="applyFilters()">
           <option value="all">All Departments / Faculty</option>
-          <option value="hs_loads">⭐ High School Faculty (HS LOADS - 15 Teachers)</option>
+          <option value="hs_loads">High School Faculty (HS LOADS - 15 Teachers)</option>
           <option value="elem">Kindergarten & Elementary Faculty</option>
           <option value="isal">ISAL & Islamic Studies Department</option>
         </select>
@@ -1216,7 +1226,7 @@ html_out.append('''<!DOCTYPE html>
           <option value="all">All Teachers (''')
 
 html_out.append(str(len(teacher_loads_data)) + ' Instructors)</option>\n')
-html_out.append('          <optgroup label="⭐ High School Faculty (From HS LOADS)">\n')
+html_out.append('          <optgroup label="High School Faculty (From HS LOADS)">\n')
 
 for t in [x for x in teacher_loads_data if x['category'] == 'hs_loads']:
     html_out.append(f'            <option value="{html.escape(t["name"])}">{html.escape(t["name"])} ({t["total_periods"]} periods - {t["total_hours"]} hrs)</option>\n')
@@ -1712,8 +1722,8 @@ for t_name in sorted(teacher_schedule.keys()):
     t_items.sort(key=lambda x: (days.index(x['day']), time_to_sort_key(x['time'])))
     t_dept = t_items[0]['dept_label'] if t_items else 'Integrated Faculty'
     header_markup = build_header_html(
-        "TEACHER ATTENDANCE & INSTRUCTIONAL LOAD LOG",
-        "Faculty Daily Attendance Sign-In & Verification Record"
+        "TEACHER INSTRUCTIONAL ATTENDANCE & LOAD MONITORING RECORD",
+        "Face-to-Face Modality &bull; Faculty Monitoring Form &bull; School Year 2026 - 2027"
     )
     
     html_out.append(f'''
@@ -1727,9 +1737,9 @@ for t_name in sorted(teacher_schedule.keys()):
 
         <!-- META BOX -->
         <div class="meta-box">
-          <div class="meta-row"><span class="meta-lbl">Teacher's Name:</span><span class="meta-val td-bold">{t_name}</span></div>
+          <div class="meta-row"><span class="meta-lbl">Teacher's Name:</span><span class="meta-val td-bold">{html.escape(t_name)}</span></div>
           <div class="meta-row"><span class="meta-lbl">Total Weekly Loads:</span><span class="meta-val td-bold">{len(t_items)} Pure F2F Classes</span></div>
-          <div class="meta-row"><span class="meta-lbl">Department:</span><span class="meta-val">{t_dept}</span></div>
+          <div class="meta-row"><span class="meta-lbl">Department:</span><span class="meta-val">{html.escape(t_dept)}</span></div>
           <div class="meta-row"><span class="meta-lbl">Instructional Mode:</span><span class="meta-val">Pure Face-to-Face</span></div>
           <div class="meta-row"><span class="meta-lbl">School Year:</span><span class="meta-val">2026 - 2027</span></div>
           <div class="meta-row"><span class="meta-lbl">Faculty Status:</span><span class="meta-val">Active Faculty Member</span></div>
@@ -1740,38 +1750,47 @@ for t_name in sorted(teacher_schedule.keys()):
           <thead>
             <tr>
               <th class="th-num">#</th>
-              <th style="width:11%;">Day</th>
-              <th class="th-time">Scheduled Time</th>
-              <th class="th-in">Actual In</th>
-              <th class="th-out">Actual Out</th>
-              <th style="width:16%;">Grade / Cohort</th>
-              <th class="th-subject">Subject / Learning Area</th>
-              <th class="th-room">Room</th>
-              <th class="th-status">Status</th>
-              <th class="th-remarks">Teacher Signature</th>
+              <th style="width:6.5%;">Day</th>
+              <th style="width:16.5%;">Scheduled Time</th>
+              <th style="width:4.5%;">Mins</th>
+              <th style="width:8%;">Actual In</th>
+              <th style="width:8%;">Actual Out</th>
+              <th style="width:13.5%;">Grade / Sec</th>
+              <th style="width:18.5%;">Subject / Learning Area</th>
+              <th style="width:5%;">Room</th>
+              <th style="width:11.5%;">Instruction Status</th>
+              <th style="width:5%;">Signature</th>
             </tr>
           </thead>
           <tbody>''')
     
     t_num = 1
     for it in t_items:
+        m_val = it.get('mins', '40')
         html_out.append(f'''
             <tr>
               <td class="td-center td-bold">{t_num}</td>
               <td class="td-center td-bold">{day_abbr_map.get(it['day'], it['day'].upper()[:3])}</td>
               <td class="time-slot">{it['time']}</td>
+              <td class="td-center" style="font-weight:700;color:#475569;">{m_val}</td>
               <td class="td-center"></td>
               <td class="td-center"></td>
-              <td><b>{it['section']}</b></td>
-              <td><b>{it['subject']}</b></td>
+              <td><b>{html.escape(it['section'])}</b></td>
+              <td><b>{html.escape(it['subject'])}</b></td>
               <td class="td-center"></td>
               <td>
                 <div class="status-grid">
-                  <div class="status-row"><span>[ ] In</span><span>[ ] Late</span></div>
-                  <div class="status-row"><span>[ ] Abs</span><span>[ ] Sub</span></div>
+                  <div style="display:flex;justify-content:space-between;gap:3px;font-size:6.8pt;font-weight:700;">
+                    <label style="cursor:pointer;white-space:nowrap;"><input type="checkbox" style="margin:0;width:10px;height:10px;"> In</label>
+                    <label style="cursor:pointer;white-space:nowrap;"><input type="checkbox" style="margin:0;width:10px;height:10px;"> Late</label>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;gap:3px;font-size:6.8pt;font-weight:700;">
+                    <label style="cursor:pointer;white-space:nowrap;"><input type="checkbox" style="margin:0;width:10px;height:10px;"> Abs</label>
+                    <label style="cursor:pointer;white-space:nowrap;"><input type="checkbox" style="margin:0;width:10px;height:10px;"> Sub</label>
+                  </div>
                 </div>
               </td>
-              <td></td>
+              <td class="td-center"></td>
             </tr>''')
         t_num += 1
 
@@ -1782,6 +1801,7 @@ for t_name in sorted(teacher_schedule.keys()):
               <td class="td-center" style="color:#cbd5e1;">{t_num}</td>
               <td></td>
               <td></td>
+              <td></td>
               <td class="td-center"></td>
               <td class="td-center"></td>
               <td></td>
@@ -1789,17 +1809,42 @@ for t_name in sorted(teacher_schedule.keys()):
               <td></td>
               <td>
                 <div class="status-grid">
-                  <div class="status-row"><span>[ ] In</span><span>[ ] Late</span></div>
-                  <div class="status-row"><span>[ ] Abs</span><span>[ ] Sub</span></div>
+                  <div style="display:flex;justify-content:space-between;gap:3px;font-size:6.8pt;font-weight:700;">
+                    <label style="cursor:pointer;white-space:nowrap;"><input type="checkbox" style="margin:0;width:10px;height:10px;"> In</label>
+                    <label style="cursor:pointer;white-space:nowrap;"><input type="checkbox" style="margin:0;width:10px;height:10px;"> Late</label>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;gap:3px;font-size:6.8pt;font-weight:700;">
+                    <label style="cursor:pointer;white-space:nowrap;"><input type="checkbox" style="margin:0;width:10px;height:10px;"> Abs</label>
+                    <label style="cursor:pointer;white-space:nowrap;"><input type="checkbox" style="margin:0;width:10px;height:10px;"> Sub</label>
+                  </div>
                 </div>
               </td>
-              <td></td>
+              <td class="td-center"></td>
             </tr>''')
         t_num += 1
 
-    html_out.append('''
+    html_out.append(f'''
           </tbody>
         </table>
+
+        <!-- SIGNATURE BLOCK -->
+        <div class="sign-row" style="margin-top:auto;padding-top:6px;border-top:1.5px solid #cbd5e1;display:grid;grid-template-columns:repeat(3, 1fr);gap:16px;font-size:7.5pt;">
+          <div class="sign-col" style="text-align:center;">
+            <div style="border-bottom:1.5px solid #0f172a;height:24px;margin-bottom:4px;"></div>
+            <div style="font-weight:800;color:#1e293b;text-transform:uppercase;font-size:7pt;letter-spacing:0.3px;">{html.escape(t_name)}</div>
+            <div style="font-size:6.8pt;color:#64748b;font-weight:600;">Teacher's Signature over Printed Name</div>
+          </div>
+          <div class="sign-col" style="text-align:center;">
+            <div style="border-bottom:1.5px solid #0f172a;height:24px;margin-bottom:4px;"></div>
+            <div style="font-weight:800;color:#1e293b;text-transform:uppercase;font-size:7pt;letter-spacing:0.3px;">Academic Coordinator / Department Head</div>
+            <div style="font-size:6.8pt;color:#64748b;font-weight:600;">Verified & Monitored By</div>
+          </div>
+          <div class="sign-col" style="text-align:center;">
+            <div style="border-bottom:1.5px solid #0f172a;height:24px;margin-bottom:4px;"></div>
+            <div style="font-weight:800;color:#1e293b;text-transform:uppercase;font-size:7pt;letter-spacing:0.3px;">School Principal / Directress</div>
+            <div style="font-size:6.8pt;color:#64748b;font-weight:600;">Approved By</div>
+          </div>
+        </div>
       </div>
     </div>
 ''')
@@ -1959,3 +2004,12 @@ with open(target_file, 'w', encoding='utf-8') as f:
     f.write(''.join(html_out))
 
 print(f"Generated {target_file} ({os.path.getsize(target_file):,} bytes).")
+
+root_f2f_1 = os.path.join(REPO_DIR, '..', 'f2f-monitoring-sheet.html')
+root_f2f_2 = os.path.join(REPO_DIR, '..', 'f2f-classroom-monitoring-sheet.html')
+with open(root_f2f_1, 'w', encoding='utf-8') as f:
+    f.write(''.join(html_out))
+with open(root_f2f_2, 'w', encoding='utf-8') as f:
+    f.write(''.join(html_out))
+print(f"Successfully mirrored to {root_f2f_1} and {root_f2f_2}")
+

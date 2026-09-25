@@ -27,6 +27,7 @@ day_abbr_map = {
     'Friday': 'FRI',
     'Saturday': 'SAT'
 }
+day_order = {'Sunday': 0, 'Monday': 1, 'Tuesday': 2, 'Wednesday': 3, 'Thursday': 4}
 
 def get_grid(sheet):
     grid = {}
@@ -91,70 +92,27 @@ def parse_mins(m_str):
     return str(m.group(1)) if m else '40'
 
 KNOWN_TEACHERS = {
-    'Saimona': 'Tchr. Saimona',
-    'Jerlyn': 'Tchr. Jerlyn',
-    'Keychell': 'Tchr. Keychell',
-    'Faidh': 'Ustadh Faidh',
-    'Saliha': 'Ustadha Saliha',
-    'Obaydah': 'Ust. Obaydah',
-    'Obayda': 'Ust. Obaydah',
-    'Marham': 'Tchr. Marham',
-    'Jenny': 'Tchr. Jenny',
-    'Jessa': 'Tchr. Jessa',
-    'Laurel': 'Ust. Laurel',
-    'Laiurel': 'Ust. Laurel',
-    'Silfah': 'Ustadha Silfa',
-    'Silfa': 'Ustadha Silfa',
-    'Ersahad': 'Ustadh Ersahad',
-    'Hainur': 'Ustadh Hainur',
-    'Bustamante': 'Alim Bustamante',
-    'Wendy': 'Tchr. Wendy',
-    'Sahdia': 'Tchr. Sahdia',
-    'Norhydie': 'Tchr. Norhydie',
-    'Joanna': 'Tchr. Joanna',
-    'Katrina': 'Tchr. Katrina',
-    'Sitti': 'Tchr. Sitti',
-    'Monisa': 'Tchr. Monisa',
-    'Zara': 'Tchr. Franchette',
-    'Anna': 'Tchr. Anna',
-    'Arvin': 'Tchr. Arvin',
-    'Fhairudz': 'Tchr. Fhairudz',
-    'Erica': 'Tchr. Erica',
-    'Junaisah': 'Tchr. Junaisah',
-    'Junaisa': 'Tchr. Junaisah',
-    'Ayah': 'Tchr. Ayah',
-    'Jayra': 'Tchr. Jayra',
-    'Jairah': 'Tchr. Jayra',
-    'Shi': 'Tchr. Shirehan',
-    'Shirehan': 'Tchr. Shirehan',
-    'Sophia': 'Tchr. Sophia',
-    'Aniah': 'Tchr. Aniah',
-    'Halnaisa': 'Tchr. Halnaisa',
-    'Franchette': 'Tchr. Franchette',
-    'Ethel': 'Tchr. Ethel',
-    'Ali': 'Ustadh Muh Ali',
-    'Radzmia': 'Tchr. Radzmia',
-    'Wardah': 'Tchr. Wardah',
-    'Jaisam': 'Ustadh Jaisam',
-    'Rowena': 'Tchr. Rowena',
-    'Norhaima': 'Tchr. Norhaima',
-    'Jhelyn': 'Tchr. Jhelyn',
-    'Nof': 'Tchr. Nof',
-    'Angeleni': 'Tchr. Angeleni',
-    'Nadzra': 'Tchr. Nadzra',
-    'Samsuddin': 'Alim Samsuddin',
-    'Abdulwahab': 'Alim Abdulwahab',
-    'Mamonas': 'Alim Mamonas',
-    'Moh': 'Sir Moh',
-    'Mohaymen': 'Sir Moh',
-    'Thea': 'Tchr. Thea',
-    'Abegail': 'Tchr. Abegail',
-    'Marie': 'Tchr. Marie',
-    'Ahmad': 'Tchr. Ahmad',
-    'Dipatuan': 'Alim Dipatuan',
-    'Abdul Karim': 'Alim Abdul Karim',
-    'Abdiraheem': 'Ust. Abdiraheem',
-    'Abdi': 'Ust. Abdiraheem',
+    'Saimona': 'Tchr. Saimona', 'Jerlyn': 'Tchr. Jerlyn', 'Keychell': 'Tchr. Keychell',
+    'Faidh': 'Ustadh Faidh', 'Saliha': 'Ustadha Saliha', 'Obaydah': 'Ust. Obaydah',
+    'Obayda': 'Ust. Obaydah', 'Marham': 'Tchr. Marham', 'Jenny': 'Tchr. Jenny',
+    'Jessa': 'Tchr. Jessa', 'Laurel': 'Ust. Laurel', 'Laiurel': 'Ust. Laurel',
+    'Silfah': 'Ustadha Silfa', 'Silfa': 'Ustadha Silfa', 'Ersahad': 'Ustadh Ersahad',
+    'Hainur': 'Ustadh Hainur', 'Bustamante': 'Alim Bustamante', 'Wendy': 'Tchr. Wendy',
+    'Sahdia': 'Tchr. Sahdia', 'Norhydie': 'Tchr. Norhydie', 'Joanna': 'Tchr. Joanna',
+    'Katrina': 'Tchr. Katrina', 'Sitti': 'Tchr. Sitti', 'Monisa': 'Tchr. Monisa',
+    'Zara': 'Tchr. Franchette', 'Anna': 'Tchr. Anna', 'Arvin': 'Tchr. Arvin',
+    'Fhairudz': 'Tchr. Fhairudz', 'Erica': 'Tchr. Erica', 'Junaisah': 'Tchr. Junaisah',
+    'Junaisa': 'Tchr. Junaisah', 'Ayah': 'Tchr. Ayah', 'Jayra': 'Tchr. Jayra',
+    'Jairah': 'Tchr. Jayra', 'Shi': 'Tchr. Shirehan', 'Shirehan': 'Tchr. Shirehan',
+    'Sophia': 'Tchr. Sophia', 'Aniah': 'Tchr. Aniah', 'Halnaisa': 'Tchr. Halnaisa',
+    'Franchette': 'Tchr. Franchette', 'Ethel': 'Tchr. Ethel', 'Ali': 'Ustadh Muh Ali',
+    'Radzmia': 'Tchr. Radzmia', 'Wardah': 'Tchr. Wardah', 'Jaisam': 'Ustadh Jaisam',
+    'Rowena': 'Tchr. Rowena', 'Norhaima': 'Tchr. Norhaima', 'Jhelyn': 'Tchr. Jhelyn',
+    'Nof': 'Tchr. Nof', 'Angeleni': 'Tchr. Angeleni', 'Nadzra': 'Tchr. Nadzra',
+    'Samsuddin': 'Alim Samsuddin', 'Abdulwahab': 'Alim Abdulwahab', 'Mamonas': 'Alim Mamonas',
+    'Moh': 'Sir Moh', 'Mohaymen': 'Sir Moh', 'Thea': 'Tchr. Thea', 'Abegail': 'Tchr. Abegail',
+    'Marie': 'Tchr. Marie', 'Ahmad': 'Tchr. Ahmad', 'Dipatuan': 'Alim Dipatuan',
+    'Abdul Karim': 'Alim Abdul Karim', 'Abdiraheem': 'Ust. Abdiraheem', 'Abdi': 'Ust. Abdiraheem',
 }
 
 def normalize_teacher(name):
@@ -289,6 +247,7 @@ def build_header_html(form_title, form_subtitle=None):
     '''
 
 all_master_attendance_rows = []
+teacher_monitor_map = {}
 
 for sec in sections:
     s_grid = elem_grid if sec['sheet'] == 'ELEM' else (hs_new_grid if sec['sheet'] == 'HS SCHED (NEW)' else hs_grid)
@@ -307,6 +266,7 @@ for sec in sections:
             
             subj, tchr, kind = clean_parse(c_val)
             if kind == 'CLASS' and tchr and tchr != 'TBA':
+                # Add to master attendance
                 all_master_attendance_rows.append({
                     'day': day,
                     'day_abbr': day_abbr,
@@ -321,8 +281,43 @@ for sec in sections:
                     'dept_label': sec['dept_label'],
                     'room': sec['room']
                 })
+                # Add to teacher attendance map
+                if tchr not in teacher_monitor_map:
+                    teacher_monitor_map[tchr] = {
+                        'name': tchr,
+                        'dept': sec['dept_label'],
+                        'dept_code': sec['dept_code'],
+                        'items': []
+                    }
+                teacher_monitor_map[tchr]['items'].append({
+                    'day': day,
+                    'day_abbr': day_abbr,
+                    'day_idx': day_order.get(day, 0),
+                    'time': t_slot,
+                    'sort_time': time_to_sort_key(t_slot),
+                    'mins': mins_val,
+                    'section': sec['sec_short'],
+                    'subject': subj.upper(),
+                    'room': sec['room']
+                })
 
-print(f"Compiled {len(all_master_attendance_rows)} master attendance rows for ODL 2nd Shift.")
+for t_name, t_data in teacher_monitor_map.items():
+    if any(t_name.startswith(p) for p in ['Ust.', 'Ustadh', 'Ustadha', 'Alim']):
+        t_data['cat'] = 'isal'
+        t_data['dept'] = 'ISAL & Islamic Studies Department'
+    elif any('G11' in it['section'] or 'G12' in it['section'] for it in t_data['items']):
+        t_data['cat'] = 'shs'
+        t_data['dept'] = 'Senior High School Faculty'
+    elif any('G7' in it['section'] or 'G8' in it['section'] or 'G9' in it['section'] or 'G10' in it['section'] for it in t_data['items']):
+        t_data['cat'] = 'jhs'
+        t_data['dept'] = 'Junior High School Faculty'
+    else:
+        t_data['cat'] = 'elem'
+        t_data['dept'] = 'Elementary Faculty'
+    t_data['items'].sort(key=lambda x: (x['day_idx'], x['sort_time'], x['section']))
+
+teachers_list = sorted(teacher_monitor_map.values(), key=lambda x: x['name'])
+print(f"Compiled {len(all_master_attendance_rows)} master attendance rows and {len(teachers_list)} teachers for ODL 2nd Shift.")
 
 html_out = []
 html_out.append('''<!DOCTYPE html>
@@ -337,7 +332,7 @@ html_out.append('''<!DOCTYPE html>
   <style>
     @page {
       size: A4 portrait;
-      margin: 6mm 8mm 6mm 8mm;
+      margin: 5mm 6mm 5mm 6mm;
     }
     * {
       box-sizing: border-box;
@@ -560,7 +555,7 @@ html_out.append('''<!DOCTYPE html>
     .page-sheet {
       width: 210mm;
       min-height: 290mm;
-      padding: 6mm 8mm;
+      padding: 5mm 6mm;
       background: #ffffff;
       box-shadow: 0 4px 15px rgba(0,0,0,0.08);
       border: 1px solid #e2e8f0;
@@ -582,20 +577,20 @@ html_out.append('''<!DOCTYPE html>
       align-items: center;
       justify-content: space-between;
       border-bottom: 2px solid #0f172a;
-      padding-bottom: 5px;
-      margin-bottom: 5px;
+      padding-bottom: 4px;
+      margin-bottom: 4px;
       gap: 10px;
     }
     .header-logo-side {
-      width: 50px;
+      width: 48px;
       display: flex;
       justify-content: center;
       align-items: center;
       flex-shrink: 0;
     }
     .header-logo {
-      width: 50px;
-      height: 50px;
+      width: 48px;
+      height: 48px;
       object-fit: contain;
     }
     .header-center-text {
@@ -604,11 +599,11 @@ html_out.append('''<!DOCTYPE html>
     }
     .arabic-header {
       font-family: 'Amiri', 'Traditional Arabic', 'Times New Roman', serif;
-      font-size: 15pt;
+      font-size: 14pt;
       font-weight: 700;
       color: #064e3b;
       direction: rtl;
-      line-height: 1.2;
+      line-height: 1.15;
       margin-bottom: 1px;
       text-align: center;
     }
@@ -748,6 +743,103 @@ html_out.append('''<!DOCTYPE html>
       font-size: 6.5pt;
       margin-top: 1px;
     }
+
+    /* TEACHER SHEET TABLE */
+    table.teacher-record-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 7.5pt;
+      line-height: 1.15;
+    }
+    table.teacher-record-table th, table.teacher-record-table td {
+      border: 1px solid #94a3b8;
+      padding: 3.5px 4.5px;
+      vertical-align: middle;
+    }
+    table.teacher-record-table thead th {
+      background: #f1f5f9;
+      color: #0f172a;
+      font-weight: 800;
+      text-align: center;
+      font-size: 7.5pt;
+      padding: 4px 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .th-num { width: 3%; }
+    .th-day { width: 6.5%; }
+    .th-time { width: 16.5%; }
+    .th-mins { width: 4.5%; }
+    .th-in { width: 8%; }
+    .th-out { width: 8%; }
+    .th-grade { width: 13.5%; }
+    .th-subject { width: 18.5%; }
+    .th-room { width: 5%; }
+    .th-status { width: 11.5%; }
+    .th-remarks { width: 5%; }
+    .td-center { text-align: center; }
+
+    .day-cell {
+      font-weight: 800;
+      color: #064e3b;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      font-size: 7.8pt;
+      white-space: nowrap;
+    }
+    .time-slot {
+      font-weight: 800;
+      color: #0f172a;
+      text-align: center;
+      white-space: nowrap;
+      font-size: 7.8pt;
+      letter-spacing: 0.2px;
+      font-variant-numeric: tabular-nums;
+    }
+    .subject-cell {
+      font-weight: 900;
+      color: #064e3b;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      font-size: 8pt;
+    }
+    .grade-cell {
+      font-weight: 700;
+      color: #1e293b;
+      font-size: 7.8pt;
+      white-space: nowrap;
+    }
+
+    /* 2x2 STATUS CHECKLIST */
+    .status-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5px;
+      font-size: 6.8pt;
+      font-weight: 700;
+    }
+    .status-cell-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 3px;
+    }
+    .status-chk {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .status-chk input {
+      margin: 0;
+      width: 10px;
+      height: 10px;
+      cursor: pointer;
+    }
+
+    /* SIGNATURE FOOTER */
     .sign-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -775,17 +867,6 @@ html_out.append('''<!DOCTYPE html>
       font-size: 6.5pt;
       color: #64748b;
     }
-    .badge-dept {
-      display: inline-block;
-      font-size: 6.5pt;
-      font-weight: 800;
-      padding: 1px 5px;
-      border-radius: 3px;
-      text-transform: uppercase;
-    }
-    .dept-elem { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
-    .dept-jhs { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
-    .dept-shs { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
 
     /* ATTENDANCE TABLE VIEW */
     .attendance-view-container {
@@ -886,27 +967,29 @@ html_out.append('''<!DOCTYPE html>
             AL MUNAWWARA ISLAMIC SCHOOL
             <span class="badge-shift">ODL Second Shift</span>
           </div>
-          <div style="font-size: 11px; color: #64748b; font-weight: 600;">Classroom Instructional Monitoring & Master Timetables</div>
+          <div style="font-size: 11px; color: #64748b; font-weight: 600;">Instructional Monitoring & Daily Per-Teacher Loads</div>
         </div>
       </div>
       <div class="toolbar-actions">
-        <a href="/odl-second-shift-teacher.html" class="btn btn-purple">Go to Daily Per-Teacher Monitoring</a>
+        <a href="/odl-second-shift-teacher.html" class="btn btn-purple">Open Standalone Teacher Portal</a>
         <button class="btn btn-primary" onclick="window.print()">Print Current View</button>
-        <button class="btn btn-outline" onclick="showAllSectionsForPrint()">Print All Section Sheets</button>
+        <button class="btn btn-outline" id="btnPrintAll" onclick="handlePrintAll()">Print All Sheets</button>
       </div>
     </div>
 
     <!-- Modality Switcher -->
     <div class="modality-bar">
-      <span class="modality-label">Modality:</span>
+      <span class="modality-label">Learning Modality:</span>
       <a href="/f2f-monitoring.html" class="modality-pill"><span class="modality-dot"></span>Face-to-Face</a>
       <a href="/odl-first-shift.html" class="modality-pill"><span class="modality-dot"></span>ODL First Shift</a>
       <a href="/odl-second-shift.html" class="modality-pill active"><span class="modality-dot dot-active"></span>ODL Second Shift</a>
+      <a href="/all-teachers-monitoring.html" class="modality-pill" style="border-color:#3b82f6;color:#2563eb;background:#eff6ff;"><span class="modality-dot" style="background:#2563eb;"></span>All Modalities (152 Teachers)</a>
     </div>
 
     <!-- View Switcher Tabs -->
     <div class="view-tabs">
       <button class="view-tab active" id="tabSections" onclick="switchView('sections')">Section Classrooms (29 Sections)</button>
+      <button class="view-tab" id="tabTeachers" onclick="switchView('teachers')">Daily Per-Teacher Attendance Sheets (54 Teachers)</button>
       <button class="view-tab" id="tabMasterAttendance" onclick="switchView('master')">Master Daily Attendance Matrix</button>
     </div>
 
@@ -935,6 +1018,35 @@ html_out.append('''        </select>
       <div class="filter-group">
         <label>Search Teacher or Subject</label>
         <input type="text" id="secSearch" placeholder="Type teacher or subject..." onkeyup="searchSectionClasses()">
+      </div>
+    </div>
+
+    <!-- Teacher Filter Controls -->
+    <div id="controlsTeachers" class="filter-grid" style="display: none;">
+      <div class="filter-group">
+        <label>Faculty Department</label>
+        <select id="tchrDeptFilter" onchange="onTchrDeptChange()">
+          <option value="all">All Faculty (54 Teachers)</option>
+          <option value="isal">ISAL & Islamic Studies Department</option>
+          <option value="elem">Elementary Faculty</option>
+          <option value="jhs">Junior High School Faculty</option>
+          <option value="shs">Senior High School Faculty</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Select Teacher</label>
+        <select id="teacherSelect" onchange="onTeacherSelectChange()">
+''')
+
+for t in teachers_list:
+    cat_code = t.get('cat', 'elem')
+    html_out.append(f'          <option value="{html.escape(t["name"])}" data-cat="{cat_code}">{html.escape(t["name"])} ({html.escape(t["dept"])})</option>\n')
+
+html_out.append('''        </select>
+      </div>
+      <div class="filter-group">
+        <label>Search Teacher</label>
+        <input type="text" id="tchrSearch" placeholder="Type teacher name..." onkeyup="searchTeacherByName()">
       </div>
     </div>
 
@@ -1077,6 +1189,145 @@ for s_idx, sec in enumerate(sections):
 
 html_out.append('''  </div>
 
+  <!-- TEACHER SHEETS CONTAINER -->
+  <div class="sheet-wrapper" id="teachersContainer" style="display: none;">
+''')
+
+ROWS_PER_PAGE = 14
+
+for t_idx, t in enumerate(teachers_list):
+    t_name = t['name']
+    t_dept = t['dept']
+    t_cat = t.get('cat', 'elem')
+    items = t['items']
+    
+    total_pages = max(1, (len(items) + ROWS_PER_PAGE - 1) // ROWS_PER_PAGE)
+    
+    for page in range(total_pages):
+        page_items = items[page * ROWS_PER_PAGE : (page + 1) * ROWS_PER_PAGE]
+        page_sheet_id = f"sheet-tchr-{re.sub(r'[^a-zA-Z0-9]', '_', t_name)}-p{page+1}"
+        
+        display_style = "display: flex;" if t_idx == 0 else "display: none;"
+        print_class = "" if t_idx == 0 else "hide-in-print"
+        page_note = f" (Page {page+1} of {total_pages})" if total_pages > 1 else ""
+
+        html_out.append(f'''
+    <!-- TEACHER RECORD SHEET: {html.escape(t_name)}{page_note} -->
+    <div class="page-sheet teacher-sheet dept-target-{t_cat} {print_class}" id="{page_sheet_id}" data-teacher="{html.escape(t_name)}" data-cat="{t_cat}" style="{display_style}">
+      <div class="sheet-content">
+        {build_header_html("TEACHER INSTRUCTIONAL ATTENDANCE & LOAD MONITORING RECORD", "Online Distance Learning (Second Shift) &bull; Official Monitoring Record &bull; SY 2026 - 2027")}
+
+        <div class="meta-box">
+          <div class="meta-row"><span class="meta-lbl">Teacher's Name:</span><span class="meta-val td-bold">{html.escape(t_name)}</span></div>
+          <div class="meta-row"><span class="meta-lbl">Department / Faculty:</span><span class="meta-val">{html.escape(t_dept)}</span></div>
+          <div class="meta-row"><span class="meta-lbl">Shift Modality:</span><span class="meta-val td-bold">ODL Second Shift</span></div>
+          <div class="meta-row"><span class="meta-lbl">School Year:</span><span class="meta-val">2026 - 2027</span></div>
+          <div class="meta-row"><span class="meta-lbl">Weekly Teaching Load:</span><span class="meta-val td-bold">{len(items)} Official Periods</span></div>
+          <div class="meta-row"><span class="meta-lbl">Form Status:</span><span class="meta-val">Active Record{page_note}</span></div>
+        </div>
+
+        <table class="teacher-record-table">
+          <thead>
+            <tr>
+              <th class="th-num">#</th>
+              <th class="th-day">DAY</th>
+              <th class="th-time">SCHEDULED TIME</th>
+              <th class="th-mins">MINS</th>
+              <th class="th-in">ACTUAL TIME IN</th>
+              <th class="th-out">ACTUAL TIME OUT</th>
+              <th class="th-grade">GRADE / SEC</th>
+              <th class="th-subject">SUBJECT / LEARNING AREA</th>
+              <th class="th-room">ROOM</th>
+              <th class="th-status">INSTRUCTION STATUS</th>
+              <th class="th-remarks">SIGN</th>
+            </tr>
+          </thead>
+          <tbody>
+        ''')
+
+        for row_idx in range(ROWS_PER_PAGE):
+            row_num = page * ROWS_PER_PAGE + row_idx + 1
+            if row_idx < len(page_items):
+                it = page_items[row_idx]
+                html_out.append(f'''            <tr>
+              <td class="td-center" style="font-weight:700; color:#64748b;">{row_num}</td>
+              <td class="day-cell">{html.escape(it['day_abbr'])}</td>
+              <td class="time-slot">{html.escape(it['time'])}</td>
+              <td class="td-center" style="font-weight:700;">{html.escape(it['mins'])}</td>
+              <td class="td-center">&nbsp;</td>
+              <td class="td-center">&nbsp;</td>
+              <td class="grade-cell">{html.escape(it['section'])}</td>
+              <td class="subject-cell">{html.escape(it['subject'])}</td>
+              <td class="td-center" style="font-size: 7.2pt; color: #475569;">{html.escape(it.get('room', 'ODL'))}</td>
+              <td>
+                <div class="status-grid">
+                  <div class="status-cell-row">
+                    <label class="status-chk"><input type="checkbox"> In</label>
+                    <label class="status-chk"><input type="checkbox"> Late</label>
+                  </div>
+                  <div class="status-cell-row">
+                    <label class="status-chk"><input type="checkbox"> Abs</label>
+                    <label class="status-chk"><input type="checkbox"> Sub</label>
+                  </div>
+                </div>
+              </td>
+              <td class="td-center">&nbsp;</td>
+            </tr>
+''')
+            else:
+                html_out.append(f'''            <tr>
+              <td class="td-center" style="font-weight:600; color:#cbd5e1;">{row_num}</td>
+              <td class="td-center">&nbsp;</td>
+              <td class="td-center">&nbsp;</td>
+              <td class="td-center">&nbsp;</td>
+              <td class="td-center">&nbsp;</td>
+              <td class="td-center">&nbsp;</td>
+              <td class="td-center">&nbsp;</td>
+              <td class="td-center">&nbsp;</td>
+              <td class="td-center">&nbsp;</td>
+              <td>
+                <div class="status-grid">
+                  <div class="status-cell-row">
+                    <label class="status-chk"><input type="checkbox"> In</label>
+                    <label class="status-chk"><input type="checkbox"> Late</label>
+                  </div>
+                  <div class="status-cell-row">
+                    <label class="status-chk"><input type="checkbox"> Abs</label>
+                    <label class="status-chk"><input type="checkbox"> Sub</label>
+                  </div>
+                </div>
+              </td>
+              <td class="td-center">&nbsp;</td>
+            </tr>
+''')
+
+        html_out.append(f'''          </tbody>
+        </table>
+
+        <!-- SIGNATURE BLOCK -->
+        <div class="sign-row" style="margin-top: auto; padding-top: 6px; border-top: 1.5px solid #cbd5e1;">
+          <div class="sign-col">
+            <div class="sign-line"></div>
+            <div class="sign-label">{html.escape(t_name)}</div>
+            <div class="sign-title">Teacher's Signature over Printed Name</div>
+          </div>
+          <div class="sign-col">
+            <div class="sign-line"></div>
+            <div class="sign-label">Academic Coordinator / Department Head</div>
+            <div class="sign-title">Verified & Monitored By</div>
+          </div>
+          <div class="sign-col">
+            <div class="sign-line"></div>
+            <div class="sign-label">School Principal / Directress</div>
+            <div class="sign-title">Approved By</div>
+          </div>
+        </div>
+      </div>
+    </div>
+''')
+
+html_out.append('''  </div>
+
   <!-- MASTER DAILY ATTENDANCE MATRIX CONTAINER -->
   <div id="masterAttendanceContainer" class="attendance-view-container">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
@@ -1134,30 +1385,49 @@ html_out.append('''  </div>
 
     let currentView = 'sections';
     let currentMatrixDay = 'Sunday';
+    let currentTchrDept = 'all';
 
     function switchView(view) {
       currentView = view;
       const tabSections = document.getElementById("tabSections");
+      const tabTeachers = document.getElementById("tabTeachers");
       const tabMaster = document.getElementById("tabMasterAttendance");
+
       const ctrlSections = document.getElementById("controlsSections");
+      const ctrlTeachers = document.getElementById("controlsTeachers");
       const ctrlMaster = document.getElementById("controlsMaster");
+
       const secContainer = document.getElementById("sectionsContainer");
+      const tchrContainer = document.getElementById("teachersContainer");
       const masterContainer = document.getElementById("masterAttendanceContainer");
+
+      // Reset tabs
+      tabSections.classList.remove("active");
+      tabTeachers.classList.remove("active");
+      tabMaster.classList.remove("active");
+
+      // Hide all controls and containers
+      ctrlSections.style.display = "none";
+      ctrlTeachers.style.display = "none";
+      ctrlMaster.style.display = "none";
+
+      secContainer.style.display = "none";
+      tchrContainer.style.display = "none";
+      masterContainer.style.display = "none";
 
       if (view === 'sections') {
         tabSections.classList.add("active");
-        tabMaster.classList.remove("active");
         ctrlSections.style.display = "grid";
-        ctrlMaster.style.display = "none";
         secContainer.style.display = "flex";
-        masterContainer.style.display = "none";
         applySectionFilter();
-      } else {
-        tabSections.classList.remove("active");
+      } else if (view === 'teachers') {
+        tabTeachers.classList.add("active");
+        ctrlTeachers.style.display = "grid";
+        tchrContainer.style.display = "flex";
+        onTeacherSelectChange();
+      } else if (view === 'master') {
         tabMaster.classList.add("active");
-        ctrlSections.style.display = "none";
         ctrlMaster.style.display = "grid";
-        secContainer.style.display = "none";
         masterContainer.style.display = "block";
         renderMatrixTable();
       }
@@ -1222,12 +1492,90 @@ html_out.append('''  </div>
       document.getElementById("resultCountInfo").textContent = `Found ${visibleCount} Section Monitoring Sheets matching "${query}"`;
     }
 
-    function showAllSectionsForPrint() {
-      document.getElementById("deptFilter").value = "all";
-      document.getElementById("sectionJump").value = "all";
-      document.getElementById("secSearch").value = "";
-      applySectionFilter();
-      window.print();
+    function onTchrDeptChange() {
+      const dept = document.getElementById("tchrDeptFilter").value;
+      currentTchrDept = dept;
+      const select = document.getElementById("teacherSelect");
+      let firstVisible = null;
+
+      for (let i = 0; i < select.options.length; i++) {
+        const opt = select.options[i];
+        const cat = opt.getAttribute("data-cat");
+        if (dept === 'all' || cat === dept) {
+          opt.style.display = "block";
+          if (!firstVisible) firstVisible = opt.value;
+        } else {
+          opt.style.display = "none";
+        }
+      }
+
+      if (firstVisible) {
+        select.value = firstVisible;
+        onTeacherSelectChange();
+      }
+    }
+
+    function onTeacherSelectChange() {
+      const selectedTeacher = document.getElementById("teacherSelect").value;
+      const sheets = document.querySelectorAll(".teacher-sheet");
+      let visibleCount = 0;
+
+      sheets.forEach(sheet => {
+        if (sheet.getAttribute("data-teacher") === selectedTeacher) {
+          sheet.style.display = "flex";
+          sheet.classList.remove("hide-in-print");
+          visibleCount++;
+        } else {
+          sheet.style.display = "none";
+          sheet.classList.add("hide-in-print");
+        }
+      });
+      document.getElementById("resultCountInfo").textContent = `Displaying Record for: ${selectedTeacher}`;
+    }
+
+    function searchTeacherByName() {
+      const query = document.getElementById("tchrSearch").value.toLowerCase().trim();
+      const select = document.getElementById("teacherSelect");
+      let firstMatch = null;
+      for (let i = 0; i < select.options.length; i++) {
+        const opt = select.options[i];
+        const text = opt.text.toLowerCase();
+        if (!query || text.includes(query)) {
+          opt.style.display = "block";
+          if (!firstMatch) firstMatch = opt.value;
+        } else {
+          opt.style.display = "none";
+        }
+      }
+      if (firstMatch) {
+        select.value = firstMatch;
+        onTeacherSelectChange();
+      }
+    }
+
+    function handlePrintAll() {
+      if (currentView === 'sections') {
+        document.getElementById("deptFilter").value = "all";
+        document.getElementById("sectionJump").value = "all";
+        document.getElementById("secSearch").value = "";
+        applySectionFilter();
+        window.print();
+      } else if (currentView === 'teachers') {
+        const sheets = document.querySelectorAll(".teacher-sheet");
+        sheets.forEach(sheet => {
+          const cat = sheet.getAttribute("data-cat");
+          if (currentTchrDept === 'all' || cat === currentTchrDept) {
+            sheet.style.display = "flex";
+            sheet.classList.remove("hide-in-print");
+          } else {
+            sheet.style.display = "none";
+            sheet.classList.add("hide-in-print");
+          }
+        });
+        window.print();
+      } else {
+        window.print();
+      }
     }
 
     function setMatrixDay(day, btn) {

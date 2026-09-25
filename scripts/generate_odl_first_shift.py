@@ -945,7 +945,7 @@ html_out.append('''<!DOCTYPE html>
         Classroom Monitoring Forms (26 Sections)
       </button>
       <button class="view-tab" id="tab-loads" onclick="switchView('loads')">
-        Teacher Instructional Attendance Records (53 Teachers)
+        Daily Per-Teacher Attendance Sheets (53 Teachers)
       </button>
       <button class="view-tab" id="tab-matrix" onclick="switchView('matrix')">
         Master Daily Attendance Tracking Matrix
@@ -1517,3 +1517,9 @@ with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
     f.write(output_content)
 
 print(f"Successfully generated {OUTPUT_FILE} ({len(output_content)} bytes).")
+
+ROOT_OUTPUT_FILE = os.path.join(REPO_DIR, '..', 'odl-first-shift-monitoring-sheet.html')
+with open(ROOT_OUTPUT_FILE, 'w', encoding='utf-8') as f:
+    f.write(output_content)
+print(f"Successfully mirrored to {ROOT_OUTPUT_FILE}")
+

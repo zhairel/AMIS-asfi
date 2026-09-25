@@ -639,16 +639,60 @@ html_out.append('''<!DOCTYPE html>
       display: flex;
       flex-direction: column;
       gap: 1.5px;
-      font-size: 6.5pt;
+      font-size: 6.8pt;
       font-weight: 700;
-      color: #334155;
-      line-height: 1.15;
     }
-    .status-row {
+    .status-cell-row {
       display: flex;
       justify-content: space-between;
-      padding: 0 2px;
+      gap: 3px;
+    }
+    .status-chk {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      cursor: pointer;
+      user-select: none;
       white-space: nowrap;
+    }
+    .status-chk input {
+      margin: 0;
+      width: 10px;
+      height: 10px;
+      cursor: pointer;
+    }
+
+    /* SIGNATURE FOOTER */
+    .sign-container {
+      margin-top: auto;
+      padding-top: 6px;
+      border-top: 1.5px solid #cbd5e1;
+    }
+    .sign-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      font-size: 7.5pt;
+    }
+    .sign-col {
+      text-align: center;
+    }
+    .sign-line {
+      border-bottom: 1.5px solid #0f172a;
+      height: 24px;
+      margin-bottom: 4px;
+    }
+    .sign-label {
+      font-weight: 800;
+      color: #1e293b;
+      text-transform: uppercase;
+      font-size: 7pt;
+      letter-spacing: 0.3px;
+    }
+    .sign-title {
+      font-size: 6.8pt;
+      color: #64748b;
+      font-weight: 600;
     }
 
     .row-blank {
@@ -719,15 +763,19 @@ html_out.append('''<!DOCTYPE html>
       <span class="modality-label">Learning Modality:</span>
       <a href="/teacher-monitoring.html" class="modality-pill active" title="Active S.Y. 2026 - 2027">
         <span class="modality-dot dot-active"></span>
-         Face-to-Face (F2F)
+        Face-to-Face (45 Teachers)
       </a>
       <a href="/odl-teacher-monitoring.html" class="modality-pill" title="Online Distance Learning First Shift">
-        <span class="modality-dot dot-active"></span>
-        ODL First Shift
+        <span class="modality-dot"></span>
+        ODL First Shift (53 Teachers)
       </a>
       <a href="/odl-second-shift-teacher.html" class="modality-pill" title="Online Distance Learning Second Shift">
-        <span class="modality-dot dot-active"></span>
-        ODL Second Shift
+        <span class="modality-dot"></span>
+        ODL Second Shift (54 Teachers)
+      </a>
+      <a href="/all-teachers-monitoring.html" class="modality-pill" title="Unified Multi-Modality Portal" style="border-color:#3b82f6;color:#2563eb;background:#eff6ff;">
+        <span class="modality-dot" style="background:#2563eb;"></span>
+        All Modalities (152 Teachers)
       </a>
     </div>
 
@@ -869,8 +917,14 @@ for idx, t in enumerate(teachers_list):
               <td class="td-center"></td>
               <td>
                 <div class="status-grid">
-                  <div class="status-row"><span>[ ] In</span><span>[ ] Late</span></div>
-                  <div class="status-row"><span>[ ] Abs</span><span>[ ] Sub</span></div>
+                  <div class="status-cell-row">
+                    <label class="status-chk"><input type="checkbox"> In</label>
+                    <label class="status-chk"><input type="checkbox"> Late</label>
+                  </div>
+                  <div class="status-cell-row">
+                    <label class="status-chk"><input type="checkbox"> Abs</label>
+                    <label class="status-chk"><input type="checkbox"> Sub</label>
+                  </div>
                 </div>
               </td>
               <td></td>
@@ -892,17 +946,42 @@ for idx, t in enumerate(teachers_list):
               <td></td>
               <td>
                 <div class="status-grid">
-                  <div class="status-row"><span>[ ] In</span><span>[ ] Late</span></div>
-                  <div class="status-row"><span>[ ] Abs</span><span>[ ] Sub</span></div>
+                  <div class="status-cell-row">
+                    <label class="status-chk"><input type="checkbox"> In</label>
+                    <label class="status-chk"><input type="checkbox"> Late</label>
+                  </div>
+                  <div class="status-cell-row">
+                    <label class="status-chk"><input type="checkbox"> Abs</label>
+                    <label class="status-chk"><input type="checkbox"> Sub</label>
+                  </div>
                 </div>
               </td>
               <td></td>
             </tr>''')
         row_num += 1
 
-    html_out.append('''
+    html_out.append(f'''
           </tbody>
         </table>
+
+        <!-- SIGNATURE BLOCK -->
+        <div class="sign-row" style="margin-top: auto; padding-top: 6px; border-top: 1.5px solid #cbd5e1;">
+          <div class="sign-col">
+            <div class="sign-line"></div>
+            <div class="sign-label">{t_name_esc}</div>
+            <div class="sign-title">Teacher's Signature over Printed Name</div>
+          </div>
+          <div class="sign-col">
+            <div class="sign-line"></div>
+            <div class="sign-label">Academic Coordinator / Department Head</div>
+            <div class="sign-title">Verified & Monitored By</div>
+          </div>
+          <div class="sign-col">
+            <div class="sign-line"></div>
+            <div class="sign-label">School Principal / Directress</div>
+            <div class="sign-title">Approved By</div>
+          </div>
+        </div>
       </div>
     </div>
 ''')
@@ -1086,3 +1165,9 @@ with open(output_path, 'w', encoding='utf-8') as f:
     f.write(''.join(html_out))
 
 print(f"Successfully generated {output_path} ({os.path.getsize(output_path)} bytes)")
+
+ROOT_OUTPUT_FILE = os.path.join(REPO_DIR, '..', 'teacher-monitoring.html')
+with open(ROOT_OUTPUT_FILE, 'w', encoding='utf-8') as f:
+    f.write(''.join(html_out))
+print(f"Successfully mirrored to {ROOT_OUTPUT_FILE}")
+
