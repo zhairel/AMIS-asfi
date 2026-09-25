@@ -17,6 +17,15 @@ with open(DEPED_LOGO, 'rb') as f:
     deped_b64 = "data:image/png;base64," + base64.b64encode(f.read()).decode('utf-8')
 
 days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday']
+day_abbr_map = {
+    'Sunday': 'SUN',
+    'Monday': 'MON',
+    'Tuesday': 'TUE',
+    'Wednesday': 'WED',
+    'Thursday': 'THU',
+    'Friday': 'FRI',
+    'Saturday': 'SAT'
+}
 
 def get_grid(sheet):
     grid = {}
@@ -38,8 +47,58 @@ hs_grid = get_grid(wb['HS SCHED'])
 
 def clean_time(t_str):
     if not t_str: return ''
-    t_str = t_str.strip()
-    return re.sub(r'\s+', ' ', t_str)
+    t = str(t_str).strip()
+    if any(kw in t.upper() for kw in ['GRADE', 'USTADH', 'TEACHER']):
+        return ''
+    
+    m_f2f = re.search(r'([\d:apm\.\s-]+?)\s*(?:\(F2F\)|F2F)', t, re.IGNORECASE)
+    if m_f2f:
+        t = m_f2f.group(1).strip()
+    else:
+        t = re.sub(r'\(.*?\)', '', t).strip()
+
+    t = re.sub(r'(\d{1,2}:\d{2}):+(\d{1,2}:\d{2})', r'\1 - \2', t)
+    t = re.sub(r'(\d{1,2}:\d{2}):00', r'\1', t)
+    
+    is_pm = bool(re.search(r'(?:p\.?m\.?|pm)', t, re.IGNORECASE))
+    is_am = bool(re.search(r'(?:a\.?m\.?|am)', t, re.IGNORECASE))
+    
+    clean = re.sub(r'(?:a\.?m\.?|p\.?m\.?|am|pm)', '', t, flags=re.IGNORECASE).strip()
+    
+    parts = re.split(r'\s*[-–]\s*', clean)
+    if len(parts) == 2:
+        start, end = parts[0].strip(), parts[1].strip()
+        start = re.sub(r'^0(\d:)', r'\1', start)
+        end = re.sub(r'^0(\d:)', r'\1', end)
+        
+        try:
+            start_hour = int(start.split(':')[0]) if ':' in start else 0
+            end_hour = int(end.split(':')[0]) if ':' in end else 0
+        except ValueError:
+            return t
+            
+        if is_pm:
+            if start_hour == 11 and end_hour == 12:
+                return f"{start} AM - {end} PM"
+            return f"{start} - {end} PM"
+        elif is_am:
+            return f"{start} - {end} AM"
+        else:
+            if start_hour in [7, 8, 9, 10, 11] and end_hour in [7, 8, 9, 10, 11]:
+                return f"{start} - {end} AM"
+            elif start_hour == 11 and (end_hour == 12 or end_hour <= 1):
+                return f"{start} AM - {end} PM"
+            else:
+                return f"{start} - {end} PM"
+    elif len(parts) == 1:
+        val = parts[0].strip()
+        val = re.sub(r'^0(\d:)', r'\1', val)
+        if is_pm or val.startswith(('12:', '1:', '2:', '3:', '4:', '5:')):
+            return f"{val} PM"
+        else:
+            return f"{val} AM"
+    
+    return t
 
 def parse_mins(m_str):
     if not m_str: return 40
@@ -417,7 +476,7 @@ teacher_schedule = {}
 for sec in sections:
     s_grid = elem_grid if sec['sheet'] == 'ELEM' else (hs_new_grid if sec['sheet'] == 'HS SCHED (NEW)' else hs_grid)
     for r in range(sec['r_start'], sec['r_end'] + 1):
-        t_slot = s_grid.get((r, 2), '').strip()
+        t_slot = clean_time(s_grid.get((r, 2), ''))
         if not t_slot: continue
         
         for d_idx, day in enumerate(days):
@@ -1701,7 +1760,7 @@ for t_name in sorted(teacher_schedule.keys()):
         html_out.append(f'''
             <tr>
               <td class="td-center td-bold">{t_num}</td>
-              <td class="td-center td-bold">{it['day']}</td>
+              <td class="td-center td-bold">{day_abbr_map.get(it['day'], it['day'].upper()[:3])}</td>
               <td class="time-slot">{it['time']}</td>
               <td class="td-center"></td>
               <td class="td-center"></td>
