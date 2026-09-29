@@ -6,7 +6,7 @@ REPO_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 DATA_FILE = os.path.join(REPO_DIR, 'data', 'schedule_f2f_latest.xlsx')
 AMIS_LOGO = os.path.join(REPO_DIR, 'public', 'amis_logo_opt.png')
 DEPED_LOGO = os.path.join(REPO_DIR, 'public', 'deped_logo_opt.png')
-OUTPUT_FILE = os.path.join(REPO_DIR, 'public', 'teacher-monitoring.html')
+OUTPUT_FILE = os.path.join(REPO_DIR, 'public', 'teacher-monitoring-landscape.html')
 
 wb = openpyxl.load_workbook(DATA_FILE, data_only=True)
 
@@ -231,13 +231,13 @@ html_out.append('''<!DOCTYPE html>
   <title>Per-Teacher Instructional Attendance & Load Monitoring Record - Al Munawwara Islamic School</title>
   <style id="page-orientation-style">
     @page {
-      size: A4 portrait;
-      margin: 4mm 5mm 4mm 5mm;
+      size: A4 landscape;
+      margin: 4mm 6mm 4mm 6mm;
     }
     .page-sheet {
-      width: 210mm !important;
-      min-height: 275mm !important;
-      padding: 5mm 6mm !important;
+      width: 297mm !important;
+      min-height: 195mm !important;
+      padding: 4mm 6mm !important;
     }
   </style>
   <style>
@@ -804,7 +804,7 @@ html_out.append('''<!DOCTYPE html>
     }
   </style>
 </head>
-<body class="portrait-mode">
+<body class="landscape-mode">
 
   <!-- TOOLBAR -->
   <div class="toolbar">
@@ -846,10 +846,10 @@ html_out.append('''<!DOCTYPE html>
         <!-- ORIENTATION TOGGLE -->
         <div class="orientation-switch">
           <span class="orientation-label">Orientation:</span>
-          <button id="btn-portrait" class="orientation-btn active" onclick="setOrientation('portrait')" title="Portrait Mode (Default A4)">
+          <button id="btn-portrait" class="orientation-btn" onclick="setOrientation('portrait')" title="Portrait Mode (A4)">
             📄 Portrait
           </button>
-          <button id="btn-landscape" class="orientation-btn" onclick="setOrientation('landscape')" title="Landscape Mode (Wide A4)">
+          <button id="btn-landscape" class="orientation-btn active" onclick="setOrientation('landscape')" title="Landscape Mode (Wide A4)">
             🖼️ Landscape
           </button>
         </div>
@@ -1145,7 +1145,7 @@ html_out.append('''
       showTeacher('all');
     }
 
-    let currentOrientation = 'portrait';
+    let currentOrientation = 'landscape';
 
     function setOrientation(orientation) {
       currentOrientation = orientation;
@@ -1253,7 +1253,7 @@ html_out.append('''
         setOrientation(orientParam);
       } else {
         // Default to portrait ("portrait muna")
-        setOrientation('portrait');
+        setOrientation('landscape');
       }
     });
   </script>
@@ -1267,7 +1267,7 @@ with open(output_path, 'w', encoding='utf-8') as f:
 
 print(f"Successfully generated {output_path} ({os.path.getsize(output_path)} bytes)")
 
-ROOT_OUTPUT_FILE = os.path.join(REPO_DIR, '..', 'teacher-monitoring.html')
+ROOT_OUTPUT_FILE = os.path.join(REPO_DIR, '..', 'teacher-monitoring-landscape.html')
 with open(ROOT_OUTPUT_FILE, 'w', encoding='utf-8') as f:
     f.write(''.join(html_out))
 print(f"Successfully mirrored to {ROOT_OUTPUT_FILE}")

@@ -9,13 +9,13 @@
   <title>Per-Teacher Instructional Attendance & Load Monitoring Record - Al Munawwara Islamic School</title>
   <style id="page-orientation-style">
     @page {
-      size: A4 portrait;
-      margin: 4mm 5mm 4mm 5mm;
+      size: A4 landscape;
+      margin: 4mm 6mm 4mm 6mm;
     }
     .page-sheet {
-      width: 210mm !important;
-      min-height: 275mm !important;
-      padding: 5mm 6mm !important;
+      width: 297mm !important;
+      min-height: 195mm !important;
+      padding: 4mm 6mm !important;
     }
   </style>
   <style>
@@ -582,7 +582,7 @@
     }
   </style>
 </head>
-<body class="portrait-mode">
+<body class="landscape-mode">
 
   <!-- TOOLBAR -->
   <div class="toolbar">
@@ -624,10 +624,10 @@
         <!-- ORIENTATION TOGGLE -->
         <div class="orientation-switch">
           <span class="orientation-label">Orientation:</span>
-          <button id="btn-portrait" class="orientation-btn active" onclick="setOrientation('portrait')" title="Portrait Mode (Default A4)">
+          <button id="btn-portrait" class="orientation-btn" onclick="setOrientation('portrait')" title="Portrait Mode (A4)">
             📄 Portrait
           </button>
-          <button id="btn-landscape" class="orientation-btn" onclick="setOrientation('landscape')" title="Landscape Mode (Wide A4)">
+          <button id="btn-landscape" class="orientation-btn active" onclick="setOrientation('landscape')" title="Landscape Mode (Wide A4)">
             🖼️ Landscape
           </button>
         </div>
@@ -20584,7 +20584,7 @@
       showTeacher('all');
     }
 
-    let currentOrientation = 'portrait';
+    let currentOrientation = 'landscape';
 
     function setOrientation(orientation) {
       currentOrientation = orientation;
@@ -20692,7 +20692,7 @@
         setOrientation(orientParam);
       } else {
         // Default to portrait ("portrait muna")
-        setOrientation('portrait');
+        setOrientation('landscape');
       }
     });
   </script>
