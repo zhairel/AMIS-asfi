@@ -336,7 +336,7 @@
     }
     .arabic-header {
       font-family: 'Amiri', 'Traditional Arabic', serif;
-      font-size: 17.5pt;
+      font-size: clamp(14pt, 2vw, 17.5pt);
       font-weight: 700;
       color: #064e3b;
       direction: rtl;
@@ -346,7 +346,7 @@
       letter-spacing: 0.5px;
     }
     .school-name {
-      font-size: 13pt;
+      font-size: clamp(10.5pt, 1.6vw, 13pt);
       font-weight: 900;
       color: #0f172a;
       letter-spacing: 0.8px;
@@ -355,15 +355,15 @@
       line-height: 1.15;
     }
     .form-title {
-      font-size: 11.2pt;
+      font-size: clamp(8.8pt, 1.3vw, 11.2pt);
       font-weight: 800;
       color: #064e3b;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
       line-height: 1.15;
     }
     .form-sub {
-      font-size: 9pt;
+      font-size: clamp(7.2pt, 1vw, 9pt);
       color: #475569;
       font-weight: 600;
       margin-top: 2px;
@@ -425,22 +425,24 @@
       color: #0f172a;
       font-weight: 800;
       text-align: center;
-      font-size: 9.5pt;
-      padding: 3.5px 4px;
+      padding: 3.5px 2px;
       text-transform: uppercase;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.2px;
+      line-height: 1.15;
+      vertical-align: middle;
+      font-size: clamp(6.8pt, 0.85vw, 7.8pt);
     }
-    .th-num { width: 3%; }
-    .th-day { width: 6.5%; }
-    .th-time { width: 14%; }
-    .th-mins { width: 4.5%; }
-    .th-in { width: 8%; }
-    .th-out { width: 8%; }
-    .th-grade { width: 13.5%; }
-    .th-subject { width: 21%; }
-    .th-room { width: 5%; }
-    .th-status { width: 11.5%; }
-    .th-remarks { width: 5%; }
+    .th-num { width: 3%; font-size: 8pt; }
+    .th-day { width: 6.5%; font-size: 8pt; }
+    .th-time { width: 14%; font-size: 7.8pt; }
+    .th-mins { width: 4.5%; font-size: 7.5pt; }
+    .th-in { width: 8.5%; font-size: 7.2pt; }
+    .th-out { width: 8.5%; font-size: 7.2pt; }
+    .th-grade { width: 13%; font-size: 7.8pt; }
+    .th-subject { width: 20.5%; font-size: 7.5pt; }
+    .th-room { width: 5%; font-size: 7.5pt; }
+    .th-status { width: 11.5%; font-size: 7.0pt; }
+    .th-remarks { width: 5%; font-size: 7.2pt; }
     .td-center { text-align: center; }
 
     .day-cell {
@@ -514,6 +516,13 @@
     body.landscape-mode table.sheet-table td {
       padding: 1.8px 4px;
     }
+    body.landscape-mode table.sheet-table thead th {
+      font-size: 8.5pt;
+      padding: 3px 4px;
+    }
+    body.landscape-mode .th-in, body.landscape-mode .th-out { font-size: 8.0pt; }
+    body.landscape-mode .th-subject { font-size: 8.5pt; }
+    body.landscape-mode .th-status { font-size: 7.8pt; }
     body.landscape-mode .status-grid {
       gap: 1px;
     }
@@ -20633,6 +20642,23 @@
       try {
         localStorage.setItem('amis_teacher_orientation', orientation);
       } catch (e) {}
+
+      autoFitHeaders();
+    }
+
+    function autoFitHeaders() {
+      // Auto-fit table headers dynamically so they never wrap into 3 lines or overflow
+      document.querySelectorAll('table.sheet-table thead th').forEach(th => {
+        let maxPt = currentOrientation === 'landscape' ? 8.8 : 7.8;
+        let minPt = 6.2;
+        let pt = maxPt;
+        th.style.fontSize = pt + 'pt';
+
+        while (th.clientHeight > 33 && pt > minPt) {
+          pt -= 0.2;
+          th.style.fontSize = pt.toFixed(1) + 'pt';
+        }
+      });
     }
 
     function printActiveTeacher() {
@@ -20682,6 +20708,8 @@
       }
     });
 
+    window.addEventListener('resize', autoFitHeaders);
+
     window.addEventListener('DOMContentLoaded', () => {
       populateLogos();
       filterDept('all');
@@ -20695,6 +20723,7 @@
         // Default to portrait ("portrait muna")
         setOrientation('portrait');
       }
+      autoFitHeaders();
     });
   </script>
 </body>
