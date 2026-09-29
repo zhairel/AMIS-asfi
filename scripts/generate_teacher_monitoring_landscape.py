@@ -75,6 +75,25 @@ def format_time_am_pm(t_str):
                 t += ' AM'
     return t
 
+def format_time_break(t_str):
+    if not t_str: return ''
+    parts = re.split(r'\s*[-–]\s*', t_str.strip())
+    if len(parts) == 2:
+        start_raw, end_raw = parts[0], parts[1]
+        
+        m1 = re.search(r'(\d{1,2}):(\d{2})', start_raw)
+        h1 = int(m1.group(1)) if m1 else 0
+        min1 = m1.group(2) if m1 else '00'
+        meridiem1 = 'PM' if (h1 in [12, 1, 2, 3, 4, 5, 6] or 'PM' in start_raw.upper()) else 'AM'
+        
+        m2 = re.search(r'(\d{1,2}):(\d{2})', end_raw)
+        h2 = int(m2.group(1)) if m2 else 0
+        min2 = m2.group(2) if m2 else '00'
+        meridiem2 = 'PM' if (h2 in [12, 1, 2, 3, 4, 5, 6] or 'PM' in end_raw.upper()) else 'AM'
+        
+        return f'{h1}:{min1} {meridiem1} -<br>{h2}:{min2} {meridiem2}'
+    return t_str
+
 def parse_mins(m_str):
     if not m_str: return '40'
     m_str = str(m_str).strip()
@@ -197,6 +216,7 @@ for sec in sections:
                     'day': day,
                     'day_abbr': day_abbr_map.get(day, day.upper()),
                     'time': t_slot,
+                    'time_display': format_time_break(t_slot),
                     'mins': m_slot,
                     'section': format_grade_short(sec['name']),
                     'subject': subj.upper()
@@ -654,12 +674,12 @@ html_out.append('''<!DOCTYPE html>
     }
     .th-num { width: 3%; }
     .th-day { width: 6.5%; }
-    .th-time { width: 16.5%; }
+    .th-time { width: 14%; }
     .th-mins { width: 4.5%; }
     .th-in { width: 8%; }
     .th-out { width: 8%; }
     .th-grade { width: 13.5%; }
-    .th-subject { width: 18.5%; }
+    .th-subject { width: 21%; }
     .th-room { width: 5%; }
     .th-status { width: 11.5%; }
     .th-remarks { width: 5%; }
@@ -681,6 +701,7 @@ html_out.append('''<!DOCTYPE html>
       white-space: nowrap;
       font-size: 9.8pt;
       letter-spacing: 0.2px;
+      line-height: 1.15;
       font-variant-numeric: tabular-nums;
     }
     .subject-cell {
@@ -887,7 +908,7 @@ html_out.append('''<!DOCTYPE html>
 ''')
 
 for idx, t in enumerate(teachers_list):
-    html_out.append(f'          <option value="{idx}">{html.escape(t["name"])} ({len(t["items"])} F2F classes)</option>\n')
+    html_out.append(f'          <option value="{idx}">{html.escape(t["name"])} ({len(t["items"])} F2F)</option>\n')
 
 html_out.append('''        </select>
       </div>
@@ -935,7 +956,7 @@ for idx, t in enumerate(teachers_list):
         <!-- TEACHER META BOX -->
         <div class="meta-box">
           <div class="meta-row"><span class="meta-lbl">Teacher's Name:</span><span class="meta-val td-bold">{t_name_esc}</span></div>
-          <div class="meta-row"><span class="meta-lbl">Total Weekly Loads:</span><span class="meta-val td-bold">{len(items)} F2F Classes</span></div>
+          <div class="meta-row"><span class="meta-lbl">Total Weekly Loads:</span><span class="meta-val td-bold">{len(items)} F2F</span></div>
           <div class="meta-row"><span class="meta-lbl">Room Assignment:</span><span class="meta-val"></span></div>
           <div class="meta-row" style="grid-column: span 2;"><span class="meta-lbl">Week Monitored:</span><span class="meta-val"></span></div>
           <div class="meta-row"><span class="meta-lbl">School Year:</span><span class="meta-val">2026 - 2027</span></div>
@@ -968,7 +989,7 @@ for idx, t in enumerate(teachers_list):
             <tr>
               <td class="td-center" style="font-weight:700;color:#64748b;">{row_num}</td>
               <td class="day-cell">{it['day_abbr']}</td>
-              <td class="time-slot">{it['time']}</td>
+              <td class="time-slot">{it['time_display']}</td>
               <td class="td-center" style="font-weight:700;color:#475569;">{it['mins']}</td>
               <td class="td-center"></td>
               <td class="td-center"></td>
