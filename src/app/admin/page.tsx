@@ -82,6 +82,11 @@ export default function AdminDashboardPage() {
       }
 
       const res = await fetch(url.toString());
+      if (res.status === 401) {
+        localStorage.removeItem('asfi_admin_logged_in');
+        router.push('/admin/login');
+        return;
+      }
       const data = await res.json();
       if (data.success) {
         setApplications(data.applications || []);
@@ -172,22 +177,28 @@ export default function AdminDashboardPage() {
       'Date Applied',
     ];
 
+    const escapeCsvCell = (val: any) => {
+      if (val === null || val === undefined) return '""';
+      const str = String(val).replace(/"/g, '""');
+      return `"${str}"`;
+    };
+
     const rows = applications.map((a) => [
-      `"${a.reference_number}"`,
-      `"${a.status}"`,
-      `"${a.first_name}"`,
-      `"${a.middle_name || ''}"`,
-      `"${a.last_name}"`,
-      `"${a.suffix || ''}"`,
-      `"${a.age || ''}"`,
-      `"${a.gender}"`,
-      `"${a.civil_status}"`,
-      `"${a.contact_number}"`,
-      `"${a.email}"`,
-      `"${a.present_address.replace(/"/g, '""')}"`,
-      `"${a.beneficiary_first_name} ${a.beneficiary_last_name}"`,
-      `"${a.beneficiary_relationship}"`,
-      `"${a.date_applied}"`,
+      escapeCsvCell(a.reference_number),
+      escapeCsvCell(a.status),
+      escapeCsvCell(a.first_name),
+      escapeCsvCell(a.middle_name || ''),
+      escapeCsvCell(a.last_name),
+      escapeCsvCell(a.suffix || ''),
+      escapeCsvCell(a.age ?? ''),
+      escapeCsvCell(a.gender),
+      escapeCsvCell(a.civil_status),
+      escapeCsvCell(a.contact_number),
+      escapeCsvCell(a.email),
+      escapeCsvCell(a.present_address || ''),
+      escapeCsvCell(`${a.beneficiary_first_name} ${a.beneficiary_last_name}`.trim()),
+      escapeCsvCell(a.beneficiary_relationship),
+      escapeCsvCell(a.date_applied),
     ]);
 
     const csvContent = [headers.join(','), ...rows.map((e) => e.join(','))].join('\n');

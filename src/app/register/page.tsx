@@ -153,11 +153,23 @@ export default function RegisterPage() {
     if (stepNumber === 1) {
       if (!formData.firstName.trim()) errs.firstName = 'First name is required';
       if (!formData.lastName.trim()) errs.lastName = 'Last name is required';
-      if (!formData.birthDate) errs.birthDate = 'Date of birth is required';
+      if (!formData.birthDate) {
+        errs.birthDate = 'Date of birth is required';
+      } else {
+        const birthDateObj = new Date(formData.birthDate);
+        const today = new Date();
+        if (birthDateObj > today) {
+          errs.birthDate = 'Date of birth cannot be in the future';
+        }
+      }
       if (!formData.placeOfBirth.trim()) errs.placeOfBirth = 'Place of birth is required';
       if (!formData.gender) errs.gender = 'Gender is required';
       if (!formData.civilStatus) errs.civilStatus = 'Civil status is required';
-      if (!formData.contactNumber.trim()) errs.contactNumber = 'Contact number is required';
+      if (!formData.contactNumber.trim()) {
+        errs.contactNumber = 'Contact number is required';
+      } else if (formData.contactNumber.replace(/[^0-9]/g, '').length < 7) {
+        errs.contactNumber = 'Please provide a valid contact number';
+      }
       if (!formData.email.trim()) {
         errs.email = 'Email address is required';
       } else if (!/\S+@\S+\.\S+/.test(formData.email)) {

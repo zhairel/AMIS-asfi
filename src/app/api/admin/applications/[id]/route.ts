@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSupabaseAdmin, isSupabaseConfigured } from '@/lib/supabase';
 import { memoryApplications } from '@/lib/storage';
+import { isAuthenticatedAdmin } from '@/lib/adminAuth';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -10,6 +11,14 @@ export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  // Security: Verify administrative authentication
+  if (!isAuthenticatedAdmin(req)) {
+    return NextResponse.json(
+      { success: false, message: 'Unauthorized access. Please log in as administrator.' },
+      { status: 401 }
+    );
+  }
+
   try {
     const { id } = params;
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
@@ -22,7 +31,7 @@ export async function GET(
         try {
           let query = supabaseAdmin.from('applications').select('*');
           if (isUuid) {
-            query = query.or(`id.eq.${id},reference_number.eq.${id}`);
+            query = query.eq('id', id);
           } else {
             query = query.eq('reference_number', id);
           }
@@ -68,6 +77,14 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  // Security: Verify administrative authentication
+  if (!isAuthenticatedAdmin(req)) {
+    return NextResponse.json(
+      { success: false, message: 'Unauthorized access. Please log in as administrator.' },
+      { status: 401 }
+    );
+  }
+
   try {
     const { id } = params;
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
@@ -94,14 +111,17 @@ export async function PATCH(
 
           let updateQuery = supabaseAdmin.from('applications').update(updatePayload);
           if (isUuid) {
-            updateQuery = updateQuery.or(`id.eq.${id},reference_number.eq.${id}`);
+            updateQuery = updateQuery.eq('id', id);
           } else {
             updateQuery = updateQuery.eq('reference_number', id);
           }
 
-          await updateQuery;
+          const { error: updateError } = await updateQuery;
+          if (updateError) {
+            console.error('Supabase update failed:', updateError.message);
+          }
         } catch (err: any) {
-          console.error('Supabase update failed:', err.message);
+          console.error('Supabase update exception:', err.message);
         }
       }
     }

@@ -53,6 +53,9 @@ export default function ApplicationDetailPage() {
   const [copiedRef, setCopiedRef] = useState(false);
   const [lightboxImage, setLightboxImage] = useState<{ src: string; title: string } | null>(null);
   const [showFormPreview, setShowFormPreview] = useState(false);
+  const [adminNotes, setAdminNotes] = useState<string>('');
+  const [savingNotes, setSavingNotes] = useState(false);
+  const [notesSavedNotice, setNotesSavedNotice] = useState(false);
 
   useEffect(() => {
     const isAuth = localStorage.getItem('asfi_admin_logged_in') === 'true';
@@ -71,9 +74,15 @@ export default function ApplicationDetailPage() {
     setError(null);
     try {
       const res = await fetch(`/api/admin/applications/${id}`);
+      if (res.status === 401) {
+        localStorage.removeItem('asfi_admin_logged_in');
+        router.push('/admin/login');
+        return;
+      }
       const data = await res.json();
       if (res.ok && data.success && data.application) {
         setApplication(data.application);
+        setAdminNotes(data.application.admin_notes || '');
       } else {
         setError(data.message || 'Application record not found.');
       }
@@ -94,6 +103,12 @@ export default function ApplicationDetailPage() {
         body: JSON.stringify({ status: newStatus }),
       });
 
+      if (res.status === 401) {
+        localStorage.removeItem('asfi_admin_logged_in');
+        router.push('/admin/login');
+        return;
+      }
+
       if (res.ok) {
         setApplication({ ...application, status: newStatus });
       } else {
@@ -103,6 +118,36 @@ export default function ApplicationDetailPage() {
       alert('Error connecting to server.');
     } finally {
       setActionLoading(false);
+    }
+  };
+
+  const handleSaveNotes = async () => {
+    if (!application) return;
+    setSavingNotes(true);
+    try {
+      const res = await fetch(`/api/admin/applications/${application.id || application.reference_number}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ adminNotes }),
+      });
+
+      if (res.status === 401) {
+        localStorage.removeItem('asfi_admin_logged_in');
+        router.push('/admin/login');
+        return;
+      }
+
+      if (res.ok) {
+        setApplication({ ...application, admin_notes: adminNotes });
+        setNotesSavedNotice(true);
+        setTimeout(() => setNotesSavedNotice(false), 2500);
+      } else {
+        alert('Failed to save remarks.');
+      }
+    } catch {
+      alert('Error connecting to server.');
+    } finally {
+      setSavingNotes(false);
     }
   };
 
@@ -695,6 +740,40 @@ export default function ApplicationDetailPage() {
                   </div>
                 </div>
               )}
+            </div>
+
+            {/* Admin Verification Remarks Card */}
+            <div className="bg-white rounded-2xl border border-slate-200/90 p-6 shadow-xs space-y-3">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                <span className="font-extrabold text-slate-800 text-xs sm:text-sm uppercase tracking-wider flex items-center gap-1.5">
+                  <FileText className="w-4 h-4 text-emerald-800" />
+                  Committee Verification Remarks
+                </span>
+                {notesSavedNotice && (
+                  <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full flex items-center gap-1 animate-pulse">
+                    <Check className="w-3 h-3" /> Saved
+                  </span>
+                )}
+              </div>
+              <p className="text-[11px] text-slate-500 font-medium">
+                Internal administrative notes (e.g. PhilSys ID cross-check, physical photo submission, interview notes).
+              </p>
+              <textarea
+                rows={3}
+                value={adminNotes}
+                onChange={(e) => setAdminNotes(e.target.value)}
+                placeholder="Enter verification notes or committee remarks..."
+                className="w-full p-3 rounded-xl border border-slate-300 text-xs text-slate-900 font-medium focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 outline-none transition"
+              />
+              <button
+                type="button"
+                disabled={savingNotes}
+                onClick={handleSaveNotes}
+                className="w-full py-2 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-xs"
+              >
+                {savingNotes ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
+                <span>Save Remarks</span>
+              </button>
             </div>
 
             {/* Audit & Meta Details */}

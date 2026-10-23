@@ -12,6 +12,13 @@ import {
   UserCheck,
   HeartHandshake,
   Award,
+  BookOpen,
+  GraduationCap,
+  Briefcase,
+  Stethoscope,
+  Building2,
+  Users,
+  Search,
 } from 'lucide-react';
 
 export default function HomePage() {
@@ -20,19 +27,64 @@ export default function HomePage() {
       {/* Top Notification Bar */}
       <div className="bg-emerald-950 text-emerald-200 text-xs py-2 px-4 border-b border-emerald-800/60">
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="font-semibold text-white">SEC Registration No.: 2026070258874-03</span>
+          <div className="flex items-center gap-2 truncate">
+            <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse flex-shrink-0" />
+            <span className="font-semibold text-white truncate">SEC Registration No.: 2026070258874-03</span>
             <span className="hidden sm:inline text-emerald-400/80">· Non-stock · Non-profit Foundation</span>
           </div>
           <a
             href="mailto:amissadaqahfamilyincorporarted@gmail.com"
-            className="text-amber-300 hover:text-amber-200 font-medium text-[11px] truncate"
+            className="text-amber-300 hover:text-amber-200 font-medium text-[11px] truncate flex-shrink-0"
           >
             amissadaqahfamilyincorporarted@gmail.com
           </a>
         </div>
       </div>
+
+      {/* Sticky Navigation Bar */}
+      <nav className="sticky top-0 z-40 bg-emerald-950/95 backdrop-blur border-b border-emerald-800/80 text-white py-2.5 px-4 shadow-md">
+        <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <img
+              src="/asfi-logo.png"
+              alt="ASFI Seal"
+              className="w-7 h-7 object-contain bg-white rounded-md p-0.5 shadow-sm"
+            />
+            <span className="font-black text-sm tracking-tight text-white uppercase hidden sm:inline">
+              ASFI Foundation
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2 sm:gap-6 text-xs font-semibold text-emerald-200">
+            <a href="#about" className="hover:text-white transition hidden md:inline">
+              About ASFI
+            </a>
+            <a href="#benefits" className="hover:text-white transition hidden md:inline">
+              Member Benefits
+            </a>
+            <a href="#guidelines" className="hover:text-white transition">
+              Guidelines
+            </a>
+            <a href="#process" className="hover:text-white transition hidden sm:inline">
+              Process
+            </a>
+            <Link
+              href="/verify"
+              className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-300 hover:text-amber-200 bg-emerald-900/60 hover:bg-emerald-900 px-2.5 py-1.5 rounded-lg border border-emerald-700/60 transition"
+            >
+              <Search className="w-3 h-3" />
+              <span>Verify Application</span>
+            </Link>
+            <Link
+              href="/register"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-emerald-950 font-black text-xs shadow transition active:scale-95"
+            >
+              <span>Register</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </div>
+      </nav>
 
       {/* Hero Section */}
       <section className="relative bg-gradient-to-b from-emerald-950 via-emerald-900 to-teal-950 text-white overflow-hidden py-14 sm:py-20 border-b border-emerald-800/80 shadow-2xl">
@@ -120,56 +172,213 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Qualifications & Requirements Section */}
-      <section className="py-14 sm:py-18 max-w-5xl mx-auto px-4 sm:px-6 w-full">
+      {/* SECTION: ABOUT ASFI (PROFILE, VISION & MISSION) */}
+      <section id="about" className="py-14 sm:py-18 max-w-5xl mx-auto px-4 sm:px-6 w-full scroll-mt-14">
         <div className="text-center max-w-2xl mx-auto mb-10">
           <span className="text-xs font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full inline-block mb-2">
-            Membership Guidelines
+            Organization Profile
           </span>
           <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900">
-            Qualifications &amp; Requirements
+            About AMIS Sadaqah Family
           </h2>
           <p className="text-slate-600 text-sm sm:text-base mt-2 font-medium">
-            Membership is open to individuals and families who share ASFI’s commitment to charitable mutual care.
+            Reviving the Islamic spirit of Sadaqah through an organized, sustainable, and compassionate community in Davao City.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Profile Card */}
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border-2 border-slate-200 shadow-sm space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center flex-shrink-0">
+                <Building2 className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="font-extrabold text-slate-900 text-lg sm:text-xl">Our History &amp; Foundation</h3>
+                <span className="text-xs font-bold text-slate-500">Established 2024 · Davao City</span>
+              </div>
+            </div>
+
+            <p className="text-sm text-slate-700 leading-relaxed font-normal">
+              Started in early 2024 as <strong>AMIS Family</strong>, the initiative was built on the belief that no act of charity is too small when given sincerely for the sake of Allah (SWT). It now stands as an official <strong>SEC-registered, non-stock, non-profit corporation (SEC No. 2026070258874-03)</strong>.
+            </p>
+
+            <div className="pt-2 border-t border-slate-100 space-y-2 text-xs text-slate-600">
+              <div className="flex items-start gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                <span><strong>SMILE Program:</strong> Provided ₱10,000 livelihood capital to mothers in Davao City with regular Islamic seminars.</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                <span><strong>Masjid Cleaners Support:</strong> Monthly ₱1,000 allowances and Qur&apos;an studies for 42 masjid caretakers.</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Vision & Mission Card */}
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border-2 border-slate-200 shadow-sm space-y-5">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-900 flex items-center justify-center flex-shrink-0">
+                <Award className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="font-extrabold text-slate-900 text-lg sm:text-xl">Vision &amp; Mission</h3>
+                <span className="text-xs font-bold text-slate-500">Guided by Qur&apos;an &amp; Sunnah</span>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80">
+                <span className="text-[11px] font-black uppercase tracking-wider text-emerald-800 block mb-1">
+                  Our Vision
+                </span>
+                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium">
+                  To establish a sustainable and halal system of mutual assistance through Sadaqah, providing compassionate support, empowering families, and building resilient communities.
+                </p>
+              </div>
+
+              <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80">
+                <span className="text-[11px] font-black uppercase tracking-wider text-amber-800 block mb-1">
+                  Our Mission
+                </span>
+                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium">
+                  Strengthen the culture of voluntary monthly Sadaqah as a lifelong act of worship, and extend timely support during hospitalization, bereavement, and unforeseen emergencies.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION: MEMBERSHIP BENEFITS (SECTION VI OF HANDBOOK) */}
+      <section id="benefits" className="py-14 sm:py-18 bg-emerald-950 text-white scroll-mt-14">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <span className="text-xs font-extrabold uppercase tracking-wider text-amber-400 bg-emerald-900 px-3 py-1 rounded-full inline-block mb-2">
+              Mutual Assistance Program
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-white">
+              Official Membership Benefits
+            </h2>
+            <p className="text-emerald-200 text-sm sm:text-base mt-2 font-medium">
+              Funded by collective voluntary Sadaqah to provide real, compassionate support for members when hardships arise.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {/* Benefit 1: Hospitalization */}
+            <div className="bg-emerald-900/70 border border-emerald-700/60 rounded-3xl p-6 hover:bg-emerald-900 transition space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-amber-400 text-emerald-950 flex items-center justify-center font-bold flex-shrink-0">
+                <Stethoscope className="w-6 h-6" />
+              </div>
+              <span className="text-[10px] font-black uppercase tracking-wider text-amber-300 block">
+                Up to ₱5,000 Assistance
+              </span>
+              <h3 className="font-extrabold text-white text-base">Hospitalization Aid</h3>
+              <p className="text-xs text-emerald-100/90 leading-relaxed font-medium">
+                Financial assistance for active members (students, parents, and workers) admitted due to illness or accidental injury.
+              </p>
+            </div>
+
+            {/* Benefit 2: Bereavement */}
+            <div className="bg-emerald-900/70 border border-emerald-700/60 rounded-3xl p-6 hover:bg-emerald-900 transition space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-400 text-emerald-950 flex items-center justify-center font-bold flex-shrink-0">
+                <HeartHandshake className="w-6 h-6" />
+              </div>
+              <span className="text-[10px] font-black uppercase tracking-wider text-amber-300 block">
+                ₱7,000 Immediate Aid
+              </span>
+              <h3 className="font-extrabold text-white text-base">Bereavement Support</h3>
+              <p className="text-xs text-emerald-100/90 leading-relaxed font-medium">
+                Immediate funeral grant given to the declared beneficiary upon death of an active member, plus monthly family sustenance.
+              </p>
+            </div>
+
+            {/* Benefit 3: Education */}
+            <div className="bg-emerald-900/70 border border-emerald-700/60 rounded-3xl p-6 hover:bg-emerald-900 transition space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-teal-400 text-emerald-950 flex items-center justify-center font-bold flex-shrink-0">
+                <GraduationCap className="w-6 h-6" />
+              </div>
+              <span className="text-[10px] font-black uppercase tracking-wider text-amber-300 block">
+                Grants &amp; Discounts
+              </span>
+              <h3 className="font-extrabold text-white text-base">Educational Benefits</h3>
+              <p className="text-xs text-emerald-100/90 leading-relaxed font-medium">
+                <strong>₱10,000</strong> College Grant for continuous AMIS Grade 1–12 graduates, 30% single-parent discount, and orphan scholarships.
+              </p>
+            </div>
+
+            {/* Benefit 4: Relief */}
+            <div className="bg-emerald-900/70 border border-emerald-700/60 rounded-3xl p-6 hover:bg-emerald-900 transition space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-amber-300 text-emerald-950 flex items-center justify-center font-bold flex-shrink-0">
+                <Briefcase className="w-6 h-6" />
+              </div>
+              <span className="text-[10px] font-black uppercase tracking-wider text-amber-300 block">
+                ₱1,000 / mo · Up to 3 Mos
+              </span>
+              <h3 className="font-extrabold text-white text-base">Unemployment Relief</h3>
+              <p className="text-xs text-emerald-100/90 leading-relaxed font-medium">
+                Temporary cash aid during unexpected job loss, or tuition dues placed on hold until parent secures new employment.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-8 text-center text-[11px] text-emerald-300/80 font-medium max-w-xl mx-auto">
+            * All assistance is subject to eligibility verification, supporting documentary review, and availability of the Sadaqah Fund per ASFI guidelines.
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION: MEMBERSHIP GUIDELINES & ELIGIBILITY */}
+      <section id="guidelines" className="py-14 sm:py-18 max-w-5xl mx-auto px-4 sm:px-6 w-full scroll-mt-14">
+        <div className="text-center max-w-2xl mx-auto mb-10">
+          <span className="text-xs font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full inline-block mb-2">
+            Section V of Handbook
+          </span>
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900">
+            Eligibility &amp; Requirements
+          </h2>
+          <p className="text-slate-600 text-sm sm:text-base mt-2 font-medium">
+            Open to all individuals and families who share the vision of mutual support through voluntary charity.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Card 1 */}
-          <div className="bg-white rounded-3xl p-6 sm:p-7 border-2 border-slate-200 shadow-sm hover:shadow-md transition">
+          <div className="bg-white rounded-3xl p-6 sm:p-7 border-2 border-slate-200 shadow-sm hover:border-emerald-600 transition">
             <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-black text-lg mb-4">
               01
             </div>
-            <h3 className="font-extrabold text-slate-900 text-lg mb-2">Filipino Citizen</h3>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              Applicants must be Filipino citizens. Minor applicants (below 18 years old) must be represented and authorized by a parent or legal guardian.
+            <h3 className="font-extrabold text-slate-900 text-lg mb-2">Who May Apply</h3>
+            <p className="text-sm text-slate-600 leading-relaxed font-normal">
+              Parents, workers, employees, business owners, single parents, and OFWs. Students under 18 may apply with parent or legal guardian consent.
             </p>
           </div>
 
           {/* Card 2 */}
-          <div className="bg-white rounded-3xl p-6 sm:p-7 border-2 border-slate-200 shadow-sm hover:shadow-md transition">
+          <div className="bg-white rounded-3xl p-6 sm:p-7 border-2 border-slate-200 shadow-sm hover:border-emerald-600 transition">
             <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-900 flex items-center justify-center font-black text-lg mb-4">
               02
             </div>
             <h3 className="font-extrabold text-slate-900 text-lg mb-2">Required Documents</h3>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              Prepare a clear recent <strong>2x2 ID photo</strong>, one <strong>valid government or student ID</strong>, and full details of your designated legal beneficiary.
+            <p className="text-sm text-slate-600 leading-relaxed font-normal">
+              Accomplish the online form, prepare a recent <strong>2×2 ID photo</strong>, one <strong>valid government/student ID</strong>, and legal beneficiary details.
             </p>
           </div>
 
           {/* Card 3 */}
-          <div className="bg-white rounded-3xl p-6 sm:p-7 border-2 border-slate-200 shadow-sm hover:shadow-md transition">
+          <div className="bg-white rounded-3xl p-6 sm:p-7 border-2 border-slate-200 shadow-sm hover:border-emerald-600 transition">
             <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-black text-lg mb-4">
               03
             </div>
             <h3 className="font-extrabold text-slate-900 text-lg mb-2">Voluntary Sadaqah</h3>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              Members participate through regular, voluntary monthly Sadaqah based on their financial capacity. There is no rigid fixed fee.
+            <p className="text-sm text-slate-600 leading-relaxed font-normal">
+              <strong>No fixed membership fee.</strong> Members give voluntary monthly Sadaqah according to their financial capacity to sustain mutual aid.
             </p>
           </div>
         </div>
 
-        {/* Hadith Highlight */}
+        {/* Hadith Banner */}
         <div className="mt-8 bg-gradient-to-r from-amber-50 to-emerald-50 border-2 border-amber-300 rounded-3xl p-6 sm:p-7 shadow-sm flex items-start gap-4">
           <div className="w-12 h-12 rounded-2xl bg-amber-400/30 text-amber-900 flex items-center justify-center flex-shrink-0 mt-0.5">
             <Quote className="w-6 h-6" />
@@ -188,8 +397,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 4-Step Application Process Section */}
-      <section className="py-14 bg-white border-y-2 border-slate-200">
+      {/* SECTION: APPLICATION PROCESS */}
+      <section id="process" className="py-14 bg-white border-y-2 border-slate-200 scroll-mt-14">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto mb-10">
             <span className="text-xs font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full inline-block mb-2">
@@ -205,7 +414,7 @@ export default function HomePage() {
               <span className="font-mono text-xs font-black text-emerald-700 block mb-1">STEP 01</span>
               <h4 className="font-extrabold text-slate-900 text-base mb-1">Online Application</h4>
               <p className="text-xs sm:text-sm text-slate-600 font-medium">
-                Complete your personal information and designate your legal beneficiary.
+                Complete your personal details and nominate your legal beneficiary.
               </p>
             </div>
 
@@ -213,7 +422,7 @@ export default function HomePage() {
               <span className="font-mono text-xs font-black text-emerald-700 block mb-1">STEP 02</span>
               <h4 className="font-extrabold text-slate-900 text-base mb-1">Document Upload</h4>
               <p className="text-xs sm:text-sm text-slate-600 font-medium">
-                Attach your recent 2x2 ID photo and valid government or student ID.
+                Attach your 2x2 ID photo and valid ID (or submit later to office).
               </p>
             </div>
 
@@ -221,7 +430,7 @@ export default function HomePage() {
               <span className="font-mono text-xs font-black text-emerald-700 block mb-1">STEP 03</span>
               <h4 className="font-extrabold text-slate-900 text-base mb-1">Review &amp; Orientation</h4>
               <p className="text-xs sm:text-sm text-slate-600 font-medium">
-                The committee verifies requirements and conducts the member briefing.
+                Committee validates requirements and provides orientation on Sadaqah.
               </p>
             </div>
 
@@ -229,7 +438,7 @@ export default function HomePage() {
               <span className="font-mono text-xs font-black text-emerald-700 block mb-1">STEP 04</span>
               <h4 className="font-extrabold text-slate-900 text-base mb-1">Registry Activation</h4>
               <p className="text-xs sm:text-sm text-slate-600 font-medium">
-                Initial Sadaqah is set up and your official Member ID is recorded.
+                Initial voluntary contribution recorded and Member ID activated.
               </p>
             </div>
           </div>

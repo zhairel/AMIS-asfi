@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getExpectedAdminToken } from '@/lib/adminAuth';
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,16 +13,20 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const sessionToken = getExpectedAdminToken();
+
     const response = NextResponse.json({
       success: true,
       message: 'Admin authenticated successfully.',
+      token: sessionToken,
     });
 
-    // Set simple admin session cookie (lasts 7 days)
+    // Set secure admin session cookie (lasts 7 days)
     response.cookies.set({
       name: 'asfi_admin_auth',
-      value: 'authenticated_session_token',
-      httpOnly: false, // accessible to client for fast route check
+      value: sessionToken,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
       path: '/',
       maxAge: 60 * 60 * 24 * 7,
       sameSite: 'lax',

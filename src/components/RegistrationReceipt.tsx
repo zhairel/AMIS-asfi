@@ -42,8 +42,9 @@ export default function RegistrationReceipt({ referenceNumber, data, onReset }: 
       // Ignore if canvas confetti not supported
     }
 
-    // Generate QR code for application tracking
-    const verificationUrl = `https://asfi.amis.ph/verify?ref=${referenceNumber}`;
+    // Generate QR code for application tracking using current origin or production domain
+    const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://asfi.amis.edu.ph';
+    const verificationUrl = `${baseUrl}/verify?ref=${referenceNumber}`;
     QRCode.toDataURL(verificationUrl, {
       width: 180,
       margin: 1,
@@ -161,9 +162,19 @@ export default function RegistrationReceipt({ referenceNumber, data, onReset }: 
                   )}
                 </button>
               </div>
-              <span className="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-900">
-                PENDING VERIFICATION
-              </span>
+              <div className="flex items-center gap-2 mt-1">
+                <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-900">
+                  PENDING VERIFICATION
+                </span>
+                <a
+                  href={`/verify?ref=${referenceNumber}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="no-print text-[10px] font-bold text-emerald-700 hover:text-emerald-900 underline flex items-center gap-0.5"
+                >
+                  Verify Online →
+                </a>
+              </div>
             </div>
           </div>
         </div>
