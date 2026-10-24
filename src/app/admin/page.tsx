@@ -500,7 +500,7 @@ export default function AdminDashboardPage() {
                     return (
                       <tr
                         key={app.id || app.reference_number}
-                        onClick={() => router.push(`/admin/applications/${app.id || app.reference_number}`)}
+                        onClick={() => router.push(`/admin/applications/view/?id=${encodeURIComponent(app.id || app.reference_number)}`)}
                         className="hover:bg-slate-50/80 cursor-pointer transition group"
                       >
                         {/* Applicant Column with Avatar */}
@@ -586,7 +586,7 @@ export default function AdminDashboardPage() {
                               type="button"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                router.push(`/admin/applications/${app.id || app.reference_number}`);
+                                router.push(`/admin/applications/view/?id=${encodeURIComponent(app.id || app.reference_number)}`);
                               }}
                               className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-800 text-xs font-bold border border-slate-200 transition"
                             >

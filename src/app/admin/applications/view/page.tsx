@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import React, { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { DatabaseApplication } from '@/lib/supabase';
@@ -41,10 +41,23 @@ function toTitleCase(str: string | null | undefined): string {
     .join(' ');
 }
 
-export default function ApplicationDetailPage() {
+function ApplicationDetailContent() {
   const router = useRouter();
-  const params = useParams();
-  const id = params?.id as string;
+  const searchParams = useSearchParams();
+  const queryId = searchParams.get('id') || '';
+  const [id, setId] = useState<string>(queryId);
+
+  useEffect(() => {
+    if (queryId) {
+      setId(queryId);
+    } else if (typeof window !== 'undefined') {
+      const parts = window.location.pathname.split('/').filter(Boolean);
+      const last = parts[parts.length - 1];
+      if (last && last !== 'applications' && last !== 'view') {
+        setId(last);
+      }
+    }
+  }, [queryId]);
 
   const [application, setApplication] = useState<DatabaseApplication | null>(null);
   const [loading, setLoading] = useState(true);
@@ -878,3 +891,18 @@ export default function ApplicationDetailPage() {
     </div>
   );
 }
+
+export default function ApplicationDetailPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-slate-900 flex items-center justify-center p-6 text-white">
+          <RefreshCw className="w-8 h-8 text-emerald-500 animate-spin" />
+        </div>
+      }
+    >
+      <ApplicationDetailContent />
+    </Suspense>
+  );
+}
+
