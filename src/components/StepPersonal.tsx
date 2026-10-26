@@ -3,6 +3,7 @@
 import React from 'react';
 import { FormData, CivilStatus, Gender } from '@/types/form';
 import { User, ShieldAlert, AlertCircle, Building2 } from 'lucide-react';
+import ModernDatePicker from './ModernDatePicker';
 
 interface StepPersonalProps {
   data: FormData;
@@ -11,8 +12,7 @@ interface StepPersonalProps {
 }
 
 export default function StepPersonal({ data, updateData, errors }: StepPersonalProps) {
-  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const dobValue = e.target.value;
+  const handleDateChange = (dobValue: string) => {
     if (!dobValue) {
       updateData({ birthDate: '', age: null, isUnderage: false });
       return;
@@ -133,14 +133,12 @@ export default function StepPersonal({ data, updateData, errors }: StepPersonalP
           <label className="block text-sm font-extrabold text-slate-900 mb-1.5">
             Date of Birth <span className="text-rose-600 font-black">*</span>
           </label>
-          <input
-            type="date"
+          <ModernDatePicker
             value={data.birthDate}
             onChange={handleDateChange}
-            max={new Date().toISOString().split('T')[0]}
-            className={`w-full min-h-[50px] px-4 py-3 rounded-xl border-2 ${
-              errors.birthDate ? 'border-rose-500 bg-rose-50/70' : 'border-slate-300 bg-white'
-            } text-slate-900 text-base font-semibold focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none transition`}
+            maxDate={new Date().toISOString().split('T')[0]}
+            hasError={!!errors.birthDate}
+            placeholder="Select date of birth (MM/DD/YYYY)"
           />
           {errors.birthDate && (
             <p className="text-rose-600 font-bold text-xs mt-1.5 flex items-center gap-1">

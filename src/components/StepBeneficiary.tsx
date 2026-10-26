@@ -3,6 +3,7 @@
 import React from 'react';
 import { FormData } from '@/types/form';
 import { Users, AlertCircle, Copy, Check } from 'lucide-react';
+import ModernDatePicker from './ModernDatePicker';
 
 interface StepBeneficiaryProps {
   data: FormData;
@@ -177,12 +178,11 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
           <label className="block text-sm font-extrabold text-slate-900 mb-1.5">
             Beneficiary Date of Birth
           </label>
-          <input
-            type="date"
+          <ModernDatePicker
             value={data.beneficiaryBirthDate}
-            onChange={(e) => updateData({ beneficiaryBirthDate: e.target.value })}
-            max={new Date().toISOString().split('T')[0]}
-            className="w-full min-h-[50px] px-4 py-3 rounded-xl border-2 border-slate-300 bg-white text-slate-900 text-base font-semibold focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none transition"
+            onChange={(val) => updateData({ beneficiaryBirthDate: val })}
+            maxDate={new Date().toISOString().split('T')[0]}
+            placeholder="Select beneficiary date of birth (MM/DD/YYYY)"
           />
         </div>
 

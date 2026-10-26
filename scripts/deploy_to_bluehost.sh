@@ -9,14 +9,25 @@ ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$ROOT_DIR"
 
 echo "1. Building static export..."
+RESTORE_API=0
+if [ -d "src/app/api" ]; then
+  mv src/app/api src/app_api_dev
+  RESTORE_API=1
+fi
+
 NEXT_PUBLIC_APP_URL="https://asfi.amis.edu.ph" npm run build
+
+if [ "$RESTORE_API" = "1" ]; then
+  mv src/app_api_dev src/app/api
+fi
 
 echo "2. Assembling production package..."
 rm -rf deploy_pkg asfi_production_deploy.tar.gz
 mkdir -p deploy_pkg/api deploy_pkg/data deploy_pkg/uploads
 
-cp -rn out/* deploy_pkg/
+cp -r out/* deploy_pkg/
 cp -r php-api/* deploy_pkg/api/
+[ -f deploy_pkg/admin/index.html ] && cp deploy_pkg/admin/index.html deploy_pkg/admin/applications/index.html
 
 cat << 'EOF' > deploy_pkg/.htaccess
 # php -- BEGIN cPanel-generated handler, do not edit
