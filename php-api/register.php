@@ -29,6 +29,65 @@ if (!is_array($body)) {
     exit;
 }
 
+// Anti-Spam Check 1: Honeypot trap (Bots fill hidden fields)
+$honeypot = trim((string)($body['security_hp'] ?? $body['website_hp'] ?? ''));
+if ($honeypot !== '') {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'Automated submission rejected.']);
+    exit;
+}
+
+// Anti-Spam Check 2: Submission velocity check (Too fast = automated bot script)
+$startTime = isset($body['_formStartTime']) && is_numeric($body['_formStartTime']) ? (float)$body['_formStartTime'] : null;
+if ($startTime !== null && $startTime > 0) {
+    $nowMs = microtime(true) * 1000;
+    if (($nowMs - $startTime) < 2000) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Submission completed too fast. Please take time to review your registration form.']);
+        exit;
+    }
+}
+
+// Anti-Spam Check 3: Network IP Resolution & Rate Limiting (Flood Control)
+function get_client_ip(): string {
+    if (!empty($_SERVER['HTTP_CF_CONNECTING_IP'])) {
+        return trim(explode(',', $_SERVER['HTTP_CF_CONNECTING_IP'])[0]);
+    }
+    if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        return trim(explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0]);
+    }
+    return $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+}
+
+$clientIp = get_client_ip();
+$pdo = get_db();
+
+// Prune flood records older than 1 hour
+$oneHourAgo = time() - 3600;
+$pdo->exec("DELETE FROM registration_flood_control WHERE created_at < {$oneHourAgo}");
+
+// Limit to max 8 submissions per IP per 10 minutes (allows families but blocks spammers)
+$tenMinutesAgo = time() - 600;
+$floodCheck = $pdo->prepare("SELECT COUNT(*) FROM registration_flood_control WHERE ip_address = :ip AND created_at >= :since");
+$floodCheck->execute([':ip' => $clientIp, ':since' => $tenMinutesAgo]);
+if ((int)$floodCheck->fetchColumn() >= 8) {
+    http_response_code(429);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Registration limit reached for your network connection. To prevent spamming, please wait 5–10 minutes before submitting another application.'
+    ]);
+    exit;
+}
+
+// Anti-Spam Check 4: Payload size caps on uploads (prevent memory exhaustion)
+foreach (['photo2x2', 'applicantId', 'beneficiaryId', 'guardianId'] as $fileKey) {
+    if (!empty($body[$fileKey]) && is_string($body[$fileKey]) && strlen($body[$fileKey]) > 7 * 1024 * 1024) {
+        http_response_code(413);
+        echo json_encode(['success' => false, 'message' => "Uploaded {$fileKey} exceeds 5MB limit. Please upload a smaller file."]);
+        exit;
+    }
+}
+
 // 1. Required field validations
 $firstName = trim((string)($body['firstName'] ?? ''));
 $lastName = trim((string)($body['lastName'] ?? ''));
@@ -53,6 +112,48 @@ if (!$consentPrivacy || !$agreeTerms || !$certifyBene) {
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'All 3 declaration agreements must be accepted.']);
     exit;
+}
+
+// Anti-Spam Check 5: Duplicate Application Detection
+$birthDate = trim((string)($body['birthDate'] ?? ''));
+$contactNumber = trim((string)($body['contactNumber'] ?? ''));
+$upperFirst = mb_strtoupper($firstName, 'UTF-8');
+$upperLast = mb_strtoupper($lastName, 'UTF-8');
+
+// Check recent duplicate by name + birthdate in last 24h
+if ($birthDate !== '') {
+    $dupeStmt = $pdo->prepare("SELECT reference_number FROM applications 
+        WHERE first_name = :fn AND last_name = :ln AND birth_date = :bdate 
+        AND datetime(created_at) >= datetime('now', '-24 hours')
+        LIMIT 1");
+    $dupeStmt->execute([':fn' => $upperFirst, ':ln' => $upperLast, ':bdate' => $birthDate]);
+    $dup = $dupeStmt->fetch();
+    if ($dup) {
+        http_response_code(409);
+        echo json_encode([
+            'success' => false,
+            'message' => "A membership registration for {$upperFirst} {$upperLast} was already submitted recently (Reference No.: {$dup['reference_number']}). You do not need to register again."
+        ]);
+        exit;
+    }
+}
+
+// Check rapid resubmissions by same contact number in last 60 seconds
+if ($contactNumber !== '') {
+    $rapidStmt = $pdo->prepare("SELECT reference_number FROM applications 
+        WHERE contact_number = :contact 
+        AND datetime(created_at) >= datetime('now', '-60 seconds')
+        LIMIT 1");
+    $rapidStmt->execute([':contact' => $contactNumber]);
+    $rapid = $rapidStmt->fetch();
+    if ($rapid) {
+        http_response_code(409);
+        echo json_encode([
+            'success' => false,
+            'message' => "An application with this contact number was submitted just moments ago (Ref: {$rapid['reference_number']}). Please avoid multiple rapid submissions."
+        ]);
+        exit;
+    }
 }
 
 // 2. Generate unique ASFI Reference Number: ASFI-YYYY-XXXXX
@@ -180,6 +281,10 @@ try {
         ':date_applied' => (string)($body['dateApplied'] ?? date('Y-m-d')),
         ':created_at' => $now,
     ]);
+
+    // Record submission into flood control table to enforce rate limits
+    $logStmt = $pdo->prepare("INSERT INTO registration_flood_control (ip_address, action, created_at) VALUES (:ip, 'register', :t)");
+    $logStmt->execute([':ip' => $clientIp, ':t' => time()]);
 
     echo json_encode([
         'success' => true,

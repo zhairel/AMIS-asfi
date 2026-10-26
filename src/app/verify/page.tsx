@@ -22,6 +22,7 @@ import {
   Check,
   Award,
 } from 'lucide-react';
+import { SkeletonVerificationCard } from '@/components/SkeletonLoader';
 
 interface VerificationData {
   referenceNumber: string;
@@ -160,12 +161,7 @@ function VerifyContent() {
         </div>
 
         {/* Loading State */}
-        {loading && (
-          <div className="p-12 text-center text-slate-500 space-y-3 bg-white rounded-3xl border border-slate-200">
-            <RefreshCw className="w-8 h-8 animate-spin mx-auto text-emerald-700" />
-            <p className="font-bold text-slate-800 text-sm">Searching official registry database...</p>
-          </div>
-        )}
+        {loading && <SkeletonVerificationCard />}
 
         {/* Error / Not Found State */}
         {error && !loading && (

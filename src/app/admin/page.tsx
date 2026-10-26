@@ -32,6 +32,7 @@ import {
   ChevronRight,
   Filter,
 } from 'lucide-react';
+import { SkeletonTable } from '@/components/SkeletonLoader';
 
 // Format uppercase names into readable Title Case
 function toTitleCase(str: string | null | undefined): string {
@@ -467,10 +468,7 @@ export default function AdminDashboardPage() {
         {/* Data Table */}
         <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
           {loading ? (
-            <div className="p-16 text-center text-slate-500 font-semibold">
-              <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-3 text-emerald-700" />
-              Loading member applications...
-            </div>
+            <SkeletonTable rows={7} />
           ) : applications.length === 0 ? (
             <div className="p-16 text-center text-slate-500 space-y-2">
               <Users className="w-8 h-8 mx-auto text-slate-300" />

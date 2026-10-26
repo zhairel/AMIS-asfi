@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import RegisterNavbar from '@/components/RegisterNavbar';
 import ProgressBar from '@/components/ProgressBar';
 import StepPersonal from '@/components/StepPersonal';
@@ -9,8 +9,9 @@ import StepDocuments from '@/components/StepDocuments';
 import StepDeclarations from '@/components/StepDeclarations';
 import StepReview from '@/components/StepReview';
 import RegistrationReceipt from '@/components/RegistrationReceipt';
+import { SkeletonRegistrationForm } from '@/components/SkeletonLoader';
 import { FormData } from '@/types/form';
-import { ArrowLeft, ArrowRight, Send, Save, AlertCircle, RotateCcw, Sparkles, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Send, Save, AlertCircle, RotateCcw, Sparkles, X, ShieldAlert } from 'lucide-react';
 import { saveDraftState, loadDraftState, clearDraftState } from '@/lib/draftStorage';
 
 const initialFormData: FormData = {
@@ -80,9 +81,14 @@ export default function RegisterPage() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [submittedRef, setSubmittedRef] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
   const [autosaveNotice, setAutosaveNotice] = useState<boolean>(false);
   const [lastSavedTime, setLastSavedTime] = useState<string | null>(null);
   const [isInAppBrowser, setIsInAppBrowser] = useState<boolean>(false);
+  const [isMounted, setIsMounted] = useState<boolean>(false);
+  const [honeypot, setHoneypot] = useState<string>('');
+  const [formStartTime] = useState<number>(() => Date.now());
+  const isSubmittingRef = useRef<boolean>(false);
   const [draftPrompt, setDraftPrompt] = useState<{
     show: boolean;
     data: Partial<FormData>;
@@ -93,6 +99,7 @@ export default function RegisterPage() {
 
   // Check for saved draft and detect in-app browser on mount
   useEffect(() => {
+    setIsMounted(true);
     try {
       const ua = typeof navigator !== 'undefined' ? (navigator.userAgent || '') : '';
       const isFB = /FBAN|FBAV|Instagram|Messenger/i.test(ua);
@@ -238,6 +245,11 @@ export default function RegisterPage() {
   };
 
   const handleSubmit = async () => {
+    // Prevent double-clicking or rapid resubmissions
+    if (isSubmittingRef.current || isSubmitting) {
+      return;
+    }
+
     for (let s = 1; s <= 4; s++) {
       if (!validateStep(s)) {
         setStep(s);
@@ -245,12 +257,21 @@ export default function RegisterPage() {
       }
     }
 
+    isSubmittingRef.current = true;
     setIsSubmitting(true);
+    setSubmissionError(null);
+
     try {
+      const payload = {
+        ...formData,
+        security_hp: honeypot,
+        _formStartTime: formStartTime,
+      };
+
       const res = await fetch('/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       const json = await res.json();
@@ -259,13 +280,14 @@ export default function RegisterPage() {
         await clearDraftState();
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
-        alert(json.message || 'Failed to submit application.');
+        setSubmissionError(json.message || 'Failed to submit application.');
       }
     } catch (err) {
       console.error(err);
-      alert('Network error while submitting application. Please try again.');
+      setSubmissionError('Network error while submitting application. Please verify your connection and try again.');
     } finally {
       setIsSubmitting(false);
+      isSubmittingRef.current = false;
     }
   };
 
@@ -413,31 +435,47 @@ export default function RegisterPage() {
           />
 
           <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-4 sm:py-6">
-            {/* Live Autosave Status Strip */}
-            <div className="mb-3 flex items-center justify-between text-xs px-1">
-              <span className="text-slate-600 font-semibold hidden sm:inline">
-                Registration Progress: Step {step} of 5
-              </span>
-              {lastSavedTime ? (
-                <span className="inline-flex items-center gap-1.5 text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full font-bold ml-auto shadow-xs">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  Auto-saved at {lastSavedTime}
-                </span>
-              ) : (
-                <span className="inline-flex items-center gap-1.5 text-slate-400 font-medium ml-auto">
-                  <Save className="w-3.5 h-3.5" /> Auto-save enabled
-                </span>
-              )}
+            {/* Anti-Spam Honeypot Field */}
+            <div style={{ display: 'none', position: 'absolute', left: '-9999px', opacity: 0 }} aria-hidden="true">
+              <input
+                type="text"
+                name="security_hp"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+                tabIndex={-1}
+                autoComplete="off"
+              />
             </div>
 
-            <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-lg sm:shadow-xl p-5 sm:p-10 transition-all">
-              {step === 1 && (
-                <StepPersonal
-                  data={formData}
-                  updateData={updateData}
-                  errors={errors}
-                />
-              )}
+            {!isMounted ? (
+              <SkeletonRegistrationForm />
+            ) : (
+              <>
+                {/* Live Autosave Status Strip */}
+                <div className="mb-3 flex items-center justify-between text-xs px-1">
+                  <span className="text-slate-600 font-semibold hidden sm:inline">
+                    Registration Progress: Step {step} of 5
+                  </span>
+                  {lastSavedTime ? (
+                    <span className="inline-flex items-center gap-1.5 text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full font-bold ml-auto shadow-xs">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                      Auto-saved at {lastSavedTime}
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1.5 text-slate-400 font-medium ml-auto">
+                      <Save className="w-3.5 h-3.5" /> Auto-save enabled
+                    </span>
+                  )}
+                </div>
+
+                <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-lg sm:shadow-xl p-5 sm:p-10 transition-all">
+                  {step === 1 && (
+                    <StepPersonal
+                      data={formData}
+                      updateData={updateData}
+                      errors={errors}
+                    />
+                  )}
 
               {step === 2 && (
                 <StepBeneficiary
@@ -518,8 +556,62 @@ export default function RegisterPage() {
                 )}
               </div>
             </div>
+            </>
+            )}
           </main>
         </>
+      )}
+
+      {/* Submission In-Progress Overlay */}
+      {isSubmitting && (
+        <div className="fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 text-center shadow-2xl border-2 border-emerald-600/30 space-y-5">
+            <div className="w-16 h-16 rounded-3xl bg-emerald-100 text-emerald-800 flex items-center justify-center mx-auto shadow-inner">
+              <Send className="w-8 h-8 animate-bounce text-emerald-700" />
+            </div>
+            <div>
+              <h3 className="text-xl font-black text-slate-900">Securing &amp; Submitting Application</h3>
+              <p className="text-xs sm:text-sm text-slate-600 mt-2 font-medium leading-relaxed">
+                Please do not close or refresh your browser. We are validating your registration and generating your official ASFI reference number.
+              </p>
+            </div>
+            <div className="space-y-2 pt-1">
+              <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                <div className="h-full bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-500 rounded-full w-full animate-pulse" />
+              </div>
+              <div className="flex items-center justify-between text-[11px] font-bold text-slate-400">
+                <span>Anti-Spam Verification</span>
+                <span className="text-emerald-700">Connecting to SEC Registry...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Submission Error / Duplicate / Rate-Limit Modal */}
+      {submissionError && (
+        <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 text-center shadow-2xl border-2 border-rose-300 space-y-4">
+            <div className="w-14 h-14 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mx-auto shadow-inner">
+              <AlertCircle className="w-8 h-8" />
+            </div>
+            <div>
+              <h3 className="text-lg font-black text-slate-900">Registration Notice</h3>
+              <p className="text-xs sm:text-sm text-slate-600 mt-2 font-medium leading-relaxed">
+                {submissionError}
+              </p>
+            </div>
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => setSubmissionError(null)}
+                className="w-full py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-sm shadow-md transition active:scale-95"
+              >
+                Understand &amp; Close
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Footer */}

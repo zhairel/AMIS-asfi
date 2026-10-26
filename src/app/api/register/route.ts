@@ -52,6 +52,15 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
+    // Anti-Spam: Honeypot trap check
+    const honeypot = (body.security_hp || body.website_hp || '').trim();
+    if (honeypot) {
+      return NextResponse.json(
+        { success: false, message: 'Automated submission rejected.' },
+        { status: 400 }
+      );
+    }
+
     // Required fields validation
     if (!body.firstName?.trim() || !body.lastName?.trim()) {
       return NextResponse.json(

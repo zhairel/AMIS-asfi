@@ -20,9 +20,10 @@ function get_db(): PDO {
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     ]);
 
-    // WAL mode for high concurrency
+    // WAL mode and busy timeout for high concurrency under heavy registration traffic
     $pdo->exec('PRAGMA journal_mode = WAL;');
     $pdo->exec('PRAGMA synchronous = NORMAL;');
+    $pdo->exec('PRAGMA busy_timeout = 5000;');
 
     $pdo->exec("CREATE TABLE IF NOT EXISTS applications (
         id TEXT PRIMARY KEY,
@@ -82,6 +83,17 @@ function get_db(): PDO {
     $pdo->exec("CREATE INDEX IF NOT EXISTS idx_apps_ref ON applications(reference_number);");
     $pdo->exec("CREATE INDEX IF NOT EXISTS idx_apps_status ON applications(status);");
     $pdo->exec("CREATE INDEX IF NOT EXISTS idx_apps_created ON applications(created_at);");
+    $pdo->exec("CREATE INDEX IF NOT EXISTS idx_apps_dupe_check ON applications(first_name, last_name, birth_date);");
+    $pdo->exec("CREATE INDEX IF NOT EXISTS idx_apps_contact ON applications(contact_number);");
+
+    // Flood control & anti-spam rate limiting table
+    $pdo->exec("CREATE TABLE IF NOT EXISTS registration_flood_control (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        ip_address TEXT NOT NULL,
+        action TEXT NOT NULL,
+        created_at INTEGER NOT NULL
+    );");
+    $pdo->exec("CREATE INDEX IF NOT EXISTS idx_flood_ip ON registration_flood_control(ip_address, created_at);");
 
     // Seed initial records if table is completely empty
     $count = (int)$pdo->query("SELECT COUNT(*) FROM applications")->fetchColumn();

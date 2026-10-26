@@ -31,6 +31,7 @@ import {
   AlertCircle,
   ExternalLink,
 } from 'lucide-react';
+import { SkeletonApplicationView } from '@/components/SkeletonLoader';
 
 function toTitleCase(str: string | null | undefined): string {
   if (!str) return '';
@@ -176,14 +177,7 @@ function ApplicationDetailContent() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
-        <div className="text-center space-y-3">
-          <RefreshCw className="w-8 h-8 text-emerald-800 animate-spin mx-auto" />
-          <p className="font-bold text-slate-700 text-sm">Loading member application...</p>
-        </div>
-      </div>
-    );
+    return <SkeletonApplicationView />;
   }
 
   if (error || !application) {
