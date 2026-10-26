@@ -62,7 +62,7 @@ export default function AdminLoginPage() {
             Admin Access Portal
           </span>
           <h1 className="text-xl sm:text-2xl font-black text-slate-900">
-            AMIS SADAQAH FAMILY INC.
+            AMIS SADAQAH FOUNDATION INC.
           </h1>
           <p className="text-xs text-slate-500 font-semibold mt-1">
             SEC Registration No. 2026070258874-03

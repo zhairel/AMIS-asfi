@@ -1,5 +1,5 @@
 -- ==============================================================================
--- AMIS SADAQAH FAMILY INCORPORATED (ASFI) - Supabase Database Schema
+-- AMIS SADAQAH FOUNDATION INCORPORATED (ASFI) - Supabase Database Schema
 -- SEC Registration: 2026070258874-03
 -- ==============================================================================
 

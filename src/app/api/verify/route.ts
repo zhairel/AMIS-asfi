@@ -89,7 +89,7 @@ export async function GET(req: NextRequest) {
         affiliation: record.affiliation_name || 'Individual Member',
         dateApplied: record.date_applied || record.created_at?.split('T')[0],
         secRegistration: '2026070258874-03',
-        organization: 'AMIS SADAQAH FAMILY INCORPORATED',
+        organization: 'AMIS SADAQAH FOUNDATION INCORPORATED',
         headquarters: 'Don Julian Rodriguez Sr., Avenue, Ma-A Road, Davao City, Philippines',
         verifiedAt: new Date().toISOString(),
       },

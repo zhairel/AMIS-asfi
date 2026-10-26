@@ -27,7 +27,7 @@ export default function RegisterNavbar() {
           />
           <div className="truncate">
             <h1 className="text-xs sm:text-sm font-black tracking-tight text-white uppercase truncate">
-              AMIS Sadaqah Family Inc.
+              AMIS Sadaqah Foundation Inc.
             </h1>
             <p className="text-[10px] text-amber-300 font-medium truncate">
               SEC Reg. No. 2026070258874-03 · Membership Form

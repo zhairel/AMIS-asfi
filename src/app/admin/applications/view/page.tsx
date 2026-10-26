@@ -221,7 +221,7 @@ function ApplicationDetailContent() {
             </Link>
             <div className="h-4 w-px bg-slate-700 hidden sm:block"></div>
             <span className="text-xs font-extrabold text-slate-300 hidden sm:inline">
-              AMIS SADAQAH FAMILY INC.
+              AMIS SADAQAH FOUNDATION INC.
             </span>
           </div>
 

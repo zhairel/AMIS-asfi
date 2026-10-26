@@ -3,12 +3,12 @@ import './globals.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://asfi.amis.edu.ph'),
-  title: 'Membership Registration | AMIS Sadaqah Family Incorporated (ASFI)',
-  description: 'Official Online Membership Application for AMIS Sadaqah Family Incorporated (ASFI). SEC Reg. No. 2026070258874-03. Davao City, Philippines.',
-  keywords: ['ASFI', 'AMIS Sadaqah Family', 'Membership Application', 'Sadaqah Mutual Assistance', 'Davao City', 'Takaful'],
+  title: 'Membership Registration | AMIS Sadaqah Foundation Incorporated (ASFI)',
+  description: 'Official Online Membership Application for AMIS Sadaqah Foundation Incorporated (ASFI). SEC Reg. No. 2026070258874-03. Davao City, Philippines.',
+  keywords: ['ASFI', 'AMIS Sadaqah Foundation', 'Membership Application', 'Sadaqah Mutual Assistance', 'Davao City', 'Takaful'],
   openGraph: {
     title: 'ASFI Official Membership Registration',
-    description: 'Apply for membership in AMIS Sadaqah Family Incorporated. Halal mutual assistance through voluntary monthly Sadaqah.',
+    description: 'Apply for membership in AMIS Sadaqah Foundation Incorporated. Halal mutual assistance through voluntary monthly Sadaqah.',
     images: ['/asfi-logo.png'],
   },
 };

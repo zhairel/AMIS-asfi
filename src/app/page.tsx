@@ -102,7 +102,7 @@ export default function HomePage() {
             >
               <img
                 src="/asfi-logo.png"
-                alt="AMIS Sadaqah Family Incorporated Logo"
+                alt="AMIS Sadaqah Foundation Incorporated Logo"
                 width={128}
                 height={128}
                 style={{ width: '100%', height: '100%', objectFit: 'contain' }}
@@ -122,7 +122,7 @@ export default function HomePage() {
 
           {/* Title */}
           <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white max-w-3xl leading-tight">
-            AMIS SADAQAH FAMILY INCORPORATED
+            AMIS SADAQAH FOUNDATION INCORPORATED
           </h1>
 
           <p className="text-emerald-200 text-base sm:text-lg font-medium max-w-2xl mt-3 leading-relaxed">
@@ -179,7 +179,7 @@ export default function HomePage() {
             Organization Profile
           </span>
           <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900">
-            About AMIS Sadaqah Family
+            About AMIS Sadaqah Foundation
           </h2>
           <p className="text-slate-600 text-sm sm:text-base mt-2 font-medium">
             Reviving the Islamic spirit of Sadaqah through an organized, sustainable, and compassionate community in Davao City.
@@ -200,7 +200,7 @@ export default function HomePage() {
             </div>
 
             <p className="text-sm text-slate-700 leading-relaxed font-normal">
-              Started in early 2024 as <strong>AMIS Family</strong>, the initiative was built on the belief that no act of charity is too small when given sincerely for the sake of Allah (SWT). It now stands as an official <strong>SEC-registered, non-stock, non-profit corporation (SEC No. 2026070258874-03)</strong>.
+              Started in early 2024 as <strong>AMIS Sadaqah Foundation</strong>, the initiative was built on the belief that no act of charity is too small when given sincerely for the sake of Allah (SWT). It now stands as an official <strong>SEC-registered, non-stock, non-profit corporation (SEC No. 2026070258874-03)</strong>.
             </p>
 
             <div className="pt-2 border-t border-slate-100 space-y-2 text-xs text-slate-600">
@@ -459,7 +459,7 @@ export default function HomePage() {
       <section className="bg-emerald-950 text-white py-14 px-4 text-center mt-auto border-t-2 border-emerald-800/60">
         <div className="max-w-3xl mx-auto space-y-4">
           <h2 className="text-2xl sm:text-4xl font-extrabold">
-            Join the AMIS Sadaqah Family Today
+            Join the AMIS Sadaqah Foundation Today
           </h2>
           <p className="text-emerald-200 text-sm sm:text-base max-w-xl mx-auto font-medium leading-relaxed">
             Be part of our community of mutual care and Islamic charity. Your voluntary monthly Sadaqah brings blessings, protection, and mutual assistance.
@@ -489,7 +489,7 @@ export default function HomePage() {
               className="w-9 h-9 object-contain bg-white rounded-lg p-0.5"
             />
             <div>
-              <p className="font-bold text-slate-200 text-sm">AMIS SADAQAH FAMILY INCORPORATED</p>
+              <p className="font-bold text-slate-200 text-sm">AMIS SADAQAH FOUNDATION INCORPORATED</p>
               <p className="text-xs text-slate-500">
                 SEC Registration No.: 2026070258874-03 · Non-stock · Non-profit Foundation
               </p>

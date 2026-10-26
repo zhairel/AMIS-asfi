@@ -333,7 +333,7 @@ function VerifyContent() {
 
       {/* Footer */}
       <footer className="bg-slate-900 text-slate-400 text-xs py-6 border-t border-slate-800 text-center">
-        <p className="font-bold text-slate-300">AMIS SADAQAH FAMILY INCORPORATED</p>
+        <p className="font-bold text-slate-300">AMIS SADAQAH FOUNDATION INCORPORATED</p>
         <p className="text-[11px] text-slate-500 mt-1">
           SEC Registration No. 2026070258874-03 · Official Public Verification Registry
         </p>

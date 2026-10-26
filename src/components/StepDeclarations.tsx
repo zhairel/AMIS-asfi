@@ -49,7 +49,7 @@ export default function StepDeclarations({ data, updateData, errors }: StepDecla
           <h2>Official Declaration &amp; Member Attestation</h2>
         </div>
         <p className="text-slate-700 text-sm sm:text-base mt-1.5 font-medium leading-relaxed">
-          Please review the three (3) official declarations mandated by AMIS Sadaqah Family Incorporated (ASFI) and confirm your attestation below.
+          Please review the three (3) official declarations mandated by AMIS Sadaqah Foundation Incorporated (ASFI) and confirm your attestation below.
         </p>
       </div>
 
@@ -140,7 +140,7 @@ export default function StepDeclarations({ data, updateData, errors }: StepDecla
               2. Terms, Conditions &amp; Voluntary Monthly Sadaqah *
             </strong>
             <p className="italic text-slate-700">
-              &ldquo;I understand the terms and conditions of AMIS Sadaqah Family Incorporated, including the requirement to make a monthly Sadaqah contribution of any amount for mutual assistance. I understand that such contribution does not guarantee any return or benefit to the member.&rdquo;
+              &ldquo;I understand the terms and conditions of AMIS Sadaqah Foundation Incorporated, including the requirement to make a monthly Sadaqah contribution of any amount for mutual assistance. I understand that such contribution does not guarantee any return or benefit to the member.&rdquo;
             </p>
           </div>
         </div>

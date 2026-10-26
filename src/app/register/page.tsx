@@ -527,7 +527,7 @@ export default function RegisterPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
           <div className="flex items-center gap-2.5 justify-center sm:justify-start">
             <img src="/asfi-logo.png" alt="ASFI Seal" className="w-6 h-6 object-contain" />
-            <p className="font-bold text-slate-300">AMIS SADAQAH FAMILY INCORPORATED</p>
+            <p className="font-bold text-slate-300">AMIS SADAQAH FOUNDATION INCORPORATED</p>
           </div>
           <p className="text-[11px] text-slate-500">
             SEC Reg. No.: 2026070258874-03 · Don Julian Rodriguez Sr., Ave, Davao City

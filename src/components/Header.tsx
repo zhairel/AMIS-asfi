@@ -22,7 +22,7 @@ export default function Header() {
             >
               <img
                 src="/asfi-logo.png"
-                alt="AMIS Sadaqah Family Incorporated Logo"
+                alt="AMIS Sadaqah Foundation Incorporated Logo"
                 width={96}
                 height={96}
                 style={{ width: '100%', height: '100%', objectFit: 'contain' }}
@@ -39,7 +39,7 @@ export default function Header() {
             </div>
 
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white leading-tight font-sans">
-              AMIS SADAQAH FAMILY INCORPORATED
+              AMIS SADAQAH FOUNDATION INCORPORATED
             </h1>
 
             <p className="text-emerald-200/90 text-sm sm:text-base font-medium mt-1">

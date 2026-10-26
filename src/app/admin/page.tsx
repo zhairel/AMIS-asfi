@@ -245,7 +245,7 @@ export default function AdminDashboardPage() {
                 )}
               </div>
               <p className="text-[11px] text-slate-400 font-medium">
-                Amis Sadaqah Family Inc. • SEC Reg. 2026070258874-03
+                AMIS Sadaqah Foundation Inc. • SEC Reg. 2026070258874-03
               </p>
             </div>
           </div>

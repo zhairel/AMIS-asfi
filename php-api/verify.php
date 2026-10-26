@@ -57,7 +57,7 @@ echo json_encode([
         'affiliation' => $row['affiliation_name'] ?: 'Individual Member',
         'dateApplied' => $dateApplied ?: date('Y-m-d'),
         'secRegistration' => '2026070258874-03',
-        'organization' => 'AMIS SADAQAH FAMILY INCORPORATED',
+        'organization' => 'AMIS SADAQAH FOUNDATION INCORPORATED',
         'headquarters' => 'Don Julian Rodriguez Sr., Avenue, Ma-A Road, Davao City, Philippines',
         'verifiedAt' => date('c'),
     ],

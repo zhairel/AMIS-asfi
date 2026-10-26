@@ -125,7 +125,7 @@ export default function RegistrationReceipt({ referenceNumber, data, onReset }: 
                 SEC Registration No.: 2026070258874-03
               </span>
               <h1 className="text-lg sm:text-xl font-black text-slate-900 leading-tight">
-                AMIS SADAQAH FAMILY INCORPORATED
+                AMIS SADAQAH FOUNDATION INCORPORATED
               </h1>
               <p className="text-xs text-slate-500 font-medium">
                 Official Membership Application &amp; Mutual Assistance Acknowledgment Slip
@@ -388,7 +388,7 @@ export default function RegistrationReceipt({ referenceNumber, data, onReset }: 
 
         {/* Footer Note */}
         <div className="text-[11px] text-slate-400 border-t border-slate-100 pt-3 flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
-          <span>AMIS Sadaqah Family Incorporated · SEC Reg. No. 2026070258874-03</span>
+          <span>AMIS Sadaqah Foundation Incorporated · SEC Reg. No. 2026070258874-03</span>
           <span>Please keep a copy of this slip or take a screenshot for your records.</span>
         </div>
       </div>

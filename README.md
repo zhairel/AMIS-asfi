@@ -1,6 +1,6 @@
-# AMIS SADAQAH FAMILY INCORPORATED (ASFI) - Online Membership & Admin Portal
+# AMIS SADAQAH FOUNDATION INCORPORATED (ASFI) - Online Membership & Admin Portal
 
-Official online membership registration, document verification, and administrative management portal for **AMIS SADAQAH FAMILY INCORPORATED (ASFI)**.
+Official online membership registration, document verification, and administrative management portal for **AMIS SADAQAH FOUNDATION INCORPORATED (ASFI)**.
 
 - **SEC Registration No.**: `2026070258874-03`
 - **Headquarters**: Don Julian Rodriguez Sr., Avenue, Ma-A Road, Davao City, Philippines
