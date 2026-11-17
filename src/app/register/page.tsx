@@ -6,6 +6,7 @@ import ProgressBar from '@/components/ProgressBar';
 import StepPersonal from '@/components/StepPersonal';
 import StepBeneficiary from '@/components/StepBeneficiary';
 import StepDocuments from '@/components/StepDocuments';
+import StepPayment from '@/components/StepPayment';
 import StepDeclarations from '@/components/StepDeclarations';
 import StepReview from '@/components/StepReview';
 import RegistrationReceipt from '@/components/RegistrationReceipt';
@@ -200,6 +201,8 @@ export default function RegisterPage() {
     } else if (stepNumber === 3) {
       // Document attachments are optional — applicants may upload now or submit later to the ASFI office
     } else if (stepNumber === 4) {
+      // Payment & bank deposit slip are optional — applicants may upload now or pay at the ASFI office
+    } else if (stepNumber === 5) {
       if (!formData.consentDataPrivacy) errs.consentDataPrivacy = 'Consent is required';
       if (!formData.agreeTermsAndConditions) errs.agreeTermsAndConditions = 'Agreement to Sadaqah policy is required';
       if (!formData.certifyLegalBeneficiary) errs.certifyLegalBeneficiary = 'Beneficiary certification is required';
@@ -222,7 +225,7 @@ export default function RegisterPage() {
   const handleNext = () => {
     if (validateStep(step)) {
       const nextCompleted = completedSteps.includes(step) ? completedSteps : [...completedSteps, step];
-      const nextStep = Math.min(step + 1, 5);
+      const nextStep = Math.min(step + 1, 6);
       setCompletedSteps(nextCompleted);
       setStep(nextStep);
       saveDraftState(formData, nextStep, nextCompleted);
@@ -252,7 +255,7 @@ export default function RegisterPage() {
       return;
     }
 
-    for (let s = 1; s <= 4; s++) {
+    for (let s = 1; s <= 5; s++) {
       if (!validateStep(s)) {
         setStep(s);
         return;
@@ -456,7 +459,7 @@ export default function RegisterPage() {
                 {/* Live Autosave Status Strip */}
                 <div className="mb-3 flex items-center justify-between text-xs px-1">
                   <span className="text-slate-600 font-semibold hidden sm:inline">
-                    Registration Progress: Step {step} of 5
+                    Registration Progress: Step {step} of 6
                   </span>
                   {lastSavedTime ? (
                     <span className="inline-flex items-center gap-1.5 text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full font-bold ml-auto shadow-xs">
@@ -496,7 +499,7 @@ export default function RegisterPage() {
               )}
 
               {step === 4 && (
-                <StepDeclarations
+                <StepPayment
                   data={formData}
                   updateData={updateData}
                   errors={errors}
@@ -504,6 +507,14 @@ export default function RegisterPage() {
               )}
 
               {step === 5 && (
+                <StepDeclarations
+                  data={formData}
+                  updateData={updateData}
+                  errors={errors}
+                />
+              )}
+
+              {step === 6 && (
                 <StepReview
                   data={formData}
                   goToStep={setStep}
@@ -525,7 +536,7 @@ export default function RegisterPage() {
                   <span className="hidden sm:inline" />
                 )}
 
-                {step < 5 ? (
+                {step < 6 ? (
                   <button
                     type="button"
                     onClick={handleNext}

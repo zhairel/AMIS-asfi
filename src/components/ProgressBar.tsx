@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { User, Users, FileUp, FileSignature, CheckCircle2, Check } from 'lucide-react';
+import { User, Users, FileUp, CreditCard, FileSignature, CheckCircle2, Check } from 'lucide-react';
 
 interface Step {
   id: number;
@@ -14,8 +14,9 @@ const steps: Step[] = [
   { id: 1, label: 'Personal Info', subLabel: 'Applicant Data', icon: User },
   { id: 2, label: 'Beneficiary', subLabel: 'Designation', icon: Users },
   { id: 3, label: 'Documents', subLabel: 'Photo & Valid ID', icon: FileUp },
-  { id: 4, label: 'Declaration', subLabel: 'Sadaqah & Attestation', icon: FileSignature },
-  { id: 5, label: 'Review', subLabel: 'Confirm & Submit', icon: CheckCircle2 },
+  { id: 4, label: 'Payment', subLabel: 'BDO Deposit & Fee', icon: CreditCard },
+  { id: 5, label: 'Declaration', subLabel: 'Sadaqah & Attestation', icon: FileSignature },
+  { id: 6, label: 'Review', subLabel: 'Confirm & Submit', icon: CheckCircle2 },
 ];
 
 interface ProgressBarProps {

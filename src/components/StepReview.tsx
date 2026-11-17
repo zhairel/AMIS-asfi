@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { FormData } from '@/types/form';
-import { CheckCircle2, User, Users, FileUp, FileSignature, Edit3, ShieldCheck, HeartHandshake, Info } from 'lucide-react';
+import { CheckCircle2, User, Users, FileUp, CreditCard, FileSignature, Edit3, ShieldCheck, HeartHandshake, Info } from 'lucide-react';
 
 interface StepReviewProps {
   data: FormData;
@@ -293,10 +293,64 @@ export default function StepReview({ data, goToStep }: StepReviewProps) {
               </div>
             )}
 
-            {/* Proof of Payment */}
-            <div className="text-center">
+            {/* Optional notice */}
+            <div className="w-full pt-4 border-t border-slate-100 flex items-center gap-2 text-xs text-slate-500 font-medium">
+              <Info className="w-4 h-4 text-slate-400 flex-shrink-0" />
+              <span>Document attachments are optional. Unattached requirements may be submitted to the ASFI office during verification.</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Section 4: Membership Fee & Bank Payment Card */}
+        <div className="bg-white rounded-3xl border-2 border-slate-300 shadow-sm overflow-hidden">
+          <div className="bg-slate-100/90 px-6 py-4 border-b-2 border-slate-200 flex items-center justify-between">
+            <div className="flex items-center gap-2.5 font-extrabold text-slate-900 text-base">
+              <CreditCard className="w-5 h-5 text-emerald-700" />
+              <span>Membership Fee &amp; Payment Details</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => goToStep(4)}
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-extrabold text-emerald-900 bg-emerald-100 hover:bg-emerald-200 px-3.5 py-1.5 rounded-xl border border-emerald-300 transition active:scale-95"
+            >
+              <Edit3 className="w-4 h-4" /> Edit
+            </button>
+          </div>
+
+          <div className="p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div className="space-y-3 flex-1 text-sm">
+              <div>
+                <span className="text-slate-500 font-bold block text-xs uppercase tracking-wider">
+                  Designated Bank
+                </span>
+                <strong className="text-slate-950 font-extrabold text-base">
+                  BDO Unibank (Banco De Oro)
+                </strong>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 text-xs">
+                <div>
+                  <span className="text-slate-500 block uppercase font-bold text-[11px]">
+                    Account Name:
+                  </span>
+                  <strong className="text-slate-900 font-bold text-sm uppercase">
+                    AMIS SADAQAH FAMILY INCORPORATED
+                  </strong>
+                </div>
+                <div>
+                  <span className="text-slate-500 block uppercase font-bold text-[11px]">
+                    Account Number:
+                  </span>
+                  <strong className="font-mono text-blue-950 font-black text-base">
+                    010470184019
+                  </strong>
+                </div>
+              </div>
+            </div>
+
+            {/* Proof of Payment Thumbnail */}
+            <div className="text-center flex-shrink-0">
               <span className="block text-xs font-black text-slate-800 mb-2">
-                Proof of Payment
+                Deposit Slip / Payment Receipt
               </span>
               {data.proofOfPayment ? (
                 <div className="w-44 h-32 mx-auto rounded-2xl overflow-hidden border-2 border-emerald-600 bg-slate-50 shadow-sm p-1 flex items-center justify-center">
@@ -304,20 +358,14 @@ export default function StepReview({ data, goToStep }: StepReviewProps) {
                 </div>
               ) : (
                 <div className="w-44 h-32 mx-auto rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium text-center p-2">
-                  Not attached (Optional / Pay Later)
+                  Not attached (Pay over the counter at ASFI office)
                 </div>
               )}
-            </div>
-
-            {/* Optional notice */}
-            <div className="w-full pt-4 border-t border-slate-100 flex items-center gap-2 text-xs text-slate-500 font-medium">
-              <Info className="w-4 h-4 text-slate-400 flex-shrink-0" />
-              <span>Document attachments are optional. Unattached requirements or fee deposits may be submitted to the ASFI office during verification.</span>
             </div>
           </div>
         </div>
 
-        {/* Section 4: Declarations & Attestation Card */}
+        {/* Section 5: Declarations & Attestation Card */}
         <div className="bg-white rounded-3xl border-2 border-slate-300 shadow-sm overflow-hidden">
           <div className="bg-slate-100/90 px-6 py-4 border-b-2 border-slate-200 flex items-center justify-between">
             <div className="flex items-center gap-2.5 font-extrabold text-slate-900 text-base">
@@ -326,7 +374,7 @@ export default function StepReview({ data, goToStep }: StepReviewProps) {
             </div>
             <button
               type="button"
-              onClick={() => goToStep(4)}
+              onClick={() => goToStep(5)}
               className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-extrabold text-emerald-900 bg-emerald-100 hover:bg-emerald-200 px-3.5 py-1.5 rounded-xl border border-emerald-300 transition active:scale-95"
             >
               <Edit3 className="w-4 h-4" /> Edit
