@@ -132,6 +132,8 @@ export async function POST(req: NextRequest) {
       beneficiary_id_name: body.beneficiaryIdName || null,
       guardian_id_url: body.guardianId || null,
       guardian_id_name: body.guardianIdName || null,
+      proof_of_payment_url: body.proofOfPayment || null,
+      proof_of_payment_name: body.proofOfPaymentName || null,
       consent_data_privacy: Boolean(body.consentDataPrivacy),
       agree_terms: Boolean(body.agreeTermsAndConditions),
       certify_beneficiary: Boolean(body.certifyLegalBeneficiary),
@@ -177,6 +179,14 @@ export async function POST(req: NextRequest) {
               applicationRecord.guardian_id_url,
               referenceNumber,
               'guardian_id'
+            );
+          }
+          if (applicationRecord.proof_of_payment_url?.startsWith('data:')) {
+            applicationRecord.proof_of_payment_url = await uploadDocToStorage(
+              supabaseAdmin,
+              applicationRecord.proof_of_payment_url,
+              referenceNumber,
+              'proof_of_payment'
             );
           }
 

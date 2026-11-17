@@ -80,7 +80,7 @@ if ((int)$floodCheck->fetchColumn() >= 8) {
 }
 
 // Anti-Spam Check 4: Payload size caps on uploads (prevent memory exhaustion)
-foreach (['photo2x2', 'applicantId', 'beneficiaryId', 'guardianId'] as $fileKey) {
+foreach (['photo2x2', 'applicantId', 'beneficiaryId', 'guardianId', 'proofOfPayment'] as $fileKey) {
     if (!empty($body[$fileKey]) && is_string($body[$fileKey]) && strlen($body[$fileKey]) > 7 * 1024 * 1024) {
         http_response_code(413);
         echo json_encode(['success' => false, 'message' => "Uploaded {$fileKey} exceeds 5MB limit. Please upload a smaller file."]);
@@ -201,6 +201,7 @@ $photo2x2Url = saveBase64File($body['photo2x2'] ?? null, $referenceNumber, 'phot
 $applicantIdUrl = saveBase64File($body['applicantId'] ?? null, $referenceNumber, 'applicant_id');
 $beneficiaryIdUrl = saveBase64File($body['beneficiaryId'] ?? null, $referenceNumber, 'beneficiary_id');
 $guardianIdUrl = saveBase64File($body['guardianId'] ?? null, $referenceNumber, 'guardian_id');
+$proofOfPaymentUrl = saveBase64File($body['proofOfPayment'] ?? null, $referenceNumber, 'proof_of_payment');
 
 // 4. Save to SQLite database
 try {
@@ -215,6 +216,7 @@ try {
         beneficiary_relationship, beneficiary_birth_date, beneficiary_place_of_birth, beneficiary_address, beneficiary_contact,
         photo_2x2_url, photo_2x2_name, applicant_id_url, applicant_id_name, applicant_id_type,
         beneficiary_id_url, beneficiary_id_name, guardian_id_url, guardian_id_name,
+        proof_of_payment_url, proof_of_payment_name,
         consent_data_privacy, agree_terms, certify_beneficiary, confirm_attestation,
         printed_name, date_applied, admin_notes, created_at
     ) VALUES (
@@ -226,6 +228,7 @@ try {
         :bene_rel, :bene_bdate, :bene_pob, :bene_addr, :bene_contact,
         :p2x2_url, :p2x2_name, :app_id_url, :app_id_name, :app_id_type,
         :bene_id_url, :bene_id_name, :guard_id_url, :guard_id_name,
+        :proof_pay_url, :proof_pay_name,
         :consent, :agree, :certify, :confirm,
         :printed_name, :date_applied, NULL, :created_at
     )");
@@ -273,6 +276,8 @@ try {
         ':bene_id_name' => (string)($body['beneficiaryIdName'] ?? null),
         ':guard_id_url' => $guardianIdUrl,
         ':guard_id_name' => (string)($body['guardianIdName'] ?? null),
+        ':proof_pay_url' => $proofOfPaymentUrl,
+        ':proof_pay_name' => (string)($body['proofOfPaymentName'] ?? ($proofOfPaymentUrl ? 'proof_of_payment.jpg' : null)),
         ':consent' => $consentPrivacy ? 1 : 0,
         ':agree' => $agreeTerms ? 1 : 0,
         ':certify' => $certifyBene ? 1 : 0,

@@ -63,6 +63,8 @@ const initialFormData: FormData = {
   beneficiaryIdName: '',
   guardianId: null,
   guardianIdName: '',
+  proofOfPayment: null,
+  proofOfPaymentName: '',
 
   // Step 4: Declarations & Attestation
   consentDataPrivacy: false,

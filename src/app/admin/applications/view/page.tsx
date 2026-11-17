@@ -747,6 +747,59 @@ function ApplicationDetailContent() {
                   </div>
                 </div>
               )}
+
+              {/* 5. Proof of Payment / Bank Deposit Slip */}
+              <div className="space-y-2 pt-2 border-t border-slate-100">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-slate-700 block">
+                    Proof of Payment / Deposit Slip
+                  </span>
+                  {application.proof_of_payment_url && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setLightboxImage({
+                          src: application.proof_of_payment_url!,
+                          title: `Proof of Payment - ${fullName}`,
+                        })
+                      }
+                      className="text-xs font-bold text-emerald-800 hover:text-emerald-700 flex items-center gap-1"
+                    >
+                      <Maximize2 className="w-3.5 h-3.5" /> Full Size
+                    </button>
+                  )}
+                </div>
+
+                {application.proof_of_payment_url ? (
+                  <div
+                    className="relative w-full h-48 rounded-xl overflow-hidden border border-slate-200 bg-slate-100 flex items-center justify-center group cursor-pointer"
+                    onClick={() =>
+                      setLightboxImage({
+                        src: application.proof_of_payment_url!,
+                        title: `Proof of Payment - ${fullName}`,
+                      })
+                    }
+                  >
+                    <img
+                      src={application.proof_of_payment_url}
+                      alt="Proof of Payment"
+                      className="w-full h-full object-contain p-2"
+                    />
+                    <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-bold text-xs gap-1.5">
+                      <Maximize2 className="w-4 h-4" /> Click to Inspect
+                    </div>
+                  </div>
+                ) : (
+                  <div className="w-full h-24 rounded-xl border border-dashed border-slate-300 bg-slate-50 flex items-center justify-center text-xs text-slate-400 font-medium">
+                    No payment proof attached (Pay at office / Unpaid)
+                  </div>
+                )}
+                {application.proof_of_payment_url && (
+                  <span className="text-[11px] text-slate-400 block truncate">
+                    {application.proof_of_payment_name || 'proof_of_payment.jpg'}
+                  </span>
+                )}
+              </div>
             </div>
 
             {/* Admin Verification Remarks Card */}

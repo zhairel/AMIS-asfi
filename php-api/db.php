@@ -69,6 +69,8 @@ function get_db(): PDO {
         beneficiary_id_name TEXT,
         guardian_id_url TEXT,
         guardian_id_name TEXT,
+        proof_of_payment_url TEXT,
+        proof_of_payment_name TEXT,
         consent_data_privacy INTEGER NOT NULL DEFAULT 1,
         agree_terms INTEGER NOT NULL DEFAULT 1,
         certify_beneficiary INTEGER NOT NULL DEFAULT 1,
@@ -79,6 +81,15 @@ function get_db(): PDO {
         created_at TEXT NOT NULL,
         updated_at TEXT
     )");
+
+    // Auto-migrate schema for existing databases
+    $cols = $pdo->query("PRAGMA table_info(applications)")->fetchAll(PDO::FETCH_COLUMN, 1);
+    if (!in_array('proof_of_payment_url', $cols, true)) {
+        $pdo->exec("ALTER TABLE applications ADD COLUMN proof_of_payment_url TEXT;");
+    }
+    if (!in_array('proof_of_payment_name', $cols, true)) {
+        $pdo->exec("ALTER TABLE applications ADD COLUMN proof_of_payment_name TEXT;");
+    }
 
     $pdo->exec("CREATE INDEX IF NOT EXISTS idx_apps_ref ON applications(reference_number);");
     $pdo->exec("CREATE INDEX IF NOT EXISTS idx_apps_status ON applications(status);");

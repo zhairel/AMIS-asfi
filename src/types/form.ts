@@ -50,6 +50,8 @@ export interface FormData {
   beneficiaryIdName?: string;
   guardianId: string | null; // Data URL (Required if underage)
   guardianIdName?: string;
+  proofOfPayment: string | null; // Data URL (Optional)
+  proofOfPaymentName?: string;
 
   // Step 4: Declarations & Attestation
   consentDataPrivacy: boolean;

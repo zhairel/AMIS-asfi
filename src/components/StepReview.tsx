@@ -293,10 +293,26 @@ export default function StepReview({ data, goToStep }: StepReviewProps) {
               </div>
             )}
 
+            {/* Proof of Payment */}
+            <div className="text-center">
+              <span className="block text-xs font-black text-slate-800 mb-2">
+                Proof of Payment
+              </span>
+              {data.proofOfPayment ? (
+                <div className="w-44 h-32 mx-auto rounded-2xl overflow-hidden border-2 border-emerald-600 bg-slate-50 shadow-sm p-1 flex items-center justify-center">
+                  <img src={data.proofOfPayment} alt="Proof of Payment" className="w-full h-full object-contain rounded-xl" />
+                </div>
+              ) : (
+                <div className="w-44 h-32 mx-auto rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium text-center p-2">
+                  Not attached (Optional / Pay Later)
+                </div>
+              )}
+            </div>
+
             {/* Optional notice */}
             <div className="w-full pt-4 border-t border-slate-100 flex items-center gap-2 text-xs text-slate-500 font-medium">
               <Info className="w-4 h-4 text-slate-400 flex-shrink-0" />
-              <span>Document attachments are optional. Unattached requirements may be submitted to the ASFI office during verification.</span>
+              <span>Document attachments are optional. Unattached requirements or fee deposits may be submitted to the ASFI office during verification.</span>
             </div>
           </div>
         </div>

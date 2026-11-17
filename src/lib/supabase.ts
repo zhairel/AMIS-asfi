@@ -78,6 +78,8 @@ export interface DatabaseApplication {
   beneficiary_id_name?: string | null;
   guardian_id_url?: string | null;
   guardian_id_name?: string | null;
+  proof_of_payment_url?: string | null;
+  proof_of_payment_name?: string | null;
   consent_data_privacy: boolean;
   agree_terms: boolean;
   certify_beneficiary: boolean;

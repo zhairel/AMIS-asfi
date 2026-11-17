@@ -386,6 +386,29 @@ export default function RegistrationReceipt({ referenceNumber, data, onReset }: 
           </div>
         </div>
 
+        {/* Official Bank Account Information */}
+        <div className="border-t border-slate-200 pt-3">
+          <div className="p-3 rounded-xl bg-blue-50/70 border border-blue-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+            <div>
+              <span className="font-extrabold text-blue-950 block text-xs">
+                Official BDO Account for Membership &amp; Sadaqah Contributions:
+              </span>
+              <p className="text-slate-600 text-[11px] mt-0.5">
+                BDO Unibank · <strong>AMIS SADAQAH FAMILY INCORPORATED</strong> · Acct #: <strong className="font-mono text-blue-950 text-xs">010470184019</strong> · Branch: Davao - Wood Lane Diversion Road
+              </p>
+            </div>
+            {data.proofOfPayment ? (
+              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-800 bg-emerald-100 border border-emerald-300 px-3 py-1 rounded-full flex-shrink-0">
+                <Check className="w-3.5 h-3.5 text-emerald-600" /> Proof of Payment Attached
+              </span>
+            ) : (
+              <span className="text-[11px] text-slate-500 font-medium flex-shrink-0">
+                May also be deposited / paid at the ASFI office
+              </span>
+            )}
+          </div>
+        </div>
+
         {/* Footer Note */}
         <div className="text-[11px] text-slate-400 border-t border-slate-100 pt-3 flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
           <span>AMIS Sadaqah Foundation Incorporated · SEC Reg. No. 2026070258874-03</span>
