@@ -174,10 +174,10 @@ export default function OfficialMembershipPrintForm({ data, isScreenPreview = fa
           <div
             className="absolute overflow-hidden flex items-center justify-center bg-white border border-slate-300 rounded-[2px]"
             style={{
-              top: '13.85%',
-              left: '77.50%',
-              width: '13.15%',
-              height: '11.25%',
+              top: '13.90%',
+              left: '77.52%',
+              width: '16.28%',
+              height: '11.58%',
               zIndex: 5,
             }}
           >
@@ -193,8 +193,8 @@ export default function OfficialMembershipPrintForm({ data, isScreenPreview = fa
             style={{
               top: '13.93%',
               left: '77.56%',
-              width: '13.05%',
-              height: '11.14%',
+              width: '16.24%',
+              height: '11.54%',
               zIndex: 5,
             }}
           >
