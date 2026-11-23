@@ -48,6 +48,14 @@ async function uploadDocToStorage(
   }
 }
 
+function sanitizeMiddle(val?: string | null): string {
+  const clean = (val || '').trim().toUpperCase();
+  if (['N/A', 'NA', 'NONE', 'N.A.', 'N/A.', '-', '.'].includes(clean)) {
+    return '';
+  }
+  return clean;
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -76,6 +84,27 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    if (!body.photo2x2 || !body.applicantId) {
+      return NextResponse.json(
+        { success: false, message: 'Recent 2x2 ID photo and Valid Identification Card photo are required.' },
+        { status: 400 }
+      );
+    }
+
+    if (body.isUnderage && !body.guardianId) {
+      return NextResponse.json(
+        { success: false, message: 'Parent or Legal Guardian valid ID photo is required for minor applicants.' },
+        { status: 400 }
+      );
+    }
+
+    if (!body.proofOfPayment) {
+      return NextResponse.json(
+        { success: false, message: 'Proof of payment (deposit slip or transfer screenshot) is required.' },
+        { status: 400 }
+      );
+    }
+
     if (!body.consentDataPrivacy || !body.agreeTermsAndConditions || !body.certifyLegalBeneficiary) {
       return NextResponse.json(
         { success: false, message: 'All 3 declaration agreements must be accepted.' },
@@ -93,9 +122,9 @@ export async function POST(req: NextRequest) {
       reference_number: referenceNumber,
       status: 'Pending',
       first_name: body.firstName.trim().toUpperCase(),
-      middle_name: body.middleName?.trim().toUpperCase() || '',
+      middle_name: sanitizeMiddle(body.middleName),
       last_name: body.lastName.trim().toUpperCase(),
-      suffix: body.suffix?.trim().toUpperCase() || '',
+      suffix: sanitizeMiddle(body.suffix),
       birth_date: body.birthDate,
       age: body.age !== undefined ? body.age : null,
       place_of_birth: body.placeOfBirth?.trim().toUpperCase() || '',
@@ -115,9 +144,9 @@ export async function POST(req: NextRequest) {
       guardian_relationship: body.guardianRelationship || '',
       guardian_contact: body.guardianContact?.trim() || '',
       beneficiary_first_name: body.beneficiaryFirstName.trim().toUpperCase(),
-      beneficiary_middle_name: body.beneficiaryMiddleName?.trim().toUpperCase() || '',
+      beneficiary_middle_name: sanitizeMiddle(body.beneficiaryMiddleName),
       beneficiary_last_name: body.beneficiaryLastName.trim().toUpperCase(),
-      beneficiary_suffix: body.beneficiarySuffix?.trim().toUpperCase() || '',
+      beneficiary_suffix: sanitizeMiddle(body.beneficiarySuffix),
       beneficiary_relationship: body.beneficiaryRelationship || '',
       beneficiary_birth_date: body.beneficiaryBirthDate || null,
       beneficiary_place_of_birth: body.beneficiaryPlaceOfBirth?.trim().toUpperCase() || '',

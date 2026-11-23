@@ -25,9 +25,8 @@ interface StepPaymentProps {
   errors?: Record<string, string>;
 }
 
-export default function StepPayment({ data, updateData }: StepPaymentProps) {
+export default function StepPayment({ data, updateData, errors = {} }: StepPaymentProps) {
   const paymentInputRef = useRef<HTMLInputElement>(null);
-  const [showPassbookModal, setShowPassbookModal] = useState(false);
   const [copiedAccountNo, setCopiedAccountNo] = useState(false);
 
   const handleCopyAccount = () => {
@@ -76,13 +75,13 @@ export default function StepPayment({ data, updateData }: StepPaymentProps) {
           <h2>Membership Contribution &amp; Payment Details</h2>
         </div>
         <p className="text-slate-700 text-sm sm:text-base mt-1.5 font-medium leading-relaxed">
-          Deposit or transfer your membership fee or voluntary Sadaqah to the official ASFI bank account. You may attach your proof of payment now, or complete your payment over the counter at the ASFI office.
+          Deposit or transfer your membership fee or voluntary Sadaqah to the official ASFI bank account below, then upload a clear photo or screenshot of your deposit slip or payment confirmation to proceed.
         </p>
       </div>
 
       {/* Official BDO Account Box */}
       <div className="rounded-3xl border-2 border-blue-200 bg-gradient-to-br from-blue-50/90 via-slate-50 to-emerald-50/60 p-5 sm:p-7 shadow-sm space-y-6">
-        {/* Account Title & Modal Button */}
+        {/* Account Title */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-5 border-b border-blue-200/80">
           <div className="flex items-center gap-3.5">
             <div className="w-14 h-14 rounded-2xl bg-blue-900 text-white flex items-center justify-center font-black text-sm tracking-wider shadow-md flex-shrink-0">
@@ -100,80 +99,80 @@ export default function StepPayment({ data, updateData }: StepPaymentProps) {
               </span>
             </div>
           </div>
-
-          <button
-            type="button"
-            onClick={() => setShowPassbookModal(true)}
-            className="inline-flex items-center gap-2 text-xs sm:text-sm font-extrabold text-blue-950 bg-blue-100 hover:bg-blue-200 border-2 border-blue-300 px-4 py-2.5 rounded-xl transition active:scale-95 shadow-xs flex-shrink-0"
-          >
-            <Eye className="w-4 h-4 text-blue-800" /> View Official Passbook
-          </button>
         </div>
 
-        {/* Bank Details 4-Column Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="p-4 bg-white rounded-2xl border-2 border-slate-200 shadow-2xs">
-            <span className="text-slate-500 text-xs font-bold block uppercase tracking-wider mb-1">
-              Bank
-            </span>
-            <strong className="text-slate-950 font-black text-base sm:text-lg block">
-              BDO Unibank
-            </strong>
-            <span className="text-[11px] text-slate-500 font-medium">Banco De Oro</span>
-          </div>
-
-          <div className="p-4 bg-white rounded-2xl border-2 border-blue-400 shadow-2xs relative">
-            <div className="flex items-center justify-between mb-1">
+        {/* Bank Details 2-Column Spacious Grid (Prevents text collision & overflow) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="p-5 bg-white rounded-2xl border-2 border-blue-400 shadow-2xs flex flex-col justify-between">
+            <div className="flex items-center justify-between gap-3 mb-2">
               <span className="text-blue-950 text-xs font-black uppercase tracking-wider">
                 Account Number
               </span>
               <button
                 type="button"
                 onClick={handleCopyAccount}
-                className="text-blue-900 hover:text-blue-950 font-bold text-xs inline-flex items-center gap-1 bg-blue-50 hover:bg-blue-100 px-2 py-0.5 rounded border border-blue-200 transition"
+                className="text-blue-900 hover:text-blue-950 font-bold text-xs inline-flex items-center gap-1.5 bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-lg border border-blue-200 transition flex-shrink-0"
                 title="Copy Account Number"
               >
                 {copiedAccountNo ? (
                   <>
-                    <Check className="w-3.5 h-3.5 text-emerald-600" /> Copied
+                    <Check className="w-3.5 h-3.5 text-emerald-600" /> Copied!
                   </>
                 ) : (
                   <>
-                    <Copy className="w-3.5 h-3.5" /> Copy
+                    <Copy className="w-3.5 h-3.5" /> Copy Number
                   </>
                 )}
               </button>
             </div>
-            <strong className="text-blue-950 font-mono font-black text-lg sm:text-xl tracking-wider block">
+            <strong className="text-blue-950 font-mono font-black text-xl sm:text-2xl tracking-wider block break-all my-0.5">
               010470184019
             </strong>
-            <span className="text-[11px] text-blue-800 font-medium">Tap copy to avoid errors</span>
+            <span className="text-xs text-blue-800 font-medium mt-1 block">
+              Tap Copy Number to avoid typing errors
+            </span>
           </div>
 
-          <div className="p-4 bg-white rounded-2xl border-2 border-slate-200 shadow-2xs">
-            <span className="text-slate-500 text-xs font-bold block uppercase tracking-wider mb-1">
+          <div className="p-5 bg-white rounded-2xl border-2 border-slate-200 shadow-2xs flex flex-col justify-between">
+            <span className="text-slate-500 text-xs font-bold block uppercase tracking-wider mb-1.5">
+              Bank Name
+            </span>
+            <strong className="text-slate-950 font-black text-lg sm:text-xl block">
+              BDO Unibank
+            </strong>
+            <span className="text-xs text-slate-500 font-medium mt-1 block">
+              Banco De Oro Universal Bank
+            </span>
+          </div>
+
+          <div className="p-5 bg-white rounded-2xl border-2 border-slate-200 shadow-2xs flex flex-col justify-between">
+            <span className="text-slate-500 text-xs font-bold block uppercase tracking-wider mb-1.5">
               Account Type
             </span>
-            <strong className="text-slate-950 font-black text-base sm:text-lg block">
+            <strong className="text-slate-950 font-black text-lg sm:text-xl block">
               Peso Savings
             </strong>
-            <span className="text-[11px] text-slate-500 font-medium">Regular Savings</span>
+            <span className="text-xs text-slate-500 font-medium mt-1 block">
+              Corporate Regular Savings Account
+            </span>
           </div>
 
-          <div className="p-4 bg-white rounded-2xl border-2 border-slate-200 shadow-2xs">
-            <span className="text-slate-500 text-xs font-bold block uppercase tracking-wider mb-1">
+          <div className="p-5 bg-white rounded-2xl border-2 border-slate-200 shadow-2xs flex flex-col justify-between">
+            <span className="text-slate-500 text-xs font-bold block uppercase tracking-wider mb-1.5">
               Branch of Account
             </span>
-            <strong className="text-slate-950 font-black text-xs sm:text-sm block leading-snug">
+            <strong className="text-slate-950 font-black text-sm sm:text-base block leading-snug">
               1047: Davao - Wood Lane Diversion Road
             </strong>
-            <span className="text-[11px] text-slate-500 font-medium">Davao City</span>
+            <span className="text-xs text-slate-500 font-medium mt-1 block">
+              Ma-a / Diversion Road, Davao City
+            </span>
           </div>
         </div>
 
         {/* Payment Channels Notice */}
-        <div className="p-4 bg-white/80 rounded-2xl border border-blue-200 text-xs sm:text-sm text-slate-700 leading-relaxed font-medium space-y-1">
-          <div className="font-extrabold text-blue-950 flex items-center gap-1.5 text-sm">
+        <div className="p-4 sm:p-5 bg-white/80 rounded-2xl border border-blue-200 text-xs sm:text-sm text-slate-700 leading-relaxed font-medium space-y-1.5">
+          <div className="font-extrabold text-blue-950 flex items-center gap-1.5 text-sm mb-1">
             <Info className="w-4 h-4 text-blue-700 flex-shrink-0" /> Accepted Payment Methods:
           </div>
           <p>
@@ -186,13 +185,19 @@ export default function StepPayment({ data, updateData }: StepPaymentProps) {
             3. <strong>Over-the-Counter Deposit:</strong> Any BDO branch nationwide.
           </p>
           <p>
-            4. <strong>ASFI Office:</strong> You may also pay directly in cash or check at the ASFI headquarters.
+            4. <strong>ASFI Office:</strong> Direct payment at the ASFI headquarters (upload your official ASFI payment receipt photo below).
           </p>
         </div>
       </div>
 
-      {/* Upload Proof of Payment Card */}
-      <div className="w-full bg-white rounded-3xl border-2 border-slate-300 hover:border-emerald-700 p-5 sm:p-6 transition-all shadow-sm">
+      {/* Upload Proof of Payment Card (REQUIRED) */}
+      <div
+        className={`w-full bg-white rounded-3xl border-2 p-5 sm:p-6 transition-all shadow-sm ${
+          errors.proofOfPayment
+            ? 'border-rose-500 bg-rose-50/20'
+            : 'border-slate-300 hover:border-emerald-700'
+        }`}
+      >
         {/* Card Header */}
         <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-200">
           <div className="flex items-center gap-3">
@@ -200,14 +205,14 @@ export default function StepPayment({ data, updateData }: StepPaymentProps) {
               <Receipt className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="font-extrabold text-slate-900 text-base sm:text-lg flex items-center gap-2">
-                Upload Deposit Slip or Transfer Screenshot
-                <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 font-bold border border-slate-300">
-                  Optional
+              <h3 className="font-extrabold text-slate-900 text-base sm:text-lg flex flex-wrap items-center gap-2">
+                <span>Upload Deposit Slip or Transfer Screenshot</span>
+                <span className="text-xs px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-700 font-extrabold border border-rose-200">
+                  Required *
                 </span>
               </h3>
-              <p className="text-xs sm:text-sm text-slate-600 font-medium">
-                Attach a clear photo of your bank deposit slip or transaction confirmation.
+              <p className="text-xs sm:text-sm text-slate-600 font-medium mt-0.5">
+                Attach a clear photo or screenshot of your bank deposit slip, online transfer confirmation, or official ASFI receipt.
               </p>
             </div>
           </div>
@@ -217,8 +222,8 @@ export default function StepPayment({ data, updateData }: StepPaymentProps) {
                 <CheckCircle className="w-4 h-4 text-emerald-600" /> Proof Attached
               </span>
             ) : (
-              <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-slate-500 bg-slate-100 px-3.5 py-1.5 rounded-full">
-                Optional / Pay at Office
+              <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-rose-700 bg-rose-100 border border-rose-200 px-3.5 py-1.5 rounded-full">
+                Required Upload
               </span>
             )}
           </div>
@@ -238,16 +243,20 @@ export default function StepPayment({ data, updateData }: StepPaymentProps) {
           ) : (
             <div
               onClick={() => paymentInputRef.current?.click()}
-              className="w-full sm:w-72 h-52 border-2 border-dashed border-emerald-500/70 hover:border-emerald-700 rounded-2xl flex flex-col items-center justify-center p-4 cursor-pointer bg-emerald-50/30 hover:bg-emerald-50/70 transition group flex-shrink-0"
+              className={`w-full sm:w-72 h-52 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center p-4 cursor-pointer transition group flex-shrink-0 ${
+                errors.proofOfPayment
+                  ? 'border-rose-400 bg-rose-50/50 hover:border-rose-600'
+                  : 'border-emerald-500/70 hover:border-emerald-700 bg-emerald-50/30 hover:bg-emerald-50/70'
+              }`}
             >
               <div className="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform shadow-sm">
                 <FileUp className="w-7 h-7" />
               </div>
               <span className="text-sm font-bold text-slate-900 group-hover:text-emerald-950 text-center">
-                Upload Payment Receipt
+                Upload Payment Receipt *
               </span>
               <span className="text-xs text-slate-500 mt-1 text-center">
-                Deposit slip, transfer screenshot, or PDF
+                Deposit slip, transfer screenshot, or receipt photo
               </span>
             </div>
           )}
@@ -258,9 +267,9 @@ export default function StepPayment({ data, updateData }: StepPaymentProps) {
               <h4 className="text-sm font-extrabold text-slate-800 mb-1.5">Receipt Guidelines:</h4>
               <ul className="text-xs sm:text-sm text-slate-600 space-y-1 font-medium list-disc list-inside">
                 <li>Make sure the transaction date, amount, and reference number are clear and readable</li>
-                <li>Avoid dark or blurred photos</li>
+                <li>Avoid dark, cropped, or blurred photos</li>
                 <li>Accepted formats: JPG, PNG, WEBP, PDF (Max 15MB)</li>
-                <li>Attachment is optional. You may also present your payment receipt in person at the ASFI office</li>
+                <li>Proof of payment image is <strong>required</strong> before proceeding to the next step</li>
               </ul>
 
               {data.proofOfPaymentName && (
@@ -271,25 +280,33 @@ export default function StepPayment({ data, updateData }: StepPaymentProps) {
               )}
             </div>
 
-            <div className="flex flex-wrap gap-3 pt-2">
-              <button
-                type="button"
-                onClick={() => paymentInputRef.current?.click()}
-                className="inline-flex items-center gap-2 min-h-[44px] px-5 py-2.5 rounded-xl font-extrabold text-sm text-white bg-emerald-800 hover:bg-emerald-700 shadow-sm transition active:scale-95"
-              >
-                <FileUp className="w-4 h-4" />
-                {data.proofOfPayment ? 'Replace Payment Slip' : 'Select Payment Slip File'}
-              </button>
-
-              {data.proofOfPayment && (
+            <div className="space-y-3 pt-2">
+              <div className="flex flex-wrap gap-3">
                 <button
                   type="button"
-                  onClick={() => updateData({ proofOfPayment: null, proofOfPaymentName: '' })}
-                  className="inline-flex items-center gap-2 min-h-[44px] px-4 py-2.5 rounded-xl font-bold text-sm text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition active:scale-95"
+                  onClick={() => paymentInputRef.current?.click()}
+                  className="inline-flex items-center gap-2 min-h-[44px] px-5 py-2.5 rounded-xl font-extrabold text-sm text-white bg-emerald-800 hover:bg-emerald-700 shadow-sm transition active:scale-95"
                 >
-                  <Trash2 className="w-4 h-4" />
-                  Remove
+                  <FileUp className="w-4 h-4" />
+                  {data.proofOfPayment ? 'Replace Payment Slip' : 'Select Payment Slip File'}
                 </button>
+
+                {data.proofOfPayment && (
+                  <button
+                    type="button"
+                    onClick={() => updateData({ proofOfPayment: null, proofOfPaymentName: '' })}
+                    className="inline-flex items-center gap-2 min-h-[44px] px-4 py-2.5 rounded-xl font-bold text-sm text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition active:scale-95"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    Remove
+                  </button>
+                )}
+              </div>
+
+              {errors.proofOfPayment && (
+                <p className="text-rose-600 text-xs sm:text-sm flex items-center gap-1.5 font-bold bg-rose-50 border border-rose-200 px-3.5 py-2 rounded-xl">
+                  <AlertCircle className="w-4 h-4 flex-shrink-0" /> {errors.proofOfPayment}
+                </p>
               )}
             </div>
           </div>
@@ -303,93 +320,6 @@ export default function StepPayment({ data, updateData }: StepPaymentProps) {
           />
         </div>
       </div>
-
-      {/* Official BDO Passbook Lightbox Modal */}
-      {showPassbookModal && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fade-in"
-          onClick={() => setShowPassbookModal(false)}
-        >
-          <div
-            className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-200 flex flex-col max-h-[90vh]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Modal Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-slate-50">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-blue-900 text-white flex items-center justify-center font-black text-xs flex-shrink-0">
-                  BDO
-                </div>
-                <div>
-                  <h3 className="font-extrabold text-slate-900 text-base sm:text-lg">
-                    Official BDO Passbook Verification
-                  </h3>
-                  <span className="text-xs text-slate-500 font-medium">
-                    AMIS SADAQAH FAMILY INCORPORATED
-                  </span>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowPassbookModal(false)}
-                className="w-9 h-9 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 flex items-center justify-center transition active:scale-95"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Modal Image Body */}
-            <div className="p-4 sm:p-6 overflow-y-auto flex-1 flex flex-col items-center justify-center bg-slate-100">
-              <div className="rounded-2xl overflow-hidden border-2 border-slate-300 shadow-lg bg-white max-w-full">
-                <img
-                  src="/asfi-bdo-passbook.png"
-                  alt="Official BDO Passbook - AMIS SADAQAH FAMILY INCORPORATED"
-                  className="w-full max-h-[60vh] object-contain"
-                />
-              </div>
-
-              {/* Passbook Quick Info */}
-              <div className="w-full mt-4 p-4 bg-white rounded-2xl border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-3 text-xs sm:text-sm">
-                <div>
-                  <span className="text-slate-500 font-bold block text-[11px] uppercase">
-                    Account Number
-                  </span>
-                  <span className="font-mono font-black text-blue-950 text-base">
-                    010470184019
-                  </span>
-                </div>
-
-                <div>
-                  <span className="text-slate-500 font-bold block text-[11px] uppercase">
-                    Account Name
-                  </span>
-                  <span className="font-black text-slate-900">
-                    AMIS SADAQAH FAMILY INCORPORATED
-                  </span>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={handleCopyAccount}
-                  className="inline-flex items-center gap-1.5 font-bold text-xs bg-blue-900 hover:bg-blue-800 text-white px-3.5 py-2 rounded-xl shadow-xs transition active:scale-95"
-                >
-                  {copiedAccountNo ? (
-                    <>
-                      <Check className="w-4 h-4 text-emerald-300" /> Copied!
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-4 h-4" /> Copy Account No.
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

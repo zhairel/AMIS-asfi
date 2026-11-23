@@ -199,9 +199,19 @@ export default function RegisterPage() {
       if (!formData.beneficiaryContact.trim()) errs.beneficiaryContact = 'Beneficiary contact number is required';
       if (!formData.beneficiaryAddress.trim()) errs.beneficiaryAddress = 'Beneficiary address is required';
     } else if (stepNumber === 3) {
-      // Document attachments are optional — applicants may upload now or submit later to the ASFI office
+      if (!formData.photo2x2) {
+        errs.photo2x2 = 'Recent 2×2 ID photo is required. Please upload a clear photo.';
+      }
+      if (!formData.applicantId) {
+        errs.applicantId = 'Valid Identification Card photo is required. Please upload your ID.';
+      }
+      if (formData.isUnderage && !formData.guardianId) {
+        errs.guardianId = 'Parent or Legal Guardian valid ID photo is required for minor applicants.';
+      }
     } else if (stepNumber === 4) {
-      // Payment & bank deposit slip are optional — applicants may upload now or pay at the ASFI office
+      if (!formData.proofOfPayment) {
+        errs.proofOfPayment = 'Proof of payment (deposit slip or transfer screenshot) is required. Please upload your receipt photo.';
+      }
     } else if (stepNumber === 5) {
       if (!formData.consentDataPrivacy) errs.consentDataPrivacy = 'Consent is required';
       if (!formData.agreeTermsAndConditions) errs.agreeTermsAndConditions = 'Agreement to Sadaqah policy is required';
@@ -216,7 +226,7 @@ export default function RegisterPage() {
     if (!isValid) {
       setToastMessage('Please complete all required fields before proceeding.');
       setTimeout(() => setToastMessage(null), 3500);
-      window.scrollTo({ top: 60, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     return isValid;
@@ -230,7 +240,7 @@ export default function RegisterPage() {
       setStep(nextStep);
       saveDraftState(formData, nextStep, nextCompleted);
       setLastSavedTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-      window.scrollTo({ top: 40, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -238,14 +248,14 @@ export default function RegisterPage() {
     const prevStep = Math.max(step - 1, 1);
     setStep(prevStep);
     saveDraftState(formData, prevStep, completedSteps);
-    window.scrollTo({ top: 40, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleStepClick = (targetStep: number) => {
     if (targetStep < step || validateStep(step)) {
       setStep(targetStep);
       saveDraftState(formData, targetStep, completedSteps);
-      window.scrollTo({ top: 40, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -368,7 +378,7 @@ export default function RegisterPage() {
               <div className="flex items-center justify-between text-xs">
                 <span className="text-slate-500 font-medium">Last Saved Step:</span>
                 <span className="font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">
-                  Step {draftPrompt.step} of 5 ({['Personal Info', 'Beneficiary', 'Documents', 'Declarations', 'Review'][draftPrompt.step - 1] || 'Step ' + draftPrompt.step})
+                  Step {draftPrompt.step} of 6 ({['Personal Info', 'Beneficiary', 'Documents', 'Payment', 'Declarations', 'Review'][draftPrompt.step - 1] || 'Step ' + draftPrompt.step})
                 </span>
               </div>
               {draftPrompt.savedAt && (

@@ -29,6 +29,15 @@ if (!is_array($body)) {
     exit;
 }
 
+// Helper: Clean middle names / suffixes so 'N/A', 'NONE', etc. are not stored
+function sanitize_middle_name($val): string {
+    $clean = mb_strtoupper(trim((string)$val), 'UTF-8');
+    if (in_array($clean, ['N/A', 'NA', 'NONE', 'N.A.', 'N/A.', '-', '.'])) {
+        return '';
+    }
+    return $clean;
+}
+
 // Anti-Spam Check 1: Honeypot trap (Bots fill hidden fields)
 $honeypot = trim((string)($body['security_hp'] ?? $body['website_hp'] ?? ''));
 if ($honeypot !== '') {
@@ -102,6 +111,24 @@ $beneLast = trim((string)($body['beneficiaryLastName'] ?? ''));
 if ($beneFirst === '' || $beneLast === '') {
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Beneficiary first name and last name are required.']);
+    exit;
+}
+
+if (empty($body['photo2x2']) || empty($body['applicantId'])) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'Recent 2x2 ID photo and Valid Identification Card photo are required.']);
+    exit;
+}
+
+if (!empty($body['isUnderage']) && empty($body['guardianId'])) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'Parent or Legal Guardian valid ID photo is required for minor applicants.']);
+    exit;
+}
+
+if (empty($body['proofOfPayment'])) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'Proof of payment (deposit slip or transfer screenshot) is required.']);
     exit;
 }
 
@@ -237,9 +264,9 @@ try {
         ':id' => $id,
         ':ref' => $referenceNumber,
         ':first_name' => mb_strtoupper($firstName, 'UTF-8'),
-        ':middle_name' => mb_strtoupper(trim((string)($body['middleName'] ?? '')), 'UTF-8'),
+        ':middle_name' => sanitize_middle_name($body['middleName'] ?? ''),
         ':last_name' => mb_strtoupper($lastName, 'UTF-8'),
-        ':suffix' => mb_strtoupper(trim((string)($body['suffix'] ?? '')), 'UTF-8'),
+        ':suffix' => sanitize_middle_name($body['suffix'] ?? ''),
         ':birth_date' => (string)($body['birthDate'] ?? ''),
         ':age' => isset($body['age']) && is_numeric($body['age']) ? (int)$body['age'] : null,
         ':place_of_birth' => mb_strtoupper(trim((string)($body['placeOfBirth'] ?? '')), 'UTF-8'),
@@ -259,9 +286,9 @@ try {
         ':guardian_relationship' => (string)($body['guardianRelationship'] ?? ''),
         ':guardian_contact' => trim((string)($body['guardianContact'] ?? '')),
         ':bene_first' => mb_strtoupper($beneFirst, 'UTF-8'),
-        ':bene_mid' => mb_strtoupper(trim((string)($body['beneficiaryMiddleName'] ?? '')), 'UTF-8'),
+        ':bene_mid' => sanitize_middle_name($body['beneficiaryMiddleName'] ?? ''),
         ':bene_last' => mb_strtoupper($beneLast, 'UTF-8'),
-        ':bene_suf' => mb_strtoupper(trim((string)($body['beneficiarySuffix'] ?? '')), 'UTF-8'),
+        ':bene_suf' => sanitize_middle_name($body['beneficiarySuffix'] ?? ''),
         ':bene_rel' => (string)($body['beneficiaryRelationship'] ?? ''),
         ':bene_bdate' => (string)($body['beneficiaryBirthDate'] ?? '') ?: null,
         ':bene_pob' => mb_strtoupper(trim((string)($body['beneficiaryPlaceOfBirth'] ?? '')), 'UTF-8'),

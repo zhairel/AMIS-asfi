@@ -33,7 +33,11 @@ if (!$row) {
     exit;
 }
 
-$middleInitial = !empty($row['middle_name']) ? mb_substr(trim($row['middle_name']), 0, 1, 'UTF-8') . '.' : '';
+$cleanMiddle = trim((string)($row['middle_name'] ?? ''));
+if (in_array(strtoupper($cleanMiddle), ['N/A', 'NA', 'NONE', 'N.A.', 'N/A.', '-', '.'], true)) {
+    $cleanMiddle = '';
+}
+$middleInitial = !empty($cleanMiddle) ? mb_substr($cleanMiddle, 0, 1, 'UTF-8') . '.' : '';
 $formattedName = trim(implode(' ', array_filter([
     $row['first_name'],
     $middleInitial,

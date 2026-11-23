@@ -67,12 +67,24 @@ export default function OfficialMembershipPrintForm({ data, isScreenPreview = fa
     return { d1: '', d2: '', m1: '', m2: '', y1: '', y2: '' };
   };
 
+  const cleanMiddle = (m?: string | null) => {
+    if (!m) return '';
+    const trimmed = m.trim();
+    if (['N/A', 'NA', 'NONE', 'N.A.', 'N/A.', '-', '.'].includes(trimmed.toUpperCase())) {
+      return '';
+    }
+    return trimmed;
+  };
+
   const applicantDob = parseDateDigits(data.birth_date);
   const beneficiaryDob = parseDateDigits(data.beneficiary_birth_date);
 
+  const beneficiaryMiddle = cleanMiddle(data.beneficiary_middle_name);
+  const applicantMiddle = cleanMiddle(data.middle_name);
+
   const beneficiaryFullName = [
     data.beneficiary_first_name,
-    data.beneficiary_middle_name,
+    beneficiaryMiddle,
     data.beneficiary_last_name,
     data.beneficiary_suffix,
   ]
@@ -82,7 +94,7 @@ export default function OfficialMembershipPrintForm({ data, isScreenPreview = fa
 
   const applicantFullName = [
     data.first_name,
-    data.middle_name,
+    applicantMiddle,
     data.last_name,
     data.suffix,
   ]
@@ -200,7 +212,7 @@ export default function OfficialMembershipPrintForm({ data, isScreenPreview = fa
             zIndex: 5,
           }}
         >
-          {data.middle_name || ''}
+          {applicantMiddle}
         </div>
 
         {/* Name: Family Name */}
@@ -552,7 +564,7 @@ export default function OfficialMembershipPrintForm({ data, isScreenPreview = fa
             zIndex: 5,
           }}
         >
-          {data.beneficiary_middle_name || ''}
+          {beneficiaryMiddle}
         </div>
 
         {/* Beneficiary Name: Family Name */}

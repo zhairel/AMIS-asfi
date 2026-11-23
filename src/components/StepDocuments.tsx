@@ -79,7 +79,7 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
           <h2>Membership Requirements &amp; Document Uploads</h2>
         </div>
         <p className="text-slate-700 text-sm sm:text-base mt-1.5 font-medium leading-relaxed">
-          Document uploads are optional. You may attach clear photos or scanned copies now (JPG, PNG, or WEBP), or submit physical photocopies to the ASFI office / membership committee later.
+          Upload clear, legible photos or scanned copies of your required identification documents (JPG, PNG, or WEBP; Maximum 5MB each) to proceed.
         </p>
       </div>
 
@@ -87,7 +87,9 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
       <div className="flex flex-col space-y-6">
         {/* Requirement 1: 2x2 Photo */}
         <div
-          className="w-full bg-white rounded-3xl border-2 p-5 sm:p-6 transition-all shadow-sm border-slate-300 hover:border-emerald-600"
+          className={`w-full bg-white rounded-3xl border-2 p-5 sm:p-6 transition-all shadow-sm ${
+            errors.photo2x2 ? 'border-rose-500 bg-rose-50/20' : 'border-slate-300 hover:border-emerald-600'
+          }`}
         >
           {/* Card Header */}
           <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-200">
@@ -98,8 +100,8 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
               <div>
                 <h3 className="font-extrabold text-slate-900 text-base sm:text-lg flex items-center gap-2">
                   Recent 2×2 ID Photo
-                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 font-bold">
-                    Optional
+                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-700 font-extrabold border border-rose-200">
+                    Required *
                   </span>
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-600 font-medium">
@@ -113,8 +115,8 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
                   <CheckCircle className="w-4 h-4 text-emerald-600" /> Photo Attached
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-slate-500 bg-slate-100 px-3.5 py-1.5 rounded-full">
-                  Optional
+                <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-rose-700 bg-rose-100 border border-rose-200 px-3.5 py-1.5 rounded-full">
+                  Required Upload
                 </span>
               )}
             </div>
@@ -165,25 +167,33 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
                 )}
               </div>
 
-              <div className="flex flex-wrap gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => photoInputRef.current?.click()}
-                  className="inline-flex items-center gap-2 min-h-[44px] px-5 py-2.5 rounded-xl font-extrabold text-sm text-white bg-emerald-800 hover:bg-emerald-700 shadow-sm transition active:scale-95"
-                >
-                  <Camera className="w-4 h-4" />
-                  {data.photo2x2 ? 'Replace Photo' : 'Select Photo File'}
-                </button>
-
-                {data.photo2x2 && (
+              <div className="space-y-2.5 pt-2">
+                <div className="flex flex-wrap gap-3">
                   <button
                     type="button"
-                    onClick={() => updateData({ photo2x2: null, photo2x2Name: '' })}
-                    className="inline-flex items-center gap-2 min-h-[44px] px-4 py-2.5 rounded-xl font-bold text-sm text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition active:scale-95"
+                    onClick={() => photoInputRef.current?.click()}
+                    className="inline-flex items-center gap-2 min-h-[44px] px-5 py-2.5 rounded-xl font-extrabold text-sm text-white bg-emerald-800 hover:bg-emerald-700 shadow-sm transition active:scale-95"
                   >
-                    <Trash2 className="w-4 h-4" />
-                    Remove
+                    <Camera className="w-4 h-4" />
+                    {data.photo2x2 ? 'Replace Photo' : 'Select Photo File'}
                   </button>
+
+                  {data.photo2x2 && (
+                    <button
+                      type="button"
+                      onClick={() => updateData({ photo2x2: null, photo2x2Name: '' })}
+                      className="inline-flex items-center gap-2 min-h-[44px] px-4 py-2.5 rounded-xl font-bold text-sm text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition active:scale-95"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      Remove
+                    </button>
+                  )}
+                </div>
+
+                {errors.photo2x2 && (
+                  <p className="text-rose-600 text-xs sm:text-sm flex items-center gap-1.5 font-bold bg-rose-50 border border-rose-200 px-3 py-1.5 rounded-xl">
+                    <AlertCircle className="w-4 h-4 flex-shrink-0" /> {errors.photo2x2}
+                  </p>
                 )}
               </div>
             </div>
@@ -199,7 +209,11 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
         </div>
 
         {/* Requirement 2: Valid Identification Card */}
-        <div className="w-full bg-white rounded-3xl border-2 border-slate-300 hover:border-emerald-600 p-5 sm:p-6 transition-all shadow-sm">
+        <div
+          className={`w-full bg-white rounded-3xl border-2 p-5 sm:p-6 transition-all shadow-sm ${
+            errors.applicantId ? 'border-rose-500 bg-rose-50/20' : 'border-slate-300 hover:border-emerald-600'
+          }`}
+        >
           {/* Card Header */}
           <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-200">
             <div className="flex items-center gap-3">
@@ -209,8 +223,8 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
               <div>
                 <h3 className="font-extrabold text-slate-900 text-base sm:text-lg flex items-center gap-2">
                   Valid Identification Card
-                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 font-bold">
-                    Optional
+                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-700 font-extrabold border border-rose-200">
+                    Required *
                   </span>
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-600 font-medium">
@@ -224,8 +238,8 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
                   <CheckCircle className="w-4 h-4 text-emerald-600" /> ID Attached
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-slate-500 bg-slate-100 px-3.5 py-1.5 rounded-full">
-                  Optional
+                <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-rose-700 bg-rose-100 border border-rose-200 px-3.5 py-1.5 rounded-full">
+                  Required Upload
                 </span>
               )}
             </div>
@@ -236,7 +250,7 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
             {/* ID Type Dropdown */}
             <div>
               <label className="block text-xs sm:text-sm font-extrabold text-slate-900 mb-1.5">
-                Select Type of ID Presented <span className="text-slate-500 font-normal text-xs">(Optional)</span>
+                Select Type of ID Presented <span className="text-rose-600 font-black">*</span>
               </label>
               <select
                 value={data.applicantIdType || ''}
@@ -296,25 +310,33 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
                   )}
                 </div>
 
-                <div className="flex flex-wrap gap-3 pt-2">
-                  <button
-                    type="button"
-                    onClick={() => idInputRef.current?.click()}
-                    className="inline-flex items-center gap-2 min-h-[44px] px-5 py-2.5 rounded-xl font-extrabold text-sm text-white bg-emerald-800 hover:bg-emerald-700 shadow-sm transition active:scale-95"
-                  >
-                    <FileUp className="w-4 h-4" />
-                    {data.applicantId ? 'Replace ID File' : 'Select ID File'}
-                  </button>
-
-                  {data.applicantId && (
+                <div className="space-y-2.5 pt-2">
+                  <div className="flex flex-wrap gap-3">
                     <button
                       type="button"
-                      onClick={() => updateData({ applicantId: null, applicantIdName: '' })}
-                      className="inline-flex items-center gap-2 min-h-[44px] px-4 py-2.5 rounded-xl font-bold text-sm text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition active:scale-95"
+                      onClick={() => idInputRef.current?.click()}
+                      className="inline-flex items-center gap-2 min-h-[44px] px-5 py-2.5 rounded-xl font-extrabold text-sm text-white bg-emerald-800 hover:bg-emerald-700 shadow-sm transition active:scale-95"
                     >
-                      <Trash2 className="w-4 h-4" />
-                      Remove
+                      <FileUp className="w-4 h-4" />
+                      {data.applicantId ? 'Replace ID File' : 'Select ID File'}
                     </button>
+
+                    {data.applicantId && (
+                      <button
+                        type="button"
+                        onClick={() => updateData({ applicantId: null, applicantIdName: '' })}
+                        className="inline-flex items-center gap-2 min-h-[44px] px-4 py-2.5 rounded-xl font-bold text-sm text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition active:scale-95"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        Remove
+                      </button>
+                    )}
+                  </div>
+
+                  {errors.applicantId && (
+                    <p className="text-rose-600 text-xs sm:text-sm flex items-center gap-1.5 font-bold bg-rose-50 border border-rose-200 px-3 py-1.5 rounded-xl">
+                      <AlertCircle className="w-4 h-4 flex-shrink-0" /> {errors.applicantId}
+                    </p>
                   )}
                 </div>
               </div>
@@ -437,7 +459,11 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
 
         {/* Requirement 4: Parent / Legal Guardian Valid ID (Conditional for Minors) */}
         {data.isUnderage && (
-          <div className="w-full bg-amber-50/70 rounded-3xl border-2 border-amber-400 p-5 sm:p-6 transition-all shadow-sm">
+          <div
+            className={`w-full bg-amber-50/70 rounded-3xl border-2 p-5 sm:p-6 transition-all shadow-sm ${
+              errors.guardianId ? 'border-rose-500' : 'border-amber-400'
+            }`}
+          >
             {/* Card Header */}
             <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-amber-200">
               <div className="flex items-center gap-3">
@@ -447,12 +473,12 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
                 <div>
                   <h3 className="font-extrabold text-amber-950 text-base sm:text-lg flex items-center gap-2">
                     Parent / Legal Guardian Valid ID
-                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 font-bold">
-                      Optional
+                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-700 font-extrabold border border-rose-200">
+                      Required for Minors *
                     </span>
                   </h3>
                   <p className="text-xs sm:text-sm text-amber-900 font-medium">
-                    Because applicant is under 18 years old, a valid ID of the authorizing parent or guardian may be uploaded or submitted to the office.
+                    Because applicant is under 18 years old, a valid ID of the authorizing parent or guardian is required.
                   </p>
                 </div>
               </div>
@@ -462,8 +488,8 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
                     <CheckCircle className="w-4 h-4 text-emerald-600" /> Attached
                   </span>
                 ) : (
-                  <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-slate-500 bg-slate-100 px-3.5 py-1.5 rounded-full">
-                    Optional
+                  <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-rose-700 bg-rose-100 border border-rose-200 px-3.5 py-1.5 rounded-full">
+                    Required Upload
                   </span>
                 )}
               </div>
@@ -508,25 +534,33 @@ export default function StepDocuments({ data, updateData, errors }: StepDocument
                   )}
                 </div>
 
-                <div className="flex flex-wrap gap-3 pt-2">
-                  <button
-                    type="button"
-                    onClick={() => guardianIdInputRef.current?.click()}
-                    className="inline-flex items-center gap-2 min-h-[44px] px-5 py-2.5 rounded-xl font-extrabold text-sm text-white bg-amber-900 hover:bg-amber-800 shadow-sm transition active:scale-95"
-                  >
-                    <FileUp className="w-4 h-4" />
-                    {data.guardianId ? 'Replace Guardian ID' : 'Select Guardian ID File'}
-                  </button>
-
-                  {data.guardianId && (
+                <div className="space-y-2.5 pt-2">
+                  <div className="flex flex-wrap gap-3">
                     <button
                       type="button"
-                      onClick={() => updateData({ guardianId: null, guardianIdName: '' })}
-                      className="inline-flex items-center gap-2 min-h-[44px] px-4 py-2.5 rounded-xl font-bold text-sm text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition active:scale-95"
+                      onClick={() => guardianIdInputRef.current?.click()}
+                      className="inline-flex items-center gap-2 min-h-[44px] px-5 py-2.5 rounded-xl font-extrabold text-sm text-white bg-amber-900 hover:bg-amber-800 shadow-sm transition active:scale-95"
                     >
-                      <Trash2 className="w-4 h-4" />
-                      Remove
+                      <FileUp className="w-4 h-4" />
+                      {data.guardianId ? 'Replace Guardian ID' : 'Select Guardian ID File'}
                     </button>
+
+                    {data.guardianId && (
+                      <button
+                        type="button"
+                        onClick={() => updateData({ guardianId: null, guardianIdName: '' })}
+                        className="inline-flex items-center gap-2 min-h-[44px] px-4 py-2.5 rounded-xl font-bold text-sm text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition active:scale-95"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        Remove
+                      </button>
+                    )}
+                  </div>
+
+                  {errors.guardianId && (
+                    <p className="text-rose-600 text-xs sm:text-sm flex items-center gap-1.5 font-bold bg-rose-50 border border-rose-200 px-3 py-1.5 rounded-xl">
+                      <AlertCircle className="w-4 h-4 flex-shrink-0" /> {errors.guardianId}
+                    </p>
                   )}
                 </div>
               </div>

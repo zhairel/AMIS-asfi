@@ -34,7 +34,27 @@ import {
 } from 'lucide-react';
 import { SkeletonTable } from '@/components/SkeletonLoader';
 
-// Format uppercase names into readable Title Case
+// Format full names strictly in UPPERCASE and omit 'N/A' or missing middle names
+function formatFullName(
+  first: string | null | undefined,
+  middle: string | null | undefined,
+  last: string | null | undefined,
+  suffix?: string | null | undefined
+): string {
+  const f = (first || '').trim().toUpperCase();
+  let m = (middle || '').trim().toUpperCase();
+  if (['N/A', 'NA', 'NONE', 'N.A.', 'N/A.', '-', '.'].includes(m)) {
+    m = '';
+  }
+  const l = (last || '').trim().toUpperCase();
+  let s = (suffix || '').trim().toUpperCase();
+  if (['N/A', 'NA', 'NONE', 'N.A.', 'N/A.', '-', '.'].includes(s)) {
+    s = '';
+  }
+  return [f, m, l, s].filter(Boolean).join(' ');
+}
+
+// Format uppercase names into readable Title Case (for address and notes)
 function toTitleCase(str: string | null | undefined): string {
   if (!str) return '';
   return str
@@ -553,8 +573,8 @@ export default function AdminDashboardPage() {
                 </thead>
                 <tbody className="divide-y divide-slate-100 font-medium">
                   {applications.map((app) => {
-                    const fullName = `${toTitleCase(app.first_name)} ${toTitleCase(app.middle_name)} ${toTitleCase(app.last_name)} ${app.suffix || ''}`.trim();
-                    const beneficiaryName = `${toTitleCase(app.beneficiary_first_name)} ${toTitleCase(app.beneficiary_last_name)}`.trim();
+                    const fullName = formatFullName(app.first_name, app.middle_name, app.last_name, app.suffix);
+                    const beneficiaryName = formatFullName(app.beneficiary_first_name, app.beneficiary_middle_name, app.beneficiary_last_name, app.beneficiary_suffix);
 
                     return (
                       <tr
@@ -574,17 +594,22 @@ export default function AdminDashboardPage() {
                                 />
                               </div>
                             ) : (
-                              <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-800 font-extrabold text-xs flex items-center justify-center ring-2 ring-emerald-50 flex-shrink-0">
+                              <div className="w-10 h-10 rounded-full bg-slate-100 text-slate-700 font-extrabold text-xs flex items-center justify-center ring-2 ring-slate-200 flex-shrink-0">
                                 {getInitials(app.first_name, app.last_name)}
                               </div>
                             )}
 
                             <div>
-                              <div className="font-bold text-slate-900 group-hover:text-emerald-900 transition flex items-center gap-1.5">
-                                {fullName}
+                              <div className="font-black text-slate-900 group-hover:text-emerald-900 transition flex items-center gap-1.5 flex-wrap">
+                                <span>{fullName}</span>
                                 {app.is_underage && (
                                   <span className="text-[10px] font-extrabold bg-purple-100 text-purple-800 px-1.5 py-0.2 rounded-md">
                                     Minor
+                                  </span>
+                                )}
+                                {!app.photo_2x2_url && (
+                                  <span className="text-[9px] font-extrabold bg-rose-50 text-rose-700 border border-rose-200 px-1.5 py-0.5 rounded uppercase tracking-tight">
+                                    Missing Upload Pic
                                   </span>
                                 )}
                               </div>

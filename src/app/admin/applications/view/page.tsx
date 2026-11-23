@@ -33,6 +33,26 @@ import {
 } from 'lucide-react';
 import { SkeletonApplicationView } from '@/components/SkeletonLoader';
 
+// Format full names strictly in UPPERCASE and omit 'N/A' or missing middle names
+function formatFullName(
+  first: string | null | undefined,
+  middle: string | null | undefined,
+  last: string | null | undefined,
+  suffix?: string | null | undefined
+): string {
+  const f = (first || '').trim().toUpperCase();
+  let m = (middle || '').trim().toUpperCase();
+  if (['N/A', 'NA', 'NONE', 'N.A.', 'N/A.', '-', '.'].includes(m)) {
+    m = '';
+  }
+  const l = (last || '').trim().toUpperCase();
+  let s = (suffix || '').trim().toUpperCase();
+  if (['N/A', 'NA', 'NONE', 'N.A.', 'N/A.', '-', '.'].includes(s)) {
+    s = '';
+  }
+  return [f, m, l, s].filter(Boolean).join(' ');
+}
+
 function toTitleCase(str: string | null | undefined): string {
   if (!str) return '';
   return str
@@ -198,8 +218,18 @@ function ApplicationDetailContent() {
     );
   }
 
-  const fullName = `${toTitleCase(application.first_name)} ${toTitleCase(application.middle_name)} ${toTitleCase(application.last_name)} ${application.suffix || ''}`.trim();
-  const beneficiaryFullName = `${toTitleCase(application.beneficiary_first_name)} ${toTitleCase(application.beneficiary_middle_name)} ${toTitleCase(application.beneficiary_last_name)} ${application.beneficiary_suffix || ''}`.trim();
+  const fullName = formatFullName(
+    application.first_name,
+    application.middle_name,
+    application.last_name,
+    application.suffix
+  );
+  const beneficiaryFullName = formatFullName(
+    application.beneficiary_first_name,
+    application.beneficiary_middle_name,
+    application.beneficiary_last_name,
+    application.beneficiary_suffix
+  );
 
   return (
     <div className="min-h-screen bg-slate-50/70 flex flex-col font-sans">
@@ -268,6 +298,11 @@ function ApplicationDetailContent() {
                 {application.is_underage && (
                   <span className="inline-flex items-center gap-1 text-xs font-extrabold bg-purple-100 text-purple-800 px-2.5 py-0.5 rounded-full border border-purple-200">
                     <ShieldAlert className="w-3 h-3" /> Minor Applicant (&lt;18)
+                  </span>
+                )}
+                {!application.photo_2x2_url && (
+                  <span className="inline-flex items-center gap-1 text-xs font-extrabold bg-rose-50 text-rose-700 border border-rose-200 px-2.5 py-0.5 rounded-full uppercase tracking-tight">
+                    Missing Upload Pic
                   </span>
                 )}
               </div>
@@ -818,6 +853,54 @@ function ApplicationDetailContent() {
               <p className="text-[11px] text-slate-500 font-medium">
                 Internal administrative notes (e.g. PhilSys ID cross-check, physical photo submission, interview notes).
               </p>
+
+              {/* Quick Preset Remark Buttons */}
+              <div className="space-y-1.5 pt-1">
+                <span className="text-[10px] text-slate-500 font-bold block">Quick Remark Presets:</span>
+                <div className="flex flex-wrap gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const note = 'Assalaamu alaikum,\n\nKindly attach your 2x2 photo to complete your registration.';
+                      setAdminNotes((prev) => (prev ? `${prev}\n\n${note}` : note));
+                    }}
+                    className="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold border border-slate-200 transition"
+                  >
+                    + Missing 2x2 Photo
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const note = 'Assalaamu alaikum,\n\nKindly attach a clear copy of your Valid Government ID.';
+                      setAdminNotes((prev) => (prev ? `${prev}\n\n${note}` : note));
+                    }}
+                    className="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold border border-slate-200 transition"
+                  >
+                    + Missing Valid ID
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const note = 'Assalaamu alaikum,\n\nKindly attach proof of transaction / deposit slip for membership fee (Php150).';
+                      setAdminNotes((prev) => (prev ? `${prev}\n\n${note}` : note));
+                    }}
+                    className="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold border border-slate-200 transition"
+                  >
+                    + Missing Payment Proof
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const note = 'Assalaamu alaikum,\n\nMissing upload pic, valid ID, and proof of transaction for membership fee. (Php150)';
+                      setAdminNotes(note);
+                    }}
+                    className="px-2 py-1 rounded bg-rose-50 hover:bg-rose-100 text-rose-800 text-[10px] font-bold border border-rose-200 transition"
+                  >
+                    + Missing All 3 (Pic, ID, Fee)
+                  </button>
+                </div>
+              </div>
+
               <textarea
                 rows={3}
                 value={adminNotes}

@@ -10,18 +10,34 @@ interface StepReviewProps {
 }
 
 export default function StepReview({ data, goToStep }: StepReviewProps) {
-  const applicantFullName = [data.firstName, data.middleName, data.lastName, data.suffix]
+  const cleanMiddle = (m?: string | null) => {
+    if (!m) return '';
+    const trimmed = m.trim();
+    if (['N/A', 'NA', 'NONE', 'N.A.', 'N/A.', '-', '.'].includes(trimmed.toUpperCase())) {
+      return '';
+    }
+    return trimmed;
+  };
+
+  const applicantFullName = [
+    data.firstName,
+    cleanMiddle(data.middleName),
+    data.lastName,
+    data.suffix,
+  ]
     .filter(Boolean)
-    .join(' ');
+    .join(' ')
+    .toUpperCase();
 
   const beneficiaryFullName = [
     data.beneficiaryFirstName,
-    data.beneficiaryMiddleName,
+    cleanMiddle(data.beneficiaryMiddleName),
     data.beneficiaryLastName,
     data.beneficiarySuffix,
   ]
     .filter(Boolean)
-    .join(' ');
+    .join(' ')
+    .toUpperCase();
 
   return (
     <div className="space-y-6">
@@ -251,8 +267,8 @@ export default function StepReview({ data, goToStep }: StepReviewProps) {
                   <img src={data.photo2x2} alt="2x2 preview" className="w-full h-full object-contain rounded-xl" />
                 </div>
               ) : (
-                <div className="w-32 h-32 mx-auto rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium text-center p-2">
-                  Not attached (Optional)
+                <div className="w-32 h-32 mx-auto rounded-2xl border-2 border-dashed border-rose-300 bg-rose-50 flex items-center justify-center text-rose-600 text-xs font-bold text-center p-2">
+                  Required Photo Missing
                 </div>
               )}
             </div>
@@ -260,15 +276,15 @@ export default function StepReview({ data, goToStep }: StepReviewProps) {
             {/* Valid ID */}
             <div className="text-center">
               <span className="block text-xs font-black text-slate-800 mb-2">
-                Valid ID ({data.applicantIdType?.split(' ')[0] || 'Optional'})
+                Valid ID ({data.applicantIdType?.split(' ')[0] || 'Required'})
               </span>
               {data.applicantId ? (
                 <div className="w-44 h-32 mx-auto rounded-2xl overflow-hidden border-2 border-emerald-600 bg-slate-50 shadow-sm p-1 flex items-center justify-center">
                   <img src={data.applicantId} alt="ID preview" className="w-full h-full object-contain rounded-xl" />
                 </div>
               ) : (
-                <div className="w-44 h-32 mx-auto rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium text-center p-2">
-                  Not attached (Optional)
+                <div className="w-44 h-32 mx-auto rounded-2xl border-2 border-dashed border-rose-300 bg-rose-50 flex items-center justify-center text-rose-600 text-xs font-bold text-center p-2">
+                  Required Valid ID Missing
                 </div>
               )}
             </div>
@@ -292,12 +308,6 @@ export default function StepReview({ data, goToStep }: StepReviewProps) {
                 </div>
               </div>
             )}
-
-            {/* Optional notice */}
-            <div className="w-full pt-4 border-t border-slate-100 flex items-center gap-2 text-xs text-slate-500 font-medium">
-              <Info className="w-4 h-4 text-slate-400 flex-shrink-0" />
-              <span>Document attachments are optional. Unattached requirements may be submitted to the ASFI office during verification.</span>
-            </div>
           </div>
         </div>
 
@@ -357,8 +367,8 @@ export default function StepReview({ data, goToStep }: StepReviewProps) {
                   <img src={data.proofOfPayment} alt="Proof of Payment" className="w-full h-full object-contain rounded-xl" />
                 </div>
               ) : (
-                <div className="w-44 h-32 mx-auto rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-medium text-center p-2">
-                  Not attached (Pay over the counter at ASFI office)
+                <div className="w-44 h-32 mx-auto rounded-2xl border-2 border-dashed border-rose-300 bg-rose-50 flex items-center justify-center text-rose-600 text-xs font-bold text-center p-2">
+                  Required Payment Proof Missing
                 </div>
               )}
             </div>

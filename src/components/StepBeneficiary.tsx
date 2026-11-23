@@ -78,11 +78,11 @@ export default function StepBeneficiary({ data, updateData, errors }: StepBenefi
 
           <div>
             <span className="block text-xs sm:text-sm font-extrabold text-slate-800 mb-1.5">
-              Middle Name <span className="text-slate-400 font-normal text-xs">(or N/A)</span>
+              Middle Name <span className="text-slate-400 font-normal text-xs">(Optional - leave blank if none)</span>
             </span>
             <input
               type="text"
-              placeholder="e.g. Santos (or N/A)"
+              placeholder="e.g. Santos (leave blank if none)"
               value={data.beneficiaryMiddleName}
               onChange={(e) => updateData({ beneficiaryMiddleName: e.target.value })}
               className="w-full min-h-[50px] px-4 py-3 rounded-xl border-2 border-slate-300 bg-white text-slate-900 text-base font-semibold focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 outline-none transition"

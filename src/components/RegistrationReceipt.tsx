@@ -65,18 +65,34 @@ export default function RegistrationReceipt({ referenceNumber, data, onReset }: 
     window.print();
   };
 
-  const applicantFullName = [data.firstName, data.middleName, data.lastName, data.suffix]
+  const cleanMiddle = (m?: string | null) => {
+    if (!m) return '';
+    const trimmed = m.trim();
+    if (['N/A', 'NA', 'NONE', 'N.A.', 'N/A.', '-', '.'].includes(trimmed.toUpperCase())) {
+      return '';
+    }
+    return trimmed;
+  };
+
+  const applicantFullName = [
+    data.firstName,
+    cleanMiddle(data.middleName),
+    data.lastName,
+    data.suffix,
+  ]
     .filter(Boolean)
-    .join(' ');
+    .join(' ')
+    .toUpperCase();
 
   const beneficiaryFullName = [
     data.beneficiaryFirstName,
-    data.beneficiaryMiddleName,
+    cleanMiddle(data.beneficiaryMiddleName),
     data.beneficiaryLastName,
     data.beneficiarySuffix,
   ]
     .filter(Boolean)
-    .join(' ');
+    .join(' ')
+    .toUpperCase();
 
   return (
     <div className="space-y-6">
