@@ -102,6 +102,36 @@ export default function OfficialMembershipPrintForm({ data, isScreenPreview = fa
     .join(' ')
     .toUpperCase();
 
+  const applicantLastName = [data.last_name, data.suffix].filter(Boolean).join(' ').toUpperCase();
+  const beneLastName = [data.beneficiary_last_name, data.beneficiary_suffix].filter(Boolean).join(' ').toUpperCase();
+  const signatureName = (data.printed_name || applicantFullName).toUpperCase();
+
+  const autoFitText = (
+    text: string | null | undefined,
+    baseClass = 'text-[10.5pt]',
+    medClass = 'text-[9pt]',
+    smallClass = 'text-[8pt]',
+    xsClass = 'text-[7pt]',
+    t1 = 15,
+    t2 = 25,
+    t3 = 35
+  ): string => {
+    const len = (text || '').trim().length;
+    if (len > t3) return `${xsClass} leading-[1.05] break-words`;
+    if (len > t2) return `${smallClass} leading-[1.1] break-words`;
+    if (len > t1) return `${medClass} leading-tight break-words`;
+    return `${baseClass} leading-tight break-words`;
+  };
+
+  const getDeclNameClass = (name: string): string => {
+    const len = (name || '').trim().length;
+    if (len <= 18) return 'text-[10.5pt]';
+    if (len <= 26) return 'text-[9pt]';
+    if (len <= 34) return 'text-[8pt]';
+    if (len <= 42) return 'text-[7pt]';
+    return 'text-[6.5pt]';
+  };
+
   const isCivilStatus = (status: string) => {
     return (data.civil_status || '').trim().toLowerCase() === status.toLowerCase();
   };
@@ -142,12 +172,12 @@ export default function OfficialMembershipPrintForm({ data, isScreenPreview = fa
         {/* 2x2 Photo Frame */}
         {data.photo_2x2_url ? (
           <div
-            className="absolute overflow-hidden flex items-center justify-center bg-white"
+            className="absolute overflow-hidden flex items-center justify-center bg-white border border-slate-300 rounded-[2px]"
             style={{
-              top: '14.36%',
-              left: '78.16%',
-              width: '15.07%',
-              height: '10.68%',
+              top: '13.85%',
+              left: '77.50%',
+              width: '13.15%',
+              height: '11.25%',
               zIndex: 5,
             }}
           >
@@ -161,15 +191,15 @@ export default function OfficialMembershipPrintForm({ data, isScreenPreview = fa
           <div
             className="absolute flex flex-col items-center justify-center text-slate-400"
             style={{
-              top: '14.36%',
-              left: '78.16%',
-              width: '15.07%',
-              height: '10.68%',
+              top: '13.93%',
+              left: '77.56%',
+              width: '13.05%',
+              height: '11.14%',
               zIndex: 5,
             }}
           >
-            <span className="text-[10pt] font-black tracking-widest text-slate-300">2 × 2</span>
-            <span className="text-[8pt] font-bold text-slate-300">PHOTO</span>
+            <span className="text-[10pt] font-black tracking-widest text-slate-400">2 × 2</span>
+            <span className="text-[8pt] font-bold text-slate-400">PHOTO</span>
           </div>
         )}
 
@@ -189,12 +219,12 @@ export default function OfficialMembershipPrintForm({ data, isScreenPreview = fa
 
         {/* Name: First Name */}
         <div
-          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[11pt] truncate"
+          className={`absolute flex items-center px-2 font-bold text-slate-900 uppercase ${autoFitText(data.first_name, 'text-[11pt]', 'text-[9.5pt]', 'text-[8pt]', 'text-[7pt]', 14, 22, 30)}`}
           style={{
-            top: '32.76%',
+            top: '32.60%',
             left: '22.44%',
             width: '23.49%',
-            height: '2.02%',
+            height: '2.30%',
             zIndex: 5,
           }}
         >
@@ -203,12 +233,12 @@ export default function OfficialMembershipPrintForm({ data, isScreenPreview = fa
 
         {/* Name: Middle Name */}
         <div
-          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[11pt] truncate"
+          className={`absolute flex items-center px-2 font-bold text-slate-900 uppercase ${autoFitText(applicantMiddle, 'text-[11pt]', 'text-[9.5pt]', 'text-[8pt]', 'text-[7pt]', 14, 22, 30)}`}
           style={{
-            top: '32.76%',
+            top: '32.60%',
             left: '46.33%',
             width: '23.77%',
-            height: '2.02%',
+            height: '2.30%',
             zIndex: 5,
           }}
         >
@@ -217,26 +247,26 @@ export default function OfficialMembershipPrintForm({ data, isScreenPreview = fa
 
         {/* Name: Family Name */}
         <div
-          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[11pt] truncate"
+          className={`absolute flex items-center px-2 font-bold text-slate-900 uppercase ${autoFitText(applicantLastName, 'text-[11pt]', 'text-[9.5pt]', 'text-[8pt]', 'text-[7pt]', 14, 22, 30)}`}
           style={{
-            top: '32.76%',
+            top: '32.60%',
             left: '70.51%',
             width: '23.37%',
-            height: '2.02%',
+            height: '2.30%',
             zIndex: 5,
           }}
         >
-          {[data.last_name, data.suffix].filter(Boolean).join(' ')}
+          {applicantLastName}
         </div>
 
         {/* Place of Birth */}
         <div
-          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[10pt] truncate"
+          className={`absolute flex items-center px-2 font-bold text-slate-900 uppercase ${autoFitText(data.place_of_birth, 'text-[10pt]', 'text-[8.5pt]', 'text-[7.5pt]', 'text-[6.5pt]', 18, 28, 40)}`}
           style={{
             top: '36.13%',
             left: '22.44%',
             width: '29.49%',
-            height: '1.99%',
+            height: '2.20%',
             zIndex: 5,
           }}
         >
@@ -283,12 +313,12 @@ export default function OfficialMembershipPrintForm({ data, isScreenPreview = fa
 
         {/* Present Address */}
         <div
-          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[9pt] leading-tight overflow-hidden"
+          className={`absolute flex items-center px-2 font-bold text-slate-900 uppercase ${autoFitText(data.present_address, 'text-[9.5pt]', 'text-[8pt]', 'text-[7pt]', 'text-[6.5pt]', 40, 70, 100)}`}
           style={{
-            top: '40.94%',
+            top: '40.80%',
             left: '22.44%',
             width: '71.43%',
-            height: '1.99%',
+            height: '2.30%',
             zIndex: 5,
           }}
         >
@@ -339,7 +369,7 @@ export default function OfficialMembershipPrintForm({ data, isScreenPreview = fa
 
         {/* Citizenship */}
         <div
-          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[10pt] truncate"
+          className={`absolute flex items-center px-2 font-bold text-slate-900 uppercase ${autoFitText(data.citizenship || 'FILIPINO', 'text-[10pt]', 'text-[8.5pt]', 'text-[7.5pt]', 'text-[6.5pt]', 16, 26, 36)}`}
           style={{
             top: '47.98%',
             left: '22.44%',
@@ -353,7 +383,7 @@ export default function OfficialMembershipPrintForm({ data, isScreenPreview = fa
 
         {/* Occupation */}
         <div
-          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[10pt] truncate"
+          className={`absolute flex items-center px-2 font-bold text-slate-900 uppercase ${autoFitText(data.occupation, 'text-[10pt]', 'text-[8.5pt]', 'text-[7.5pt]', 'text-[6.5pt]', 16, 26, 36)}`}
           style={{
             top: '47.98%',
             left: '71.07%',
@@ -367,7 +397,7 @@ export default function OfficialMembershipPrintForm({ data, isScreenPreview = fa
 
         {/* Religion */}
         <div
-          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[10pt] truncate"
+          className={`absolute flex items-center px-2 font-bold text-slate-900 uppercase ${autoFitText(data.religion || 'ISLAM', 'text-[10pt]', 'text-[8.5pt]', 'text-[7.5pt]', 'text-[6.5pt]', 16, 26, 36)}`}
           style={{
             top: '51.37%',
             left: '22.44%',
@@ -381,7 +411,7 @@ export default function OfficialMembershipPrintForm({ data, isScreenPreview = fa
 
         {/* Spouse's Name */}
         <div
-          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[10pt] truncate"
+          className={`absolute flex items-center px-2 font-bold text-slate-900 uppercase ${autoFitText(data.spouse_name, 'text-[10pt]', 'text-[8.5pt]', 'text-[7.5pt]', 'text-[6.5pt]', 20, 30, 42)}`}
           style={{
             top: '51.37%',
             left: '71.07%',
@@ -395,7 +425,7 @@ export default function OfficialMembershipPrintForm({ data, isScreenPreview = fa
 
         {/* E-Mail */}
         <div
-          className="absolute flex items-center px-3 font-bold text-slate-900 text-[10pt] truncate"
+          className={`absolute flex items-center px-2 font-bold text-slate-900 ${autoFitText(data.email, 'text-[10pt]', 'text-[8.5pt]', 'text-[7.5pt]', 'text-[6.5pt]', 28, 42, 60)}`}
           style={{
             top: '54.79%',
             left: '22.44%',
@@ -409,7 +439,7 @@ export default function OfficialMembershipPrintForm({ data, isScreenPreview = fa
 
         {/* Contact Number */}
         <div
-          className="absolute flex items-center px-3 font-bold text-slate-900 text-[10pt] truncate"
+          className="absolute flex items-center px-2 font-bold text-slate-900 text-[10pt]"
           style={{
             top: '57.81%',
             left: '22.68%',
@@ -441,12 +471,12 @@ export default function OfficialMembershipPrintForm({ data, isScreenPreview = fa
 
         {/* Affiliation Name */}
         <div
-          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[10pt] truncate"
+          className={`absolute flex items-center px-2 font-bold text-slate-900 uppercase ${autoFitText(data.affiliation_name, 'text-[10pt]', 'text-[8.5pt]', 'text-[7.5pt]', 'text-[6.5pt]', 26, 40, 60)}`}
           style={{
             top: '61.68%',
             left: '47.18%',
             width: '43.55%',
-            height: '1.74%',
+            height: '2.14%',
             zIndex: 5,
           }}
         >
@@ -455,7 +485,7 @@ export default function OfficialMembershipPrintForm({ data, isScreenPreview = fa
 
         {/* Affiliation Address */}
         <div
-          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[9.5pt] truncate"
+          className={`absolute flex items-center px-2 font-bold text-slate-900 uppercase ${autoFitText(data.affiliation_address, 'text-[9.5pt]', 'text-[8.5pt]', 'text-[7.5pt]', 'text-[6.5pt]', 45, 75, 110)}`}
           style={{
             top: '64.27%',
             left: '14.95%',
@@ -491,14 +521,14 @@ export default function OfficialMembershipPrintForm({ data, isScreenPreview = fa
           style={{ width: '100%', height: '100%', zIndex: 1 }}
         />
 
-        {/* Beneficiary Name Underline in Declaration */}
+        {/* Beneficiary Name in Declaration */}
         <div
-          className="absolute flex items-center justify-center font-black text-slate-900 uppercase text-[10.5pt] border-b-2 border-slate-900 px-1"
+          className={`absolute flex items-end justify-center px-1 font-black text-slate-900 uppercase text-center break-words leading-[1.1] pb-[1px] ${getDeclNameClass(beneficiaryFullName)}`}
           style={{
-            top: '19.94%',
+            top: '17.60%',
             left: '24.17%',
-            width: '32.23%',
-            height: '1.31%',
+            width: '31.79%',
+            height: '3.65%',
             zIndex: 5,
           }}
         >
@@ -508,45 +538,45 @@ export default function OfficialMembershipPrintForm({ data, isScreenPreview = fa
         {/* Right Beneficiary ID / Photo Frame */}
         {data.beneficiary_id_url ? (
           <div
-            className="absolute overflow-hidden flex items-center justify-center bg-white"
+            className="absolute overflow-hidden flex items-center justify-center bg-white border border-slate-300 rounded-[2px]"
             style={{
-              top: '28.01%',
-              left: '74.13%',
-              width: '15.31%',
-              height: '10.74%',
+              top: '27.55%',
+              left: '73.55%',
+              width: '16.40%',
+              height: '11.65%',
               zIndex: 5,
             }}
           >
             <img
               src={data.beneficiary_id_url}
               alt="Beneficiary Attachment"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain p-1"
             />
           </div>
         ) : (
           <div
             className="absolute flex flex-col items-center justify-center text-slate-400"
             style={{
-              top: '28.01%',
-              left: '74.13%',
-              width: '15.31%',
-              height: '10.74%',
+              top: '27.61%',
+              left: '73.65%',
+              width: '16.28%',
+              height: '11.57%',
               zIndex: 5,
             }}
           >
-            <span className="text-[9pt] font-black text-slate-300">BENEFICIARY</span>
-            <span className="text-[7.5pt] font-bold text-slate-300">ID / PHOTO</span>
+            <span className="text-[9pt] font-black text-slate-400">BENEFICIARY</span>
+            <span className="text-[7.5pt] font-bold text-slate-400">ID / PHOTO</span>
           </div>
         )}
 
         {/* Beneficiary Name: First Name */}
         <div
-          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[11pt] truncate"
+          className={`absolute flex items-center px-2 font-bold text-slate-900 uppercase ${autoFitText(data.beneficiary_first_name, 'text-[11pt]', 'text-[9.5pt]', 'text-[8pt]', 'text-[7pt]', 14, 22, 30)}`}
           style={{
-            top: '46.72%',
+            top: '46.60%',
             left: '23.13%',
             width: '23.61%',
-            height: '2.02%',
+            height: '2.30%',
             zIndex: 5,
           }}
         >
@@ -555,12 +585,12 @@ export default function OfficialMembershipPrintForm({ data, isScreenPreview = fa
 
         {/* Beneficiary Name: Middle Name */}
         <div
-          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[11pt] truncate"
+          className={`absolute flex items-center px-2 font-bold text-slate-900 uppercase ${autoFitText(beneficiaryMiddle, 'text-[11pt]', 'text-[9.5pt]', 'text-[8pt]', 'text-[7pt]', 14, 22, 30)}`}
           style={{
-            top: '46.72%',
+            top: '46.60%',
             left: '47.14%',
             width: '23.77%',
-            height: '2.02%',
+            height: '2.30%',
             zIndex: 5,
           }}
         >
@@ -569,26 +599,26 @@ export default function OfficialMembershipPrintForm({ data, isScreenPreview = fa
 
         {/* Beneficiary Name: Family Name */}
         <div
-          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[11pt] truncate"
+          className={`absolute flex items-center px-2 font-bold text-slate-900 uppercase ${autoFitText(beneLastName, 'text-[11pt]', 'text-[9.5pt]', 'text-[8pt]', 'text-[7pt]', 14, 22, 30)}`}
           style={{
-            top: '46.72%',
+            top: '46.60%',
             left: '71.31%',
             width: '23.21%',
-            height: '2.02%',
+            height: '2.30%',
             zIndex: 5,
           }}
         >
-          {[data.beneficiary_last_name, data.beneficiary_suffix].filter(Boolean).join(' ')}
+          {beneLastName}
         </div>
 
         {/* Beneficiary Place of Birth */}
         <div
-          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[10pt] truncate"
+          className={`absolute flex items-center px-2 font-bold text-slate-900 uppercase ${autoFitText(data.beneficiary_place_of_birth, 'text-[10pt]', 'text-[8.5pt]', 'text-[7.5pt]', 'text-[6.5pt]', 18, 28, 40)}`}
           style={{
             top: '50.06%',
             left: '23.13%',
             width: '29.49%',
-            height: '2.02%',
+            height: '2.20%',
             zIndex: 5,
           }}
         >
@@ -635,12 +665,12 @@ export default function OfficialMembershipPrintForm({ data, isScreenPreview = fa
 
         {/* Beneficiary Present Address */}
         <div
-          className="absolute flex items-center px-3 font-bold text-slate-900 uppercase text-[9.5pt] truncate"
+          className={`absolute flex items-center px-2 font-bold text-slate-900 uppercase ${autoFitText(data.beneficiary_address, 'text-[9.5pt]', 'text-[8.5pt]', 'text-[7.5pt]', 'text-[6.5pt]', 45, 75, 110)}`}
           style={{
-            top: '54.56%',
+            top: '54.40%',
             left: '23.17%',
             width: '71.43%',
-            height: '2.02%',
+            height: '2.40%',
             zIndex: 5,
           }}
         >
@@ -649,7 +679,7 @@ export default function OfficialMembershipPrintForm({ data, isScreenPreview = fa
 
         {/* Beneficiary Contact # */}
         <div
-          className="absolute flex items-center px-3 font-bold text-slate-900 text-[10pt] truncate"
+          className="absolute flex items-center px-2 font-bold text-slate-900 text-[10pt]"
           style={{
             top: '58.21%',
             left: '23.01%',
@@ -663,16 +693,16 @@ export default function OfficialMembershipPrintForm({ data, isScreenPreview = fa
 
         {/* Member's Signature Overprinted Name */}
         <div
-          className="absolute flex items-center justify-center font-black text-slate-900 uppercase text-[12pt] tracking-wide"
+          className={`absolute flex items-center justify-center font-black text-slate-900 uppercase text-center tracking-wide ${autoFitText(signatureName, 'text-[12pt]', 'text-[10pt]', 'text-[8.5pt]', 'text-[7.5pt]', 22, 32, 44)}`}
           style={{
-            top: '66.10%',
+            top: '65.80%',
             left: '54.79%',
             width: '39.48%',
-            height: '1.71%',
+            height: '2.20%',
             zIndex: 5,
           }}
         >
-          {data.printed_name || applicantFullName}
+          {signatureName}
         </div>
       </div>
     </div>
