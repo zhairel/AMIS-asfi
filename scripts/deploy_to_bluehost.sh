@@ -53,6 +53,7 @@ DirectoryIndex index.html index.php
     RewriteRule ^api/verify/?$ api/verify.php [L,QSA]
 
     RewriteRule ^admin/applications/([^/]+)/?$ admin/applications/view/index.html [L,QSA]
+    RewriteRule ^admin/rejected/?$ admin/index.html?status=Rejected [L,QSA]
 
     RewriteCond %{REQUEST_FILENAME} -f [OR]
     RewriteCond %{REQUEST_FILENAME} -d

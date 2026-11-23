@@ -299,5 +299,8 @@ function normalize_application_row(array $row): array {
     if ($row['age'] !== null) {
         $row['age'] = (int)$row['age'];
     }
+    if (empty($row['date_applied']) && !empty($row['created_at'])) {
+        $row['date_applied'] = substr((string)$row['created_at'], 0, 10);
+    }
     return $row;
 }
