@@ -20,7 +20,7 @@ if ($rawRef === '') {
 $ref = mb_strtoupper($rawRef, 'UTF-8');
 $pdo = get_db();
 
-$stmt = $pdo->prepare("SELECT reference_number, status, first_name, middle_name, last_name, suffix, is_underage, affiliation_name, date_applied, created_at FROM applications WHERE UPPER(reference_number) = :ref OR UPPER(id) = :ref LIMIT 1");
+$stmt = $pdo->prepare("SELECT reference_number, status, first_name, middle_name, last_name, suffix, is_underage, affiliation_name, date_applied, admin_notes, created_at FROM applications WHERE UPPER(reference_number) = :ref OR UPPER(id) = :ref LIMIT 1");
 $stmt->execute([':ref' => $ref]);
 $row = $stmt->fetch();
 
@@ -56,6 +56,8 @@ echo json_encode([
         'membershipType' => $isUnderage ? 'Minor Member (with Parent/Guardian)' : 'Regular Member',
         'affiliation' => $row['affiliation_name'] ?: 'Individual Member',
         'dateApplied' => $dateApplied ?: date('Y-m-d'),
+        'remarks' => !empty($row['admin_notes']) ? $row['admin_notes'] : null,
+        'adminNotes' => !empty($row['admin_notes']) ? $row['admin_notes'] : null,
         'secRegistration' => '2026070258874-03',
         'organization' => 'AMIS SADAQAH FOUNDATION INCORPORATED',
         'headquarters' => 'Don Julian Rodriguez Sr., Avenue, Ma-A Road, Davao City, Philippines',

@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
         try {
           const { data, error } = await supabaseAdmin
             .from('applications')
-            .select('reference_number, status, first_name, middle_name, last_name, suffix, is_underage, affiliation_name, date_applied, created_at')
+            .select('reference_number, status, first_name, middle_name, last_name, suffix, is_underage, affiliation_name, date_applied, admin_notes, created_at')
             .eq('reference_number', ref)
             .maybeSingle();
 
@@ -57,6 +57,7 @@ export async function GET(req: NextRequest) {
           is_underage: mem.is_underage,
           affiliation_name: mem.affiliation_name,
           date_applied: mem.date_applied,
+          admin_notes: (mem as any).admin_notes || (mem as any).adminNotes || null,
           created_at: mem.created_at,
         };
       }
@@ -88,6 +89,8 @@ export async function GET(req: NextRequest) {
         membershipType: record.is_underage ? 'Minor Member (with Parent/Guardian)' : 'Regular Member',
         affiliation: record.affiliation_name || 'Individual Member',
         dateApplied: record.date_applied || record.created_at?.split('T')[0],
+        remarks: record.admin_notes || null,
+        adminNotes: record.admin_notes || null,
         secRegistration: '2026070258874-03',
         organization: 'AMIS SADAQAH FOUNDATION INCORPORATED',
         headquarters: 'Don Julian Rodriguez Sr., Avenue, Ma-A Road, Davao City, Philippines',

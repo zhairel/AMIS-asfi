@@ -31,6 +31,8 @@ interface VerificationData {
   membershipType: string;
   affiliation: string;
   dateApplied: string;
+  remarks?: string | null;
+  adminNotes?: string | null;
   secRegistration: string;
   organization: string;
   headquarters: string;
@@ -286,25 +288,72 @@ function VerifyContent() {
                 </div>
               </div>
 
-              {/* Status Explanation Box */}
-              <div className="p-4 rounded-2xl bg-emerald-50/80 border border-emerald-200 text-xs text-emerald-950 space-y-1.5 leading-relaxed">
-                <p className="font-extrabold flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-emerald-700" /> Official Registry Verification Note:
-                </p>
-                {data.status === 'Approved' ? (
-                  <p>
-                    This application has been verified and formally approved by the ASFI Membership Committee. The member is in good standing and registered under SEC Registration No. 2026070258874-03.
+              {/* Status Explanation & Committee Remarks Box */}
+              {data.status === 'Rejected' ? (
+                <div className="p-5 rounded-2xl bg-rose-50 border-2 border-rose-300 text-xs text-rose-950 space-y-3.5 leading-relaxed shadow-sm">
+                  <div className="flex items-center gap-2 text-rose-800">
+                    <AlertCircle className="w-5 h-5 flex-shrink-0 text-rose-600" />
+                    <span className="font-black text-sm uppercase tracking-wide">
+                      Application Evaluation Remarks &amp; Next Steps
+                    </span>
+                  </div>
+
+                  {data.remarks || data.adminNotes ? (
+                    <div className="bg-white rounded-xl p-4 border border-rose-200 shadow-xs space-y-2">
+                      <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">
+                        Official Committee Remarks:
+                      </span>
+                      <p className="text-sm font-semibold text-slate-800 whitespace-pre-line leading-relaxed">
+                        {data.remarks || data.adminNotes}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="bg-white rounded-xl p-4 border border-rose-200 shadow-xs text-slate-700">
+                      This application was reviewed and could not be approved at this time due to incomplete documentary requirements or payment verification.
+                    </div>
+                  )}
+
+                  <div className="pt-2 border-t border-rose-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[11px] text-slate-600">
+                    <span>
+                      Please comply with the remarks above. You may submit a corrected application or contact the ASFI Secretariat for assistance.
+                    </span>
+                    <Link
+                      href="/register"
+                      className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs transition whitespace-nowrap shadow-xs"
+                    >
+                      <span>Submit Corrected Application &rarr;</span>
+                    </Link>
+                  </div>
+                </div>
+              ) : data.status === 'Approved' ? (
+                <div className="p-4 rounded-2xl bg-emerald-50/80 border border-emerald-200 text-xs text-emerald-950 space-y-1.5 leading-relaxed">
+                  <p className="font-extrabold flex items-center gap-1.5">
+                    <ShieldCheck className="w-4 h-4 text-emerald-700" /> Official Registry Verification Note:
                   </p>
-                ) : data.status === 'Rejected' ? (
                   <p>
-                    This application was reviewed and could not be approved at this time. Please contact the ASFI Secretariat or visit the official office in Ma-A, Davao City.
+                    This application has been verified and formally approved by the ASFI Membership Committee. The member is in good standing and registered under SEC Registration No. {data.secRegistration}.
                   </p>
-                ) : (
+                  {(data.remarks || data.adminNotes) && (
+                    <div className="mt-2 p-3 bg-white rounded-lg border border-emerald-200 text-slate-700">
+                      <strong>Remarks:</strong> {data.remarks || data.adminNotes}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="p-4 rounded-2xl bg-amber-50/80 border border-amber-200 text-xs text-amber-950 space-y-1.5 leading-relaxed">
+                  <p className="font-extrabold flex items-center gap-1.5">
+                    <Clock className="w-4 h-4 text-amber-700" /> Pending Committee Review:
+                  </p>
                   <p>
                     This application is officially registered in our database and is currently under verification by the committee. Applicants are invited to the next orientation session and voluntary Sadaqah enrollment.
                   </p>
-                )}
-              </div>
+                  {(data.remarks || data.adminNotes) && (
+                    <div className="mt-2 p-3 bg-white rounded-lg border border-amber-200 text-slate-700">
+                      <strong>Notes:</strong> {data.remarks || data.adminNotes}
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Action Buttons */}
               <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-200">
